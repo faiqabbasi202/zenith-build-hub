@@ -26,8 +26,8 @@ export const Route = createFileRoute("/real-estate/$slug")({
       };
     }
     const d = loaderData.development;
-    const title = d.seo_title ?? `${d.title} | AMARC Developments`;
-    const description = d.seo_description ?? d.summary ?? "";
+    const title = d["seo_title"] ?? `${d["title"]} | AMARC Developments`;
+    const description = d["seo_description"] ?? d["summary"] ?? "";
     return {
       meta: [
         { title },
@@ -51,27 +51,27 @@ function DevelopmentDetail() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(developmentQuery(slug));
   const dev = data.development!;
-  const amenities = asList(dev.amenities);
-  const highlights = asList(dev.highlights);
-  const gallery = asList(dev.gallery);
-  const unitTypes = asObjects(dev.unit_types);
-  const plan = asObjects(dev.payment_plan);
+  const amenities = asList(dev["amenities"]);
+  const highlights = asList(dev["highlights"]);
+  const gallery = asList(dev["gallery"]);
+  const unitTypes = asObjects(dev["unit_types"]);
+  const plan = asObjects(dev["payment_plan"]);
 
   return (
     <SiteShell>
       <PageHero
         eyebrow="Development"
-        title={dev.title}
-        intro={dev.summary}
-        image={dev.cover_image_url}
+        title={dev["title"]}
+        intro={dev["summary"]}
+        image={dev["cover_image_url"]}
       >
         <div className="mt-8 flex flex-wrap items-center gap-4">
-          <StatusChip label={statusLabel(dev.status)} />
-          {dev.starting_price ? (
-            <span className="label-mono text-amber">From {dev.starting_price}</span>
+          <StatusChip label={statusLabel(dev["status"])} />
+          {dev["starting_price"] ? (
+            <span className="label-mono text-amber">From {dev["starting_price"]}</span>
           ) : null}
-          {dev.handover ? (
-            <span className="label-mono text-muted-foreground">Handover {dev.handover}</span>
+          {dev["handover"] ? (
+            <span className="label-mono text-muted-foreground">Handover {dev["handover"]}</span>
           ) : null}
         </div>
       </PageHero>
@@ -80,7 +80,7 @@ function DevelopmentDetail() {
         <Container className="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
           <div>
             <p className="text-lg leading-relaxed whitespace-pre-line text-foreground/85">
-              {dev.description}
+              {dev["description"]}
             </p>
 
             {highlights.length ? (
@@ -125,7 +125,7 @@ function DevelopmentDetail() {
                   <Reveal key={src} delay={(i % 2) * 0.06} className="overflow-hidden border border-border">
                     <img
                       src={src}
-                      alt={`${dev.title} — view ${i + 1}`}
+                      alt={`${dev["title"]} — view ${i + 1}`}
                       loading="lazy"
                       className="h-full w-full object-cover"
                     />
@@ -171,8 +171,8 @@ function DevelopmentDetail() {
               <Action to="/contact" className="mt-6 w-full">
                 Enquire now
               </Action>
-              {dev.brochure_url ? (
-                <Action href={dev.brochure_url} variant="outline" className="mt-3 w-full">
+              {dev["brochure_url"] ? (
+                <Action href={dev["brochure_url"]} variant="outline" className="mt-3 w-full">
                   Download brochure
                 </Action>
               ) : null}

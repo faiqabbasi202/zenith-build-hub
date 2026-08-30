@@ -152,9 +152,13 @@ export function Reveal({
     <MotionTag
       ref={ref as never}
       className={className}
-      initial={reduce ? undefined : { opacity: 0, y: 18 }}
-      animate={inView || reduce ? { opacity: 1, y: 0 } : undefined}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      {...(reduce
+        ? {}
+        : {
+            initial: { opacity: 0, y: 18 },
+            animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
+            transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
+          })}
     >
       {children}
     </MotionTag>

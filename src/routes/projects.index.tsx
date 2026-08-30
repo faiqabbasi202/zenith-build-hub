@@ -9,13 +9,13 @@ import { STATUS_LABEL } from "@/lib/format";
 import { projectsQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
-type Search = { sector?: string; status?: string; city?: string };
+type Search = { sector?: string | undefined; status?: string | undefined; city?: string | undefined };
 
 export const Route = createFileRoute("/projects/")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    sector: typeof search.sector === "string" ? search.sector : undefined,
-    status: typeof search.status === "string" ? search.status : undefined,
-    city: typeof search.city === "string" ? search.city : undefined,
+    sector: typeof search["sector"] === "string" ? search["sector"] : undefined,
+    status: typeof search["status"] === "string" ? search["status"] : undefined,
+    city: typeof search["city"] === "string" ? search["city"] : undefined,
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
   head: () => ({
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/projects/")({
 function ProjectsPage() {
   const { data } = useSuspenseQuery(projectsQuery);
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/projects" });
+  const navigate = useNavigate({ from: "/projects/" });
 
   const cities = useMemo(
     () => Array.from(new Set(data.projects.map((p: any) => p.city).filter(Boolean))).sort(),
@@ -56,7 +56,7 @@ function ProjectsPage() {
   });
 
   const set = (patch: Search) =>
-    navigate({ search: (prev: Search) => ({ ...prev, ...patch }), replace: true });
+    navigate({ search: ((prev: Search) => ({ ...prev, ...patch })) as never, replace: true });
 
   return (
     <SiteShell>
@@ -70,7 +70,7 @@ function ProjectsPage() {
         <Container className="space-y-5">
           <FilterRow
             label="Sector"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               data.sectors.map((s: any) => ({ value: s.slug, label: s.title })),
             )}
             active={search.sector}
@@ -78,7 +78,7 @@ function ProjectsPage() {
           />
           <FilterRow
             label="Status"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               Object.entries(STATUS_LABEL).map(([value, label]) => ({ value, label })),
             )}
             active={search.status}
@@ -86,7 +86,7 @@ function ProjectsPage() {
           />
           <FilterRow
             label="City"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               cities.map((c: any) => ({ value: c, label: c })),
             )}
             active={search.city}
@@ -126,8 +126,8 @@ function FilterRow({
   onSelect,
 }: {
   label: string;
-  options: { value?: string; label: string }[];
-  active?: string;
+  options: { value?: string | undefined; label: string }[];
+  active?: string | undefined;
   onSelect: (value?: string) => void;
 }) {
   return (

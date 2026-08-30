@@ -18,8 +18,8 @@ export const Route = createFileRoute("/services/$slug")({
       return { meta: [{ title: "Service not found | AMARC" }, { name: "robots", content: "noindex" }] };
     }
     const s = loaderData.service;
-    const title = s.seo_title ?? `${s.title} | AMARC`;
-    const description = s.seo_description ?? s.summary ?? "";
+    const title = s["seo_title"] ?? `${s["title"]} | AMARC`;
+    const description = s["seo_description"] ?? s["summary"] ?? "";
     return {
       meta: [
         { title },
@@ -43,24 +43,24 @@ function ServiceDetail() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(serviceQuery(slug));
   const service = data.service!;
-  const bullets = asList(service.bullets);
-  const steps = asObjects(service.process_steps);
-  const faqs = asObjects(service.faqs);
+  const bullets = asList(service["bullets"]);
+  const steps = asObjects(service["process_steps"]);
+  const faqs = asObjects(service["faqs"]);
 
   return (
     <SiteShell>
       <PageHero
         eyebrow="Service"
-        title={service.title}
-        intro={service.summary}
-        image={service.hero_image_url}
+        title={service["title"]}
+        intro={service["summary"]}
+        image={service["hero_image_url"]}
       />
 
       <section className="py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
           <div>
             <p className="text-lg leading-relaxed text-foreground/85 whitespace-pre-line">
-              {service.description}
+              {service["description"]}
             </p>
             {steps.length ? (
               <ol className="mt-14 space-y-px border border-border bg-border">
