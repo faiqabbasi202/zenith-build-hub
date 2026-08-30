@@ -70,7 +70,7 @@ function ProjectsPage() {
         <Container className="space-y-5">
           <FilterRow
             label="Sector"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               data.sectors.map((s: any) => ({ value: s.slug, label: s.title })),
             )}
             active={search.sector}
@@ -78,7 +78,7 @@ function ProjectsPage() {
           />
           <FilterRow
             label="Status"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               Object.entries(STATUS_LABEL).map(([value, label]) => ({ value, label })),
             )}
             active={search.status}
@@ -86,7 +86,7 @@ function ProjectsPage() {
           />
           <FilterRow
             label="City"
-            options={[{ value: undefined, label: "All" }].concat(
+            options={([{ value: undefined, label: "All" }] as { value?: string | undefined; label: string }[]).concat(
               cities.map((c: any) => ({ value: c, label: c })),
             )}
             active={search.city}
@@ -127,7 +127,7 @@ function FilterRow({
 }: {
   label: string;
   options: { value?: string | undefined; label: string }[];
-  active?: string;
+  active?: string | undefined;
   onSelect: (value?: string) => void;
 }) {
   return (
