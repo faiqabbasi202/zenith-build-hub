@@ -11,6 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CareersRouteImport } from './routes/careers'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as DownloadsRouteImport } from './routes/downloads'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as TendersRouteImport } from './routes/tenders'
 import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as ProjectsIndexRouteImport } from './routes/projects.index'
@@ -28,6 +34,36 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadsRoute = DownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TendersRoute = TendersRouteImport.update({
+  id: '/tenders',
+  path: '/tenders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsIndexRoute = InsightsIndexRouteImport.update({
@@ -74,6 +110,12 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/faq': typeof FaqRoute
+  '/tenders': typeof TendersRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/real-estate/$slug': typeof RealEstateSlugRoute
@@ -86,6 +128,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/faq': typeof FaqRoute
+  '/tenders': typeof TendersRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/real-estate/$slug': typeof RealEstateSlugRoute
@@ -99,6 +147,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/auth': typeof AuthRoute
+  '/careers': typeof CareersRoute
+  '/contact': typeof ContactRoute
+  '/downloads': typeof DownloadsRoute
+  '/faq': typeof FaqRoute
+  '/tenders': typeof TendersRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
   '/real-estate/$slug': typeof RealEstateSlugRoute
@@ -113,6 +167,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/downloads'
+    | '/faq'
+    | '/tenders'
     | '/insights/$slug'
     | '/projects/$slug'
     | '/real-estate/$slug'
@@ -125,6 +185,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/downloads'
+    | '/faq'
+    | '/tenders'
     | '/insights/$slug'
     | '/projects/$slug'
     | '/real-estate/$slug'
@@ -137,6 +203,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/auth'
+    | '/careers'
+    | '/contact'
+    | '/downloads'
+    | '/faq'
+    | '/tenders'
     | '/insights/$slug'
     | '/projects/$slug'
     | '/real-estate/$slug'
@@ -150,6 +222,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AuthRoute: typeof AuthRoute
+  CareersRoute: typeof CareersRoute
+  ContactRoute: typeof ContactRoute
+  DownloadsRoute: typeof DownloadsRoute
+  FaqRoute: typeof FaqRoute
+  TendersRoute: typeof TendersRoute
   InsightsSlugRoute: typeof InsightsSlugRoute
   ProjectsSlugRoute: typeof ProjectsSlugRoute
   RealEstateSlugRoute: typeof RealEstateSlugRoute
@@ -174,6 +252,48 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/downloads': {
+      id: '/downloads'
+      path: '/downloads'
+      fullPath: '/downloads'
+      preLoaderRoute: typeof DownloadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tenders': {
+      id: '/tenders'
+      path: '/tenders'
+      fullPath: '/tenders'
+      preLoaderRoute: typeof TendersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights/': {
@@ -238,6 +358,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AuthRoute: AuthRoute,
+  CareersRoute: CareersRoute,
+  ContactRoute: ContactRoute,
+  DownloadsRoute: DownloadsRoute,
+  FaqRoute: FaqRoute,
+  TendersRoute: TendersRoute,
   InsightsSlugRoute: InsightsSlugRoute,
   ProjectsSlugRoute: ProjectsSlugRoute,
   RealEstateSlugRoute: RealEstateSlugRoute,
