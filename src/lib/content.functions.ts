@@ -137,7 +137,7 @@ export const getProject = createServerFn({ method: "GET" })
       .from("projects")
       .select("slug,title,city,cover_image_url,status,sector_slug,summary")
       .eq("is_published", true)
-      .eq("sector_slug", (project as Row).sector_slug)
+      .eq("sector_slug", (project as Row)["sector_slug"])
       .neq("slug", data.slug)
       .limit(3);
     return { project: project as Row, related: (related ?? []) as Row[] };

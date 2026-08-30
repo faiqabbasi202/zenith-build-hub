@@ -13,9 +13,9 @@ type Search = { sector?: string; status?: string; city?: string };
 
 export const Route = createFileRoute("/projects/")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    sector: typeof search.sector === "string" ? search.sector : undefined,
-    status: typeof search.status === "string" ? search.status : undefined,
-    city: typeof search.city === "string" ? search.city : undefined,
+    sector: typeof search["sector"] === "string" ? search["sector"] : undefined,
+    status: typeof search["status"] === "string" ? search["status"] : undefined,
+    city: typeof search["city"] === "string" ? search["city"] : undefined,
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
   head: () => ({

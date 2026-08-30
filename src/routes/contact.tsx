@@ -43,7 +43,7 @@ const inputCls =
 function ContactPage() {
   const { data: settings } = useSuspenseQuery(siteSettingsQuery);
   const { data: services } = useSuspenseQuery(servicesQuery);
-  const offices = asObjects(settings?.offices);
+  const offices = asObjects(settings?["offices"]);
   const [sending, setSending] = useState(false);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -117,18 +117,18 @@ function ContactPage() {
 
           <aside className="space-y-8">
             <div className="space-y-4 border border-border bg-surface p-7">
-              {settings?.phone ? (
-                <a href={`tel:${String(settings.phone).replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
-                  <Phone className="h-4 w-4 text-amber" aria-hidden /> {settings.phone}
+              {settings?["phone"] ? (
+                <a href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+                  <Phone className="h-4 w-4 text-amber" aria-hidden /> {settings["phone"]}
                 </a>
               ) : null}
-              {settings?.email ? (
-                <a href={`mailto:${settings.email}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
-                  <Mail className="h-4 w-4 text-amber" aria-hidden /> {settings.email}
+              {settings?["email"] ? (
+                <a href={`mailto:${settings["email"]}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+                  <Mail className="h-4 w-4 text-amber" aria-hidden /> {settings["email"]}
                 </a>
               ) : null}
-              {settings?.google_maps_url ? (
-                <a href={settings.google_maps_url} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+              {settings?["google_maps_url"] ? (
+                <a href={settings["google_maps_url"]} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
                   <MapPin className="h-4 w-4 text-amber" aria-hidden /> Find us on Google Maps
                 </a>
               ) : null}
@@ -151,11 +151,11 @@ function ContactPage() {
         </Container>
       </section>
 
-      {settings?.map_embed_url ? (
+      {settings?["map_embed_url"] ? (
         <section className="border-t border-border">
           <iframe
             title="AMARC office location map"
-            src={settings.map_embed_url}
+            src={settings["map_embed_url"]}
             className="h-[420px] w-full grayscale invert-[0.9] contrast-[0.9]"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"

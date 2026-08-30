@@ -18,8 +18,8 @@ export const Route = createFileRoute("/projects/$slug")({
       return { meta: [{ title: "Project not found | AMARC" }, { name: "robots", content: "noindex" }] };
     }
     const p = loaderData.project;
-    const title = p.seo_title ?? `${p.title} | AMARC Projects`;
-    const description = p.seo_description ?? p.summary ?? "";
+    const title = p["seo_title"] ?? `${p["title"]} | AMARC Projects`;
+    const description = p["seo_description"] ?? p["summary"] ?? "";
     return {
       meta: [
         { title },
@@ -43,35 +43,35 @@ function ProjectDetail() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(projectQuery(slug));
   const project = data.project!;
-  const scope = asList(project.scope);
-  const gallery = asList(project.gallery);
+  const scope = asList(project["scope"]);
+  const gallery = asList(project["gallery"]);
 
   const facts = [
-    ["Client", project.client],
-    ["Location", [project.location, project.city].filter(Boolean).join(", ")],
-    ["Contract value", project.value_pkr_millions ? pkr(project.value_pkr_millions) : null],
-    ["Covered area", project.covered_area],
-    ["Plot area", project.plot_area],
-    ["Storeys", project.storeys],
-    ["Start", project.start_date ? longDate(project.start_date) : null],
-    ["Completion", project.completion_date ? longDate(project.completion_date) : null],
-    ["Architect", project.architect],
-    ["Certifications", project.certifications],
+    ["Client", project["client"]],
+    ["Location", [project["location"], project["city"]].filter(Boolean).join(", ")],
+    ["Contract value", project["value_pkr_millions"] ? pkr(project["value_pkr_millions"]) : null],
+    ["Covered area", project["covered_area"]],
+    ["Plot area", project["plot_area"]],
+    ["Storeys", project["storeys"]],
+    ["Start", project["start_date"] ? longDate(project["start_date"]) : null],
+    ["Completion", project["completion_date"] ? longDate(project["completion_date"]) : null],
+    ["Architect", project["architect"]],
+    ["Certifications", project["certifications"]],
   ].filter(([, v]) => Boolean(v)) as [string, string][];
 
   return (
     <SiteShell>
       <PageHero
         eyebrow="Project"
-        title={project.title}
-        intro={project.summary}
-        image={project.cover_image_url}
+        title={project["title"]}
+        intro={project["summary"]}
+        image={project["cover_image_url"]}
       >
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <StatusChip label={statusLabel(project.status)} />
-          {project.progress_percent != null && project.status === "ongoing" ? (
+          <StatusChip label={statusLabel(project["status"])} />
+          {project["progress_percent"] != null && project["status"] === "ongoing" ? (
             <span className="label-mono text-muted-foreground">
-              {project.progress_percent}% complete
+              {project["progress_percent"]}% complete
             </span>
           ) : null}
         </div>
@@ -81,7 +81,7 @@ function ProjectDetail() {
         <Container className="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
           <div>
             <p className="text-lg leading-relaxed whitespace-pre-line text-foreground/85">
-              {project.description}
+              {project["description"]}
             </p>
 
             {scope.length ? (
@@ -104,7 +104,7 @@ function ProjectDetail() {
                   <Reveal key={src} delay={(i % 2) * 0.06} className="overflow-hidden border border-border">
                     <img
                       src={src}
-                      alt={`${project.title} — view ${i + 1}`}
+                      alt={`${project["title"]} — view ${i + 1}`}
                       loading="lazy"
                       className="h-full w-full object-cover"
                     />

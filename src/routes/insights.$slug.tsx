@@ -17,8 +17,8 @@ export const Route = createFileRoute("/insights/$slug")({
       return { meta: [{ title: "Article not found | AMARC" }, { name: "robots", content: "noindex" }] };
     }
     const p = loaderData.post;
-    const title = p.seo_title ?? `${p.title} | AMARC Insights`;
-    const description = p.seo_description ?? p.excerpt ?? "";
+    const title = p["seo_title"] ?? `${p["title"]} | AMARC Insights`;
+    const description = p["seo_description"] ?? p["excerpt"] ?? "";
     return {
       meta: [
         { title },
@@ -46,20 +46,20 @@ function PostDetail() {
   return (
     <SiteShell>
       <PageHero
-        eyebrow={`${post.category ?? "Insight"} · ${longDate(post.published_at)}`}
-        title={post.title}
-        intro={post.excerpt}
-        image={post.cover_image_url}
+        eyebrow={`${post["category"] ?? "Insight"} · ${longDate(post["published_at"])}`}
+        title={post["title"]}
+        intro={post["excerpt"]}
+        image={post["cover_image_url"]}
       />
       <article className="py-20 md:py-28">
         <Container>
           <div className="mx-auto max-w-3xl">
             <p className="label-mono text-muted-foreground">
-              By {post.author ?? "AMARC"}
-              {post.read_minutes ? ` · ${post.read_minutes} min read` : ""}
+              By {post["author"] ?? "AMARC"}
+              {post["read_minutes"] ? ` · ${post["read_minutes"]} min read` : ""}
             </p>
             <div className="mt-10 space-y-6 text-base leading-relaxed whitespace-pre-line text-foreground/85">
-              {post.body}
+              {post["body"]}
             </div>
           </div>
         </Container>

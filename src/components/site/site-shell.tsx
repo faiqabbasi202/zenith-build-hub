@@ -18,12 +18,12 @@ export function SiteShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <SiteHeader phone={settings?.phone} />
+      <SiteHeader phone={settings?["phone"]} />
       <main id="main" className="flex-1">
         {children}
       </main>
       <SiteFooter settings={settings} />
-      <WhatsAppButton number={settings?.whatsapp} />
+      <WhatsAppButton number={settings?["whatsapp"]} />
     </div>
   );
 }
