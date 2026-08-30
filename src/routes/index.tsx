@@ -77,7 +77,7 @@ function HomePage() {
 
 /* ---------------------------------- hero --------------------------------- */
 
-function Hero({ section }: { section?: Row }) {
+function Hero({ section }: { section?: Row | undefined }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -158,7 +158,7 @@ function Hero({ section }: { section?: Row }) {
 
 /* ------------------------------- credibility ------------------------------ */
 
-function Credibility({ section }: { section?: Row }) {
+function Credibility({ section }: { section?: Row | undefined }) {
   const items = asObjects(section?.["extra"]?.items);
   if (!items.length) return null;
   return (
@@ -177,7 +177,7 @@ function Credibility({ section }: { section?: Row }) {
 
 /* ---------------------------------- stats --------------------------------- */
 
-function Stats({ section }: { section?: Row }) {
+function Stats({ section }: { section?: Row | undefined }) {
   const items = asObjects(section?.["extra"]?.items);
   if (!section) return null;
   return (
@@ -325,7 +325,7 @@ function FeaturedProjects({ section, projects }: { section?: Row | undefined; pr
 
 /* --------------------------------- process -------------------------------- */
 
-function Process({ section }: { section?: Row }) {
+function Process({ section }: { section?: Row | undefined }) {
   const steps = asObjects(section?.["extra"]?.steps);
   if (!section || !steps.length) return null;
   return (
@@ -561,7 +561,7 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
 
 /* ------------------------------- closing cta ------------------------------ */
 
-function ClosingCta({ section }: { section?: Row }) {
+function ClosingCta({ section }: { section?: Row | undefined }) {
   if (!section) return null;
   return (
     <section className="relative overflow-hidden border-t border-border bg-surface py-24 md:py-32">

@@ -9,7 +9,7 @@ import { STATUS_LABEL } from "@/lib/format";
 import { projectsQuery } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 
-type Search = { sector?: string; status?: string; city?: string };
+type Search = { sector?: string | undefined; status?: string | undefined; city?: string | undefined };
 
 export const Route = createFileRoute("/projects/")({
   validateSearch: (search: Record<string, unknown>): Search => ({
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/projects/")({
 function ProjectsPage() {
   const { data } = useSuspenseQuery(projectsQuery);
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/projects" });
+  const navigate = useNavigate({ from: "/projects/" });
 
   const cities = useMemo(
     () => Array.from(new Set(data.projects.map((p: any) => p.city).filter(Boolean))).sort(),
@@ -56,7 +56,7 @@ function ProjectsPage() {
   });
 
   const set = (patch: Search) =>
-    navigate({ search: (prev: Search) => ({ ...prev, ...patch }), replace: true });
+    navigate({ search: ((prev: Search) => ({ ...prev, ...patch })) as never, replace: true });
 
   return (
     <SiteShell>
@@ -126,7 +126,7 @@ function FilterRow({
   onSelect,
 }: {
   label: string;
-  options: { value?: string; label: string }[];
+  options: { value?: string | undefined; label: string }[];
   active?: string;
   onSelect: (value?: string) => void;
 }) {
