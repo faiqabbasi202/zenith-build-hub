@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
-import { ProjectCard } from "@/routes/index";
+import { ProjectCard } from "@/components/site/project-card";
 import { Action, Container, PageHero, Reveal, SectionHead } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { asList, asObjects } from "@/lib/format";

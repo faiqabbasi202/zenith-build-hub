@@ -10,6 +10,7 @@ import {
   Eyebrow,
   Reveal,
   SectionHead,
+  StatusChip,
 } from "@/components/site/primitives";
 import { ProjectCard } from "@/components/site/project-card";
 import { SiteShell } from "@/components/site/site-shell";
