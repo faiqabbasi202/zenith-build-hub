@@ -90,7 +90,7 @@ function Hero({ section }: { section?: Row }) {
 
   return (
     <section ref={ref} className="relative isolate min-h-[92svh] overflow-hidden">
-      <motion.div style={reduce ? undefined : { y }} className="absolute inset-0 -z-10">
+      <motion.div style={reduce ? {} : { y }} className="absolute inset-0 -z-10">
         {section["media_url"] ? (
           <video
             className="h-full w-full object-cover"
@@ -115,7 +115,7 @@ function Hero({ section }: { section?: Row }) {
       <div aria-hidden className="grain absolute inset-0 -z-10" />
 
       <Container className="flex min-h-[92svh] flex-col justify-end pt-32 pb-16 md:pb-24">
-        <motion.div style={reduce ? undefined : { opacity: fade }} className="max-w-4xl">
+        <motion.div style={reduce ? {} : { opacity: fade }} className="max-w-4xl">
           <Reveal>
             <Eyebrow>{section["eyebrow"]}</Eyebrow>
           </Reveal>
@@ -215,7 +215,7 @@ function Stats({ section }: { section?: Row }) {
 
 /* -------------------------------- services -------------------------------- */
 
-function Services({ section, services }: { section?: Row; services: Row[] }) {
+function Services({ section, services }: { section?: Row | undefined; services: Row[] }) {
   if (!section) return null;
   return (
     <section className="border-t border-border bg-surface py-24 md:py-32">
@@ -261,7 +261,7 @@ function Services({ section, services }: { section?: Row; services: Row[] }) {
 
 /* --------------------------------- sectors -------------------------------- */
 
-function Sectors({ section, sectors }: { section?: Row; sectors: Row[] }) {
+function Sectors({ section, sectors }: { section?: Row | undefined; sectors: Row[] }) {
   if (!section) return null;
   return (
     <section className="py-24 md:py-32">
@@ -294,7 +294,7 @@ function Sectors({ section, sectors }: { section?: Row; sectors: Row[] }) {
 
 /* ---------------------------- featured projects --------------------------- */
 
-function FeaturedProjects({ section, projects }: { section?: Row; projects: Row[] }) {
+function FeaturedProjects({ section, projects }: { section?: Row | undefined; projects: Row[] }) {
   if (!section) return null;
   return (
     <section className="border-t border-border py-24 md:py-32">
@@ -356,7 +356,7 @@ function Process({ section }: { section?: Row }) {
 
 /* ------------------------------ developments ------------------------------ */
 
-function Developments({ section, developments }: { section?: Row; developments: Row[] }) {
+function Developments({ section, developments }: { section?: Row | undefined; developments: Row[] }) {
   if (!section) return null;
   return (
     <section className="py-24 md:py-32">
@@ -411,7 +411,7 @@ function Developments({ section, developments }: { section?: Row; developments: 
 
 /* --------------------------------- clients -------------------------------- */
 
-function Clients({ section, clients }: { section?: Row; clients: Row[] }) {
+function Clients({ section, clients }: { section?: Row | undefined; clients: Row[] }) {
   if (!section || !clients.length) return null;
   return (
     <section className="border-y border-border bg-surface py-20">
@@ -443,7 +443,7 @@ function Clients({ section, clients }: { section?: Row; clients: Row[] }) {
 
 /* ----------------------------- certifications ----------------------------- */
 
-function Certifications({ section, items }: { section?: Row; items: Row[] }) {
+function Certifications({ section, items }: { section?: Row | undefined; items: Row[] }) {
   if (!section || !items.length) return null;
   return (
     <section className="py-24 md:py-32">
@@ -472,7 +472,7 @@ function Certifications({ section, items }: { section?: Row; items: Row[] }) {
 
 /* ------------------------------ testimonials ------------------------------ */
 
-function Testimonials({ section, items }: { section?: Row; items: Row[] }) {
+function Testimonials({ section, items }: { section?: Row | undefined; items: Row[] }) {
   if (!section || !items.length) return null;
   return (
     <section className="border-t border-border bg-surface py-24 md:py-32">
@@ -506,7 +506,7 @@ function Testimonials({ section, items }: { section?: Row; items: Row[] }) {
 
 /* -------------------------------- insights -------------------------------- */
 
-function Insights({ section, posts }: { section?: Row; posts: Row[] }) {
+function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] }) {
   if (!section || !posts.length) return null;
   return (
     <section className="py-24 md:py-32">
