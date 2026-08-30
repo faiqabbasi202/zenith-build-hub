@@ -35,8 +35,8 @@ function AboutPage() {
     <SiteShell>
       <PageHero
         eyebrow="About us"
-        title={s?["company_full_name"] ?? "AMARC Engineering & Construction Company"}
-        intro={s?["tagline"] ?? undefined}
+        title={s?.["company_full_name"] ?? "AMARC Engineering & Construction Company"}
+        intro={s?.["tagline"] ?? undefined}
       />
 
       <section className="py-20 md:py-28">

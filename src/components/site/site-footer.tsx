@@ -35,7 +35,7 @@ const COLUMNS: { title: string; links: { label: string; to: string }[] }[] = [
 ];
 
 export function SiteFooter({ settings }: { settings: Settings }) {
-  const offices = asObjects(settings?["offices"]);
+  const offices = asObjects(settings?.["offices"]);
   const year = new Date().getFullYear();
 
   return (
@@ -54,11 +54,11 @@ export function SiteFooter({ settings }: { settings: Settings }) {
             </span>
           </div>
           <p className="mt-5 max-w-sm text-sm text-muted-foreground">
-            {settings?["tagline"] ?? "Engineering the built environment of Pakistan."}
+            {settings?.["tagline"] ?? "Engineering the built environment of Pakistan."}
           </p>
 
           <div className="mt-7 space-y-3 text-sm">
-            {settings?["phone"] ? (
+            {settings?.["phone"] ? (
               <a
                 href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`}
                 className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-amber"
@@ -67,7 +67,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 {settings["phone"]}
               </a>
             ) : null}
-            {settings?["email"] ? (
+            {settings?.["email"] ? (
               <a
                 href={`mailto:${settings["email"]}`}
                 className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-amber"
@@ -76,7 +76,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 {settings["email"]}
               </a>
             ) : null}
-            {settings?["address"] ? (
+            {settings?.["address"] ? (
               <p className="flex items-start gap-3 text-foreground/80">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-amber" aria-hidden />
                 <span>
@@ -87,7 +87,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
           </div>
 
           <div className="mt-7 flex gap-3">
-            {settings?["facebook_url"] ? (
+            {settings?.["facebook_url"] ? (
               <a
                 href={settings["facebook_url"]}
                 target="_blank"
@@ -98,7 +98,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 <Facebook className="h-4 w-4" />
               </a>
             ) : null}
-            {settings?["linkedin_url"] ? (
+            {settings?.["linkedin_url"] ? (
               <a
                 href={settings["linkedin_url"]}
                 target="_blank"
@@ -109,7 +109,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 <Linkedin className="h-4 w-4" />
               </a>
             ) : null}
-            {settings?["google_maps_url"] ? (
+            {settings?.["google_maps_url"] ? (
               <a
                 href={settings["google_maps_url"]}
                 target="_blank"
@@ -164,12 +164,12 @@ export function SiteFooter({ settings }: { settings: Settings }) {
       <div className="border-t border-border">
         <div className="container-page flex flex-col gap-3 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {year} {settings?["company_full_name"] ?? "AMARC Engineering & Construction Company"}.
+            © {year} {settings?.["company_full_name"] ?? "AMARC Engineering & Construction Company"}.
             All rights reserved.
           </p>
           <p className="label-mono">
-            {settings?["pec_number"] ? `PEC ${settings["pec_number"]}` : null}
-            {settings?["ntn_number"] ? ` · NTN ${settings["ntn_number"]}` : null}
+            {settings?.["pec_number"] ? `PEC ${settings["pec_number"]}` : null}
+            {settings?.["ntn_number"] ? ` · NTN ${settings["ntn_number"]}` : null}
           </p>
         </div>
       </div>

@@ -159,7 +159,7 @@ function Hero({ section }: { section?: Row }) {
 /* ------------------------------- credibility ------------------------------ */
 
 function Credibility({ section }: { section?: Row }) {
-  const items = asObjects(section?["extra"]?.items);
+  const items = asObjects(section?.["extra"]?.items);
   if (!items.length) return null;
   return (
     <section className="border-y border-border bg-surface">
@@ -178,7 +178,7 @@ function Credibility({ section }: { section?: Row }) {
 /* ---------------------------------- stats --------------------------------- */
 
 function Stats({ section }: { section?: Row }) {
-  const items = asObjects(section?["extra"]?.items);
+  const items = asObjects(section?.["extra"]?.items);
   if (!section) return null;
   return (
     <section className="relative overflow-hidden py-24 md:py-32">
@@ -326,7 +326,7 @@ function FeaturedProjects({ section, projects }: { section?: Row; projects: Row[
 /* --------------------------------- process -------------------------------- */
 
 function Process({ section }: { section?: Row }) {
-  const steps = asObjects(section?["extra"]?.steps);
+  const steps = asObjects(section?.["extra"]?.steps);
   if (!section || !steps.length) return null;
   return (
     <section className="border-t border-border bg-surface py-24 md:py-32">
