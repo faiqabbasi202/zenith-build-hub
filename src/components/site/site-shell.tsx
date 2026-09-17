@@ -18,7 +18,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <SiteHeader phone={settings?.["phone"]} />
+      <SiteHeader settings={settings} />
       <main id="main" className="flex-1">
         {children}
       </main>
