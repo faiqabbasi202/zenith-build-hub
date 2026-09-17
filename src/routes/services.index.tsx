@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Container, PageHero, Reveal } from "@/components/site/primitives";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { pageSeoQuery, servicesQuery } from "@/lib/queries";
 import { buildSeoMeta } from "@/lib/seo";
@@ -35,22 +36,38 @@ function ServicesPage() {
       />
       <section className="bg-background py-20 md:py-28">
         <Container>
-          <ul className="grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service: any, i: number) => (
-              <Reveal as="li" key={service.slug} delay={(i % 3) * 0.06} className="bg-background">
+              <Reveal as="li" key={service.slug} delay={(i % 3) * 0.06}>
                 <Link
                   to="/services/$slug"
                   params={{ slug: service.slug }}
-                  className="group flex h-full flex-col p-8 transition-colors hover:bg-surface"
+                  className="group relative flex h-[28rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors hover:border-amber/60"
                 >
-                  <span className="label-mono text-amber">{String(i + 1).padStart(2, "0")}</span>
-                  <h2 className="mt-5 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-amber">
-                    {service.title}
-                  </h2>
-                  <p className="mt-3 flex-1 text-sm text-muted-foreground">{service.summary}</p>
-                  <span className="label-mono mt-6 text-foreground/60 group-hover:text-amber">
-                    Explore →
-                  </span>
+                  {service.hero_image_url ? (
+                    <>
+                      <ResponsiveImage
+                        src={service.hero_image_url}
+                        alt={service.title}
+                        className="absolute inset-0 h-full w-full"
+                        imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
+                    </>
+                  ) : null}
+                  
+                  <div className="relative z-10 p-8">
+                    <span className="label-mono text-amber">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-amber">
+                      {service.title}
+                    </h2>
+                    <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{service.summary}</p>
+                    <span className="label-mono mt-6 block text-foreground/60 transition-colors group-hover:text-amber">
+                      Explore →
+                    </span>
+                  </div>
                 </Link>
               </Reveal>
             ))}

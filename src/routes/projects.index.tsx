@@ -127,9 +127,9 @@ function FilterRow({
   onSelect: (value?: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <span className="label-mono w-20 shrink-0 text-muted-foreground">{label}</span>
-      <div className="flex flex-wrap gap-2">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 border-b border-border/50 pb-4 last:border-0 last:pb-0">
+      <span className="label-mono shrink-0 text-muted-foreground sm:w-20">{label}</span>
+      <div className="flex w-full overflow-x-auto no-scrollbar pb-2 -mb-2 gap-2">
         {options.map((opt) => {
           const isActive = (opt.value ?? undefined) === (active ?? undefined);
           return (
@@ -138,7 +138,7 @@ function FilterRow({
               type="button"
               onClick={() => onSelect(opt.value)}
               className={cn(
-                "rounded-full border px-4 py-1.5 text-sm transition-colors",
+                "shrink-0 rounded-full border px-4 py-1.5 text-sm transition-colors",
                 isActive
                   ? "border-amber bg-amber text-primary-foreground"
                   : "border-border text-foreground/75 hover:border-amber hover:text-amber",
