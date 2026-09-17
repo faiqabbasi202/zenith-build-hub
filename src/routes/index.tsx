@@ -211,24 +211,38 @@ function Services({ section, services }: { section?: Row | undefined; services: 
             ) : null
           }
         />
-        <ul className="mt-14 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, i) => (
-            <Reveal as="li" key={service["slug"]} delay={(i % 3) * 0.06} className="bg-background">
+            <Reveal as="li" key={service["slug"]} delay={(i % 3) * 0.06}>
               <Link
                 to="/services/$slug"
                 params={{ slug: service["slug"] }}
-                className="group flex h-full flex-col p-8 transition-colors hover:bg-surface"
+                className="group relative flex h-[28rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors hover:border-amber/60"
               >
-                <span className="label-mono text-amber">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-5 font-display text-xl font-semibold tracking-tight transition-colors group-hover:text-amber">
-                  {service["title"]}
-                </h3>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{service["summary"]}</p>
-                <span className="label-mono mt-6 text-foreground/60 transition-colors group-hover:text-amber">
-                  Explore →
-                </span>
+                {service["hero_image_url"] ? (
+                  <>
+                    <ResponsiveImage
+                      src={service["hero_image_url"]}
+                      alt={service["title"]}
+                      className="absolute inset-0 h-full w-full"
+                      imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
+                  </>
+                ) : null}
+                
+                <div className="relative z-10 p-8">
+                  <span className="label-mono text-amber">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-amber">
+                    {service["title"]}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{service["summary"]}</p>
+                  <span className="label-mono mt-6 block text-foreground/60 transition-colors group-hover:text-amber">
+                    Explore →
+                  </span>
+                </div>
               </Link>
             </Reveal>
           ))}
@@ -250,18 +264,31 @@ function Sectors({ section, sectors }: { section?: Row | undefined; sectors: Row
           heading={section["heading"]}
           subheading={section["subheading"]}
         />
-        <ul className="mt-14 flex flex-wrap gap-3">
+        <ul className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {sectors.map((sector, i) => (
             <Reveal as="li" key={sector["slug"]} delay={i * 0.04}>
               <Link
                 to="/projects"
                 search={{ sector: sector["slug"] } as never}
-                className="group flex items-center gap-3 rounded-sm border border-border px-5 py-4 transition-colors hover:border-amber"
+                className="group relative flex h-48 items-end overflow-hidden rounded-sm border border-border p-5 transition-colors hover:border-amber"
               >
-                <span className="font-display text-base font-semibold transition-colors group-hover:text-amber">
-                  {sector["title"]}
-                </span>
-                <span className="label-mono text-muted-foreground">→</span>
+                {sector["hero_image_url"] ? (
+                  <>
+                    <ResponsiveImage
+                      src={sector["hero_image_url"]}
+                      alt={sector["title"]}
+                      className="absolute inset-0 h-full w-full"
+                      imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/10" />
+                  </>
+                ) : null}
+                <div className="relative z-10 flex w-full items-center justify-between gap-3">
+                  <span className="font-display text-lg font-semibold text-foreground transition-colors group-hover:text-amber">
+                    {sector["title"]}
+                  </span>
+                  <span className="label-mono text-amber opacity-0 transition-opacity group-hover:opacity-100">→</span>
+                </div>
               </Link>
             </Reveal>
           ))}

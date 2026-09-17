@@ -1,5 +1,6 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import type { ReactNode } from "react";
+import { motion } from "motion/react";
 
 import { siteSettingsQuery } from "@/lib/queries";
 
@@ -19,9 +20,15 @@ export function SiteShell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       <SiteHeader settings={settings} />
-      <main id="main" className="flex-1">
+      <motion.main
+        id="main"
+        className="flex-1"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      >
         {children}
-      </main>
+      </motion.main>
       <SiteFooter settings={settings} />
       <WhatsAppButton number={settings?.["whatsapp"]} />
     </div>
