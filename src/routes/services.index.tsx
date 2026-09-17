@@ -37,7 +37,7 @@ function ServicesPage() {
         title="Every discipline your project needs, under one contract."
         intro="We self-perform design, engineering and construction so accountability never gets split between consultants."
       />
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <ul className="grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
             {services.map((service: any, i: number) => (

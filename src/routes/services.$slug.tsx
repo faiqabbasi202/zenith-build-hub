@@ -56,7 +56,7 @@ function ServiceDetail() {
         image={service["hero_image_url"]}
       />
 
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
           <div>
             <p className="text-lg leading-relaxed text-foreground/85 whitespace-pre-line">
@@ -126,7 +126,7 @@ function ServiceDetail() {
       ) : null}
 
       {data.projects.length ? (
-        <section className="py-20 md:py-28">
+        <section className="bg-background py-20 md:py-28">
           <Container>
             <SectionHead eyebrow="Related work" heading="Projects using this service" />
             <ul className="mt-12 grid gap-8 md:grid-cols-3">

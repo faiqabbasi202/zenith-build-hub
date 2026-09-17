@@ -51,7 +51,7 @@ function PostDetail() {
         intro={post["excerpt"]}
         image={post["cover_image_url"]}
       />
-      <article className="py-20 md:py-28">
+      <article className="bg-background py-20 md:py-28">
         <Container>
           <div className="mx-auto max-w-3xl">
             <p className="label-mono text-muted-foreground">

@@ -77,7 +77,7 @@ function ProjectDetail() {
         </div>
       </PageHero>
 
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
           <div>
             <p className="text-lg leading-relaxed whitespace-pre-line text-foreground/85">

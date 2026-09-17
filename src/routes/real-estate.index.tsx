@@ -38,7 +38,7 @@ function DevelopmentsPage() {
         title="Developments we design, build and stand behind."
         intro="Own-account projects where AMARC is developer and contractor — so quality and handover dates sit with one company."
       />
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <ul className="space-y-16">
             {developments.map((dev: any, i: number) => (

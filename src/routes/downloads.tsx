@@ -35,7 +35,7 @@ function DownloadsPage() {
         title="Company profile, certificates and brochures."
         intro="Everything a client or consultant needs for pre-qualification, in one place."
       />
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <ul className="grid gap-px border border-border bg-border sm:grid-cols-2">
             {downloads.map((d: any, i: number) => (

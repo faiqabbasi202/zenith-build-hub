@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
+/* ─── Container ─────────────────────────────────────────────────────────── */
 export function Container({
   className,
   children,
@@ -14,6 +15,7 @@ export function Container({
   return <div className={cn("container-page", className)}>{children}</div>;
 }
 
+/* ─── Eyebrow ───────────────────────────────────────────────────────────── */
 export function Eyebrow({
   children,
   className,
@@ -29,6 +31,7 @@ export function Eyebrow({
   );
 }
 
+/* ─── SectionHead ───────────────────────────────────────────────────────── */
 export function SectionHead({
   eyebrow,
   heading,
@@ -50,7 +53,9 @@ export function SectionHead({
       )}
     >
       <div className={cn("max-w-2xl", align === "center" && "mx-auto text-center")}>
-        {eyebrow ? <Eyebrow className={cn(align === "center" && "justify-center")}>{eyebrow}</Eyebrow> : null}
+        {eyebrow ? (
+          <Eyebrow className={cn(align === "center" && "justify-center")}>{eyebrow}</Eyebrow>
+        ) : null}
         {heading ? (
           <h2 className="mt-4 text-3xl leading-[1.05] font-semibold sm:text-4xl lg:text-5xl">
             {heading}
@@ -65,6 +70,7 @@ export function SectionHead({
   );
 }
 
+/* ─── Action button / link ──────────────────────────────────────────────── */
 type ActionProps = {
   children: ReactNode;
   to?: string;
@@ -109,7 +115,12 @@ export function Action({
   }
   if (href) {
     return (
-      <a href={href} className={classes} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+      <a
+        href={href}
+        className={classes}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel="noreferrer"
+      >
         {children}
       </a>
     );
@@ -132,6 +143,7 @@ function ArrowGlyph() {
   );
 }
 
+/* ─── Reveal (scroll-triggered fade-up) ────────────────────────────────── */
 export function Reveal({
   children,
   delay = 0,
@@ -165,6 +177,7 @@ export function Reveal({
   );
 }
 
+/* ─── Counter ───────────────────────────────────────────────────────────── */
 export function Counter({
   value,
   prefix = "",
@@ -183,10 +196,7 @@ export function Counter({
 
   useEffect(() => {
     if (!inView) return;
-    if (reduce) {
-      setShown(value);
-      return;
-    }
+    if (reduce) { setShown(value); return; }
     let frame = 0;
     const total = 60;
     const tick = () => {
@@ -214,6 +224,7 @@ export function Counter({
   );
 }
 
+/* ─── StatusChip ────────────────────────────────────────────────────────── */
 export function StatusChip({ label }: { label: string }) {
   return (
     <span className="label-mono inline-flex items-center gap-1.5 rounded-full border border-border bg-background/70 px-2.5 py-1 text-foreground/80 backdrop-blur">
@@ -223,10 +234,12 @@ export function StatusChip({ label }: { label: string }) {
   );
 }
 
+/* ─── Hairline ──────────────────────────────────────────────────────────── */
 export function Hairline({ className }: { className?: string }) {
   return <div className={cn("h-px w-full bg-border", className)} />;
 }
 
+/* ─── PageHero — centered light-grey textured banner ───────────────────── */
 export function PageHero({
   eyebrow,
   title,
@@ -241,7 +254,8 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <header className="relative overflow-hidden border-b border-border bg-surface">
+    <header className="relative overflow-hidden border-b border-border">
+      {/* Background */}
       {image ? (
         <>
           <img
@@ -249,23 +263,184 @@ export function PageHero({
             alt=""
             aria-hidden
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover opacity-20"
+            className="absolute inset-0 h-full w-full object-cover opacity-15"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-surface/50" />
         </>
       ) : (
         <div aria-hidden className="hero-texture absolute inset-0" />
       )}
-      <Container className="relative py-20 md:py-28">
-        <Eyebrow>{eyebrow}</Eyebrow>
-        <h1 className="mt-5 max-w-4xl text-4xl leading-[1.02] font-semibold sm:text-5xl lg:text-6xl">
-          {title}
-        </h1>
-        {intro ? (
-          <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">{intro}</p>
-        ) : null}
-        {children}
+
+      {/* Content — centered */}
+      <Container className="relative py-16 text-center md:py-24">
+        <Reveal>
+          <Eyebrow className="justify-center">{eyebrow}</Eyebrow>
+          <h1 className="mt-5 text-3xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            {title}
+          </h1>
+          {intro ? (
+            <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
+              {intro}
+            </p>
+          ) : null}
+          {children ? <div className="mt-8">{children}</div> : null}
+        </Reveal>
       </Container>
     </header>
+  );
+}
+
+/* ─── ProgressBar ───────────────────────────────────────────────────────── */
+export function ProgressBar({
+  label,
+  value,
+}: {
+  label: string;
+  value: number; // 0–100
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const reduce = useReducedMotion();
+
+  return (
+    <div ref={ref}>
+      <div className="flex items-center justify-between gap-4 text-sm">
+        <span className="font-medium">{label}</span>
+        <span className="label-mono text-amber">{value}%</span>
+      </div>
+      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-border">
+        <motion.div
+          className="h-full rounded-full bg-amber"
+          initial={{ width: 0 }}
+          animate={inView ? { width: `${value}%` } : { width: 0 }}
+          transition={
+            reduce
+              ? { duration: 0 }
+              : { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─── FeatureStory — photo + text split section ─────────────────────────── */
+export function FeatureStory({
+  eyebrow,
+  heading,
+  body,
+  bars,
+  ctaLabel,
+  ctaHref,
+  image,
+  imageAlt,
+  flip = false,
+}: {
+  eyebrow?: string;
+  heading: string;
+  body: string;
+  bars?: { label: string; value: number }[];
+  ctaLabel?: string;
+  ctaHref?: string;
+  image?: string | null;
+  imageAlt?: string;
+  flip?: boolean; // true = text left, photo right; false = photo left, text right (default false = text left)
+}) {
+  return (
+    <div
+      className={cn(
+        "grid items-center gap-10 md:grid-cols-2 lg:gap-16",
+        flip && "md:[&>*:first-child]:order-2",
+      )}
+    >
+      {/* Text side */}
+      <Reveal>
+        {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+        <h2 className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+          {heading}
+        </h2>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+          {body}
+        </p>
+
+        {bars && bars.length > 0 ? (
+          <div className="mt-7 space-y-4">
+            {bars.map((bar) => (
+              <ProgressBar key={bar.label} label={bar.label} value={bar.value} />
+            ))}
+          </div>
+        ) : null}
+
+        {ctaLabel ? (
+          <div className="mt-8">
+            <Action href={ctaHref ?? "#"}>{ctaLabel}</Action>
+          </div>
+        ) : null}
+      </Reveal>
+
+      {/* Photo side */}
+      <Reveal delay={0.1} className="order-first md:order-none">
+        {image ? (
+          <img
+            src={image}
+            alt={imageAlt ?? ""}
+            loading="lazy"
+            className="aspect-[4/3] w-full rounded-sm object-cover"
+          />
+        ) : (
+          <div className="hero-texture aspect-[4/3] w-full rounded-sm" />
+        )}
+      </Reveal>
+    </div>
+  );
+}
+
+/* ─── IconCard ──────────────────────────────────────────────────────────── */
+export function IconCard({
+  icon,
+  title,
+  body,
+  elevated = false,
+}: {
+  icon: ReactNode;
+  title: string;
+  body: string;
+  elevated?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center rounded-sm border border-border bg-background p-8 text-center transition-shadow",
+        elevated && "md:shadow-lg md:shadow-black/8",
+      )}
+    >
+      <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-amber text-primary-foreground">
+        {icon}
+      </div>
+      <h3 className="mt-5 font-display text-lg font-semibold tracking-tight">{title}</h3>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+/* ─── IconCardGrid ──────────────────────────────────────────────────────── */
+export function IconCardGrid({
+  cards,
+}: {
+  cards: { icon: ReactNode; title: string; body: string }[];
+}) {
+  return (
+    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {cards.map((card, i) => (
+        <Reveal as="li" key={card.title} delay={(i % 3) * 0.07}>
+          <IconCard
+            icon={card.icon}
+            title={card.title}
+            body={card.body}
+            elevated={i % 3 === 1} /* center column elevated on desktop */
+          />
+        </Reveal>
+      ))}
+    </ul>
   );
 }

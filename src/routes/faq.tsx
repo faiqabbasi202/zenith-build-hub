@@ -39,7 +39,7 @@ function FaqPage() {
         title="Straight answers before you sign anything."
         intro="Cost, timelines, approvals and payment structures — the questions every client asks us first."
       />
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container className="space-y-16">
           {Object.entries(grouped).map(([category, items]) => (
             <div key={category}>

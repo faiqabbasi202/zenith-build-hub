@@ -3,7 +3,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
-import { Action, Container, PageHero, Reveal, SectionHead } from "@/components/site/primitives";
+import {
+  Action,
+  Container,
+  FeatureStory,
+  PageHero,
+  Reveal,
+  SectionHead,
+} from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { submitApplication } from "@/lib/content.functions";
 import { asList, longDate } from "@/lib/format";
@@ -71,7 +78,25 @@ function CareersPage() {
         intro="Direct employment, structured training and long projects that make your name."
       />
 
-      <section className="py-20 md:py-28">
+      {/* Feature Story block added per Phase 3 */}
+      <section className="bg-background py-20 md:py-28">
+        <Container>
+          <FeatureStory
+            eyebrow="Life at AMARC"
+            heading="More than just a job site."
+            body="We believe in training the next generation of engineers and builders. From comprehensive safety protocols to continuous professional development, joining AMARC means building a lasting career in Pakistan's construction sector."
+            bars={[
+              { label: "Internal Promotions", value: 65 },
+              { label: "Retention Rate", value: 85 },
+            ]}
+            image="https://images.unsplash.com/photo-1541888086925-920eb1f10350?auto=format&fit=crop&q=80"
+            imageAlt="AMARC team members reviewing plans on site"
+            flip={true}
+          />
+        </Container>
+      </section>
+
+      <section className="border-t border-border bg-surface py-20 md:py-28">
         <Container>
           <SectionHead eyebrow="Open roles" heading="Current vacancies" />
           <div className="mt-12 divide-y divide-border border-y border-border">
@@ -120,7 +145,7 @@ function CareersPage() {
                 </div>
 
                 {open === job.id ? (
-                  <Reveal className="mt-8 border border-border bg-surface p-7">
+                  <Reveal className="mt-8 border border-border bg-background p-7">
                     <h3 className="font-display text-lg font-semibold">Apply for this role</h3>
                     <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
                       <input type="hidden" name="job_title" value={job.title} />

@@ -95,7 +95,7 @@ function ProjectsPage() {
         </Container>
       </section>
 
-      <section className="py-16 md:py-24">
+      <section className="bg-background py-16 md:py-24">
         <Container>
           <p className="label-mono text-muted-foreground">
             {filtered.length} project{filtered.length === 1 ? "" : "s"}

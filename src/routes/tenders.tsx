@@ -73,7 +73,7 @@ function TendersPage() {
         intro="We procure through documented tendering. Suppliers and subcontractors can register below for pre-qualification."
       />
 
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <SectionHead eyebrow="Open tenders" heading="Current opportunities" />
           <div className="mt-12 overflow-x-auto border border-border">

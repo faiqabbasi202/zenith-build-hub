@@ -82,7 +82,7 @@ function ContactPage() {
         intro="Send the plot details and a rough brief. You will get a written response within two working days."
       />
 
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-[1.5fr_1fr]">
           <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
             <input required name="name" placeholder="Full name *" className={inputCls} />

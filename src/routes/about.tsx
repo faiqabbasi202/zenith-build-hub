@@ -1,7 +1,13 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Container, PageHero, Reveal, SectionHead } from "@/components/site/primitives";
+import {
+  Container,
+  FeatureStory,
+  PageHero,
+  Reveal,
+  SectionHead,
+} from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { aboutQuery } from "@/lib/queries";
 
@@ -33,13 +39,37 @@ function AboutPage() {
 
   return (
     <SiteShell>
+      {/* Hero — light-grey textured, centered */}
       <PageHero
         eyebrow="About us"
         title={s?.["company_full_name"] ?? "AMARC Engineering & Construction Company"}
         intro={s?.["tagline"] ?? undefined}
       />
 
-      <section className="py-20 md:py-28">
+      {/* Section 1 — Feature story: white bg */}
+      <section className="bg-background py-20 md:py-28">
+        <Container>
+          <FeatureStory
+            eyebrow="Working with us"
+            heading="Sustainable Design & Construction Consulting"
+            body={
+              s?.["about_body"] ??
+              "AMARC is represented by multiple branches across Pakistan. We implement different projects, innovative technologies and use an individual approach for every client — delivering quality-driven outcomes from concept through commissioning."
+            }
+            bars={[
+              { label: "Design Excellence", value: 90 },
+              { label: "Preconstruction Planning", value: 75 },
+            ]}
+            ctaLabel="Discover more"
+            ctaHref="/services"
+            image={s?.["about_image_url"] ?? null}
+            imageAlt="AMARC construction professional on site"
+          />
+        </Container>
+      </section>
+
+      {/* Section 2 — History milestones: grey bg */}
+      <section className="bg-surface py-20 md:py-28">
         <Container>
           <SectionHead
             eyebrow="Our history"
@@ -58,7 +88,8 @@ function AboutPage() {
         </Container>
       </section>
 
-      <section className="border-t border-border bg-surface py-20 md:py-28">
+      {/* Section 3 — Leadership: white bg */}
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <SectionHead eyebrow="Leadership" heading="The people accountable for delivery." />
           <ul className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -67,7 +98,7 @@ function AboutPage() {
                 as="li"
                 key={member.id}
                 delay={(i % 3) * 0.06}
-                className="border border-border bg-background"
+                className="border border-border bg-surface"
               >
                 {member.photo_url ? (
                   <div className="aspect-4/5 overflow-hidden">
@@ -93,7 +124,8 @@ function AboutPage() {
         </Container>
       </section>
 
-      <section className="py-20 md:py-28">
+      {/* Section 4 — Certifications & Awards: grey bg */}
+      <section className="bg-surface py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-2">
           <div>
             <SectionHead eyebrow="Compliance" heading="Certifications & registrations" />

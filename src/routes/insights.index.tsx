@@ -38,7 +38,7 @@ function InsightsPage() {
         title="Notes from the site office."
         intro="Cost benchmarks, regulatory changes and construction method, written by the engineers doing the work."
       />
-      <section className="py-20 md:py-28">
+      <section className="bg-background py-20 md:py-28">
         <Container>
           <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post: any, i: number) => (
