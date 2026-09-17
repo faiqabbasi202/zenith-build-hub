@@ -254,7 +254,7 @@ export function PageHero({
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40" />
         </>
       ) : (
-        <div aria-hidden className="rule-grid absolute inset-0 opacity-40" />
+        <div aria-hidden className="hero-texture absolute inset-0" />
       )}
       <Container className="relative py-20 md:py-28">
         <Eyebrow>{eyebrow}</Eyebrow>

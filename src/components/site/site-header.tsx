@@ -38,7 +38,7 @@ export function SiteHeader({ phone }: { phone?: string | null }) {
       className={cn(
         "sticky top-0 z-50 w-full border-b transition-colors duration-300",
         scrolled || open
-          ? "border-border bg-background/85 backdrop-blur-xl"
+          ? "border-border bg-white/90 shadow-sm backdrop-blur-xl"
           : "border-transparent bg-transparent",
       )}
     >

@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Turnkey construction, architectural and structural engineering across Pakistan since 2004.",
       },
       { name: "author", content: "AMARC Engineering & Construction Company" },
-      { name: "theme-color", content: "#221f1c" },
+      { name: "theme-color", content: "#ffffff" },
       { property: "og:site_name", content: "AMARC Engineering & Construction" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

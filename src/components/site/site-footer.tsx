@@ -39,7 +39,10 @@ export function SiteFooter({ settings }: { settings: Settings }) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-surface">
+    <footer
+      className="border-t border-[oklch(1_0_0/12%)]"
+      style={{ backgroundColor: "var(--color-dark-section)", color: "var(--color-dark-section-foreground)" }}
+    >
       <div className="container-page grid gap-12 py-16 lg:grid-cols-[1.4fr_2fr] lg:py-20">
         <div>
           <div className="flex items-center gap-3">
@@ -48,12 +51,12 @@ export function SiteFooter({ settings }: { settings: Settings }) {
             </span>
             <span>
               <span className="block font-display text-xl font-bold tracking-tight">AMARC</span>
-              <span className="label-mono text-[9px] text-muted-foreground">
+              <span className="label-mono text-[9px] opacity-50">
                 Engineering &amp; Construction
               </span>
             </span>
           </div>
-          <p className="mt-5 max-w-sm text-sm text-muted-foreground">
+          <p className="mt-5 max-w-sm text-sm opacity-60">
             {settings?.["tagline"] ?? "Engineering the built environment of Pakistan."}
           </p>
 
@@ -61,7 +64,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
             {settings?.["phone"] ? (
               <a
                 href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`}
-                className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-amber"
+                className="flex items-center gap-3 opacity-70 transition-colors hover:opacity-100 hover:text-amber"
               >
                 <Phone className="h-4 w-4 text-amber" aria-hidden />
                 {settings["phone"]}
@@ -70,14 +73,14 @@ export function SiteFooter({ settings }: { settings: Settings }) {
             {settings?.["email"] ? (
               <a
                 href={`mailto:${settings["email"]}`}
-                className="flex items-center gap-3 text-foreground/80 transition-colors hover:text-amber"
+                className="flex items-center gap-3 opacity-70 transition-colors hover:opacity-100 hover:text-amber"
               >
                 <Mail className="h-4 w-4 text-amber" aria-hidden />
                 {settings["email"]}
               </a>
             ) : null}
             {settings?.["address"] ? (
-              <p className="flex items-start gap-3 text-foreground/80">
+              <p className="flex items-start gap-3 opacity-70">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-amber" aria-hidden />
                 <span>
                   {settings["address"]}, {settings["city"]}
@@ -93,7 +96,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="AMARC on Facebook"
-                className="flex h-10 w-10 items-center justify-center rounded-sm border border-border transition-colors hover:border-amber hover:text-amber"
+                className="flex h-10 w-10 items-center justify-center rounded-sm border border-[oklch(1_0_0/15%)] transition-colors hover:border-amber hover:text-amber"
               >
                 <Facebook className="h-4 w-4" />
               </a>
@@ -104,7 +107,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="AMARC on LinkedIn"
-                className="flex h-10 w-10 items-center justify-center rounded-sm border border-border transition-colors hover:border-amber hover:text-amber"
+                className="flex h-10 w-10 items-center justify-center rounded-sm border border-[oklch(1_0_0/15%)] transition-colors hover:border-amber hover:text-amber"
               >
                 <Linkedin className="h-4 w-4" />
               </a>
@@ -115,7 +118,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="AMARC on Google Maps"
-                className="flex h-10 w-10 items-center justify-center rounded-sm border border-border transition-colors hover:border-amber hover:text-amber"
+                className="flex h-10 w-10 items-center justify-center rounded-sm border border-[oklch(1_0_0/15%)] transition-colors hover:border-amber hover:text-amber"
               >
                 <MapPin className="h-4 w-4" />
               </a>
@@ -126,13 +129,13 @@ export function SiteFooter({ settings }: { settings: Settings }) {
         <div className="grid gap-10 sm:grid-cols-3">
           {COLUMNS.map((col) => (
             <div key={col.title}>
-              <h3 className="label-mono text-muted-foreground">{col.title}</h3>
+              <h3 className="label-mono opacity-40">{col.title}</h3>
               <ul className="mt-5 space-y-3">
                 {col.links.map((link) => (
                   <li key={link.to}>
                     <Link
                       to={link.to}
-                      className="text-sm text-foreground/80 transition-colors hover:text-amber"
+                      className="text-sm opacity-70 transition-colors hover:opacity-100 hover:text-amber"
                     >
                       {link.label}
                     </Link>
@@ -145,15 +148,15 @@ export function SiteFooter({ settings }: { settings: Settings }) {
       </div>
 
       {offices.length ? (
-        <div className="border-t border-border">
+        <div className="border-t border-[oklch(1_0_0/12%)]">
           <div className="container-page grid gap-8 py-10 sm:grid-cols-3">
             {offices.map((office: any) => (
               <div key={office.city}>
                 <p className="label-mono text-amber">{office.label ?? office.city}</p>
                 <p className="mt-3 text-sm font-semibold">{office.city}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{office.address}</p>
+                <p className="mt-1 text-sm opacity-55">{office.address}</p>
                 {office.phone ? (
-                  <p className="mt-1 text-sm text-muted-foreground">{office.phone}</p>
+                  <p className="mt-1 text-sm opacity-55">{office.phone}</p>
                 ) : null}
               </div>
             ))}
@@ -161,8 +164,8 @@ export function SiteFooter({ settings }: { settings: Settings }) {
         </div>
       ) : null}
 
-      <div className="border-t border-border">
-        <div className="container-page flex flex-col gap-3 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-t border-[oklch(1_0_0/12%)]">
+        <div className="container-page flex flex-col gap-3 py-6 text-xs opacity-50 sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {settings?.["company_full_name"] ?? "AMARC Engineering & Construction Company"}.
             All rights reserved.
