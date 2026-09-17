@@ -3,6 +3,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { Action, Container, PageHero, Reveal, SectionHead, StatusChip } from "@/components/site/primitives";
 import { ProjectCard } from "@/components/site/project-card";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { asList, longDate, pkr, statusLabel } from "@/lib/format";
 import { projectQuery } from "@/lib/queries";
@@ -102,11 +103,12 @@ function ProjectDetail() {
               <div className="mt-14 grid gap-4 sm:grid-cols-2">
                 {gallery.map((src, i) => (
                   <Reveal key={src} delay={(i % 2) * 0.06} className="overflow-hidden border border-border">
-                    <img
+                    <ResponsiveImage
                       src={src}
                       alt={`${project["title"]} — view ${i + 1}`}
-                      loading="lazy"
-                      className="h-full w-full object-cover"
+                      aspectRatio="16/10"
+                      className="h-full w-full"
+                      imgClassName="h-full w-full object-cover"
                     />
                   </Reveal>
                 ))}

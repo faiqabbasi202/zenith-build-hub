@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Container, PageHero, Reveal, StatusChip } from "@/components/site/primitives";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { statusLabel } from "@/lib/format";
 import { developmentsQuery } from "@/lib/queries";
@@ -50,11 +51,12 @@ function DevelopmentsPage() {
                 >
                   <div className="relative aspect-16/10 overflow-hidden">
                     {dev.cover_image_url ? (
-                      <img
+                      <ResponsiveImage
                         src={dev.cover_image_url}
                         alt={dev.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        aspectRatio="16/10"
+                        className="h-full w-full"
+                        imgClassName="transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : null}
                   </div>

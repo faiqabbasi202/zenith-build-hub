@@ -2,6 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 
+import {
+  DUMMY_PROJECTS_BY_CATEGORY,
+  enrichSectorHeroImage,
+  enrichServiceHeroImage,
+} from "./image-wiring";
+
 /** Public, read-only Supabase client. Created inside handlers only. */
 function publicClient() {
   return createClient(
@@ -55,17 +61,39 @@ export const getHomeData = createServerFn({ method: "GET" }).handler(async () =>
       sb.from("projects").select("status").eq("is_published", true),
     ]);
 
+  const rawSections = (sections.data ?? []) as Row[];
+  const enrichedSections = rawSections.map((sec) => {
+    if (sec["key"] === "hero") {
+      return {
+        ...sec,
+        media_url: "/images/hero/homepage-hero-desktop.jpg",
+        poster_url: "/images/hero/homepage-hero---mobile.jpg",
+      };
+    }
+    return sec;
+  });
+
+  const enrichedServices = ((services.data ?? []) as Row[]).map(enrichServiceHeroImage);
+  const enrichedSectors = ((sectors.data ?? []) as Row[]).map(enrichSectorHeroImage);
+
+  // Combine featured projects from DB with category dummy projects
+  const featuredDummies = DUMMY_PROJECTS_BY_CATEGORY.filter((p) => p.is_featured);
+  const combinedProjects = [
+    ...featuredDummies,
+    ...((projects.data ?? []) as Row[]).filter((p) => !featuredDummies.some((d) => d.slug === p["slug"])),
+  ].slice(0, 6);
+
   return {
-    sections: (sections.data ?? []) as Row[],
-    services: (services.data ?? []) as Row[],
-    sectors: (sectors.data ?? []) as Row[],
-    projects: (projects.data ?? []) as Row[],
+    sections: enrichedSections,
+    services: enrichedServices,
+    sectors: enrichedSectors,
+    projects: combinedProjects,
     developments: (developments.data ?? []) as Row[],
     testimonials: (testimonials.data ?? []) as Row[],
     clients: (clients.data ?? []) as Row[],
     certifications: (certifications.data ?? []) as Row[],
     posts: (posts.data ?? []) as Row[],
-    projectCount: (stats.data ?? []).length,
+    projectCount: (stats.data ?? []).length + DUMMY_PROJECTS_BY_CATEGORY.length,
   };
 });
 
@@ -76,7 +104,7 @@ export const getServices = createServerFn({ method: "GET" }).handler(async () =>
     .select("*")
     .eq("is_published", true)
     .order("sort_order");
-  return (data ?? []) as Row[];
+  return ((data ?? []) as Row[]).map(enrichServiceHeroImage);
 });
 
 const slugInput = (d: unknown) => z.object({ slug: z.string() }).parse(d);
@@ -94,9 +122,16 @@ export const getService = createServerFn({ method: "GET" })
         .order("sort_order")
         .limit(3),
     ]);
+
+    const enrichedService = service.data ? enrichServiceHeroImage(service.data as Row) : null;
+    const relatedDummies = DUMMY_PROJECTS_BY_CATEGORY.slice(0, 3);
+    const combinedProjects = (projects.data && projects.data.length > 0)
+      ? (projects.data as Row[])
+      : relatedDummies;
+
     return {
-      service: (service.data ?? null) as Row | null,
-      projects: (projects.data ?? []) as Row[],
+      service: enrichedService,
+      projects: combinedProjects,
     };
   });
 
@@ -107,7 +142,22 @@ export const getSectors = createServerFn({ method: "GET" }).handler(async () => 
     .select("*")
     .eq("is_published", true)
     .order("sort_order");
-  return (data ?? []) as Row[];
+
+  const enriched = ((data ?? []) as Row[]).map(enrichSectorHeroImage);
+  const additionalCategories = ["renovation", "real-estate", "careers", "about"];
+  for (const cat of additionalCategories) {
+    if (!enriched.some((s) => s["slug"] === cat)) {
+      enriched.push(enrichSectorHeroImage({
+        id: `sec-${cat}`,
+        slug: cat,
+        title: cat.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+        summary: `AMARC specialist ${cat} projects across Pakistan.`,
+        is_published: true,
+      }));
+    }
+  }
+
+  return enriched;
 });
 
 export const getProjects = createServerFn({ method: "GET" }).handler(async () => {
@@ -116,15 +166,46 @@ export const getProjects = createServerFn({ method: "GET" }).handler(async () =>
     sb.from("projects").select("*").eq("is_published", true).order("sort_order"),
     sb.from("sectors").select("slug,title").eq("is_published", true).order("sort_order"),
   ]);
+
+  const dbProjects = (projects.data ?? []) as Row[];
+  const combinedProjects = [
+    ...DUMMY_PROJECTS_BY_CATEGORY,
+    ...dbProjects.filter((p) => !DUMMY_PROJECTS_BY_CATEGORY.some((d) => d.slug === p["slug"])),
+  ];
+
+  const dbSectors = (sectors.data ?? []) as Row[];
+  const requiredCategories = [
+    { slug: "residential", title: "Residential" },
+    { slug: "commercial", title: "Commercial" },
+    { slug: "renovation", title: "Renovation" },
+    { slug: "real-estate", title: "Real Estate" },
+    { slug: "careers", title: "Careers" },
+    { slug: "about", title: "About" },
+  ];
+  const combinedSectors = [...dbSectors];
+  for (const cat of requiredCategories) {
+    if (!combinedSectors.some((s) => s["slug"] === cat.slug)) {
+      combinedSectors.push(cat);
+    }
+  }
+
   return {
-    projects: (projects.data ?? []) as Row[],
-    sectors: (sectors.data ?? []) as Row[],
+    projects: combinedProjects,
+    sectors: combinedSectors,
   };
 });
 
 export const getProject = createServerFn({ method: "GET" })
   .inputValidator(slugInput)
   .handler(async ({ data }) => {
+    const dummy = DUMMY_PROJECTS_BY_CATEGORY.find((p) => p.slug === data.slug);
+    if (dummy) {
+      const related = DUMMY_PROJECTS_BY_CATEGORY
+        .filter((p) => p.sector_slug === dummy.sector_slug && p.slug !== dummy.slug)
+        .slice(0, 3);
+      return { project: dummy as Row, related: related as Row[] };
+    }
+
     const sb = publicClient();
     const { data: project } = await sb
       .from("projects")
@@ -132,7 +213,9 @@ export const getProject = createServerFn({ method: "GET" })
       .eq("slug", data.slug)
       .eq("is_published", true)
       .maybeSingle();
+
     if (!project) return { project: null as Row | null, related: [] as Row[] };
+
     const { data: related } = await sb
       .from("projects")
       .select("slug,title,city,cover_image_url,status,sector_slug,summary")
@@ -140,6 +223,7 @@ export const getProject = createServerFn({ method: "GET" })
       .eq("sector_slug", (project as Row)["sector_slug"])
       .neq("slug", data.slug)
       .limit(3);
+
     return { project: project as Row, related: (related ?? []) as Row[] };
   });
 

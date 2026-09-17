@@ -89,8 +89,8 @@ function CareersPage() {
               { label: "Internal Promotions", value: 65 },
               { label: "Retention Rate", value: 85 },
             ]}
-            image="https://images.unsplash.com/photo-1541888086925-920eb1f10350?auto=format&fit=crop&q=80"
-            imageAlt="AMARC team members reviewing plans on site"
+            image="/images/careers/careers---culture.jpg"
+            imageAlt="AMARC team members and culture"
             flip={true}
           />
         </Container>

@@ -3,6 +3,7 @@ import { motion, useInView, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
+import { ResponsiveImage } from "./responsive-image";
 
 /* ─── Container ─────────────────────────────────────────────────────────── */
 export function Container({
@@ -258,12 +259,12 @@ export function PageHero({
       {/* Background */}
       {image ? (
         <>
-          <img
+          <ResponsiveImage
             src={image}
             alt=""
-            aria-hidden
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover opacity-15"
+            eager={true}
+            className="absolute inset-0 h-full w-full opacity-15"
+            imgClassName="h-full w-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-surface/50" />
         </>
@@ -381,11 +382,12 @@ export function FeatureStory({
       {/* Photo side */}
       <Reveal delay={0.1} className="order-first md:order-none">
         {image ? (
-          <img
+          <ResponsiveImage
             src={image}
             alt={imageAlt ?? ""}
-            loading="lazy"
-            className="aspect-[4/3] w-full rounded-sm object-cover"
+            aspectRatio="4/3"
+            className="w-full rounded-sm"
+            imgClassName="h-full w-full object-cover"
           />
         ) : (
           <div className="hero-texture aspect-[4/3] w-full rounded-sm" />

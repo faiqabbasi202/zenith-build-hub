@@ -13,6 +13,7 @@ import {
   StatusChip,
 } from "@/components/site/primitives";
 import { ProjectCard } from "@/components/site/project-card";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { asObjects, longDate, pkr, statusLabel } from "@/lib/format";
 import { homeQuery, siteSettingsQuery } from "@/lib/queries";
@@ -91,24 +92,14 @@ function Hero({ section }: { section?: Row | undefined }) {
   return (
     <section ref={ref} className="relative isolate min-h-[92svh] overflow-hidden">
       <motion.div style={reduce ? {} : { y }} className="absolute inset-0 -z-10">
-        {section["media_url"] ? (
-          <video
-            className="h-full w-full object-cover"
-            src={section["media_url"]}
-            poster={section["poster_url"] ?? undefined}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-        ) : section["poster_url"] ? (
-          <img
-            src={section["poster_url"]}
-            alt="AMARC construction site at dusk"
-            className="h-full w-full object-cover"
-            fetchPriority="high"
-          />
-        ) : null}
+        <ResponsiveImage
+          desktopSrc={section["media_url"] || "/images/hero/homepage-hero-desktop.jpg"}
+          mobileSrc={section["poster_url"] || "/images/hero/homepage-hero---mobile.jpg"}
+          alt={section["heading"] ?? "AMARC Engineering & Construction"}
+          eager={true}
+          className="h-full w-full"
+          imgClassName="h-full w-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/35" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/85 via-background/40 to-transparent" />
       </motion.div>
@@ -382,11 +373,11 @@ function Developments({ section, developments }: { section?: Row | undefined; de
                 className="group relative block h-[26rem] overflow-hidden border border-border"
               >
                 {dev["cover_image_url"] ? (
-                  <img
+                  <ResponsiveImage
                     src={dev["cover_image_url"]}
                     alt={dev["title"]}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="absolute inset-0 h-full w-full"
+                    imgClassName="transition-transform duration-700 group-hover:scale-105"
                   />
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
@@ -533,11 +524,12 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
               >
                 {post["cover_image_url"] ? (
                   <div className="aspect-16/9 overflow-hidden">
-                    <img
+                    <ResponsiveImage
                       src={post["cover_image_url"]}
                       alt={post["title"]}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      aspectRatio="16/9"
+                      className="h-full w-full"
+                      imgClassName="transition-transform duration-700 group-hover:scale-105"
                     />
                   </div>
                 ) : null}

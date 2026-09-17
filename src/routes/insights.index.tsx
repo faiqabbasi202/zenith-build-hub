@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Container, PageHero, Reveal } from "@/components/site/primitives";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { longDate } from "@/lib/format";
 import { postsQuery } from "@/lib/queries";
@@ -48,13 +49,14 @@ function InsightsPage() {
                   params={{ slug: post.slug }}
                   className="group block h-full border border-border bg-surface transition-colors hover:border-amber/60"
                 >
-                  {post.cover_image_url ? (
+                  {post["cover_image_url"] ? (
                     <div className="aspect-16/9 overflow-hidden">
-                      <img
-                        src={post.cover_image_url}
-                        alt={post.title}
-                        loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      <ResponsiveImage
+                        src={post["cover_image_url"]}
+                        alt={post["title"]}
+                        aspectRatio="16/9"
+                        className="h-full w-full"
+                        imgClassName="transition-transform duration-700 group-hover:scale-105"
                       />
                     </div>
                   ) : null}

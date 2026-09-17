@@ -1,0 +1,352 @@
+{
+  "residential": [
+    {
+      "name": "3. Services — residential construction.jfif",
+      "slug": "services-residential-construction",
+      "folder": "residential",
+      "width": 2400,
+      "height": 1792,
+      "aspectRatio": "1.339",
+      "fallbackJpg": "/images/residential/services-residential-construction.jpg",
+      "fallbackWebp": "/images/residential/services-residential-construction.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/residential/services-residential-construction-600w.webp",
+          "900": "/images/residential/services-residential-construction-900w.webp",
+          "1600": "/images/residential/services-residential-construction-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/residential/services-residential-construction-600w.jpg",
+          "900": "/images/residential/services-residential-construction-900w.jpg",
+          "1600": "/images/residential/services-residential-construction-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/residential/services-residential-construction-600w.webp 600w, /images/residential/services-residential-construction-900w.webp 900w, /images/residential/services-residential-construction-1600w.webp 1600w",
+      "srcSetJpg": "/images/residential/services-residential-construction-600w.jpg 600w, /images/residential/services-residential-construction-900w.jpg 900w, /images/residential/services-residential-construction-1600w.jpg 1600w"
+    },
+    {
+      "name": "9. Featured project — interior.jfif",
+      "slug": "featured-project-interior",
+      "folder": "residential",
+      "width": 2528,
+      "height": 1696,
+      "aspectRatio": "1.491",
+      "fallbackJpg": "/images/residential/featured-project-interior.jpg",
+      "fallbackWebp": "/images/residential/featured-project-interior.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/residential/featured-project-interior-600w.webp",
+          "900": "/images/residential/featured-project-interior-900w.webp",
+          "1600": "/images/residential/featured-project-interior-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/residential/featured-project-interior-600w.jpg",
+          "900": "/images/residential/featured-project-interior-900w.jpg",
+          "1600": "/images/residential/featured-project-interior-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/residential/featured-project-interior-600w.webp 600w, /images/residential/featured-project-interior-900w.webp 900w, /images/residential/featured-project-interior-1600w.webp 1600w",
+      "srcSetJpg": "/images/residential/featured-project-interior-600w.jpg 600w, /images/residential/featured-project-interior-900w.jpg 900w, /images/residential/featured-project-interior-1600w.jpg 1600w"
+    }
+  ],
+  "commercial": [
+    {
+      "name": "4. Services — commercial construction.jfif",
+      "slug": "services-commercial-construction",
+      "folder": "commercial",
+      "width": 2400,
+      "height": 1792,
+      "aspectRatio": "1.339",
+      "fallbackJpg": "/images/commercial/services-commercial-construction.jpg",
+      "fallbackWebp": "/images/commercial/services-commercial-construction.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/commercial/services-commercial-construction-600w.webp",
+          "900": "/images/commercial/services-commercial-construction-900w.webp",
+          "1600": "/images/commercial/services-commercial-construction-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/commercial/services-commercial-construction-600w.jpg",
+          "900": "/images/commercial/services-commercial-construction-900w.jpg",
+          "1600": "/images/commercial/services-commercial-construction-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/commercial/services-commercial-construction-600w.webp 600w, /images/commercial/services-commercial-construction-900w.webp 900w, /images/commercial/services-commercial-construction-1600w.webp 1600w",
+      "srcSetJpg": "/images/commercial/services-commercial-construction-600w.jpg 600w, /images/commercial/services-commercial-construction-900w.jpg 900w, /images/commercial/services-commercial-construction-1600w.jpg 1600w"
+    },
+    {
+      "name": "8. Featured project — exterior, day.jfif",
+      "slug": "featured-project-exterior-day",
+      "folder": "commercial",
+      "width": 2528,
+      "height": 1696,
+      "aspectRatio": "1.491",
+      "fallbackJpg": "/images/commercial/featured-project-exterior-day.jpg",
+      "fallbackWebp": "/images/commercial/featured-project-exterior-day.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/commercial/featured-project-exterior-day-600w.webp",
+          "900": "/images/commercial/featured-project-exterior-day-900w.webp",
+          "1600": "/images/commercial/featured-project-exterior-day-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/commercial/featured-project-exterior-day-600w.jpg",
+          "900": "/images/commercial/featured-project-exterior-day-900w.jpg",
+          "1600": "/images/commercial/featured-project-exterior-day-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/commercial/featured-project-exterior-day-600w.webp 600w, /images/commercial/featured-project-exterior-day-900w.webp 900w, /images/commercial/featured-project-exterior-day-1600w.webp 1600w",
+      "srcSetJpg": "/images/commercial/featured-project-exterior-day-600w.jpg 600w, /images/commercial/featured-project-exterior-day-900w.jpg 900w, /images/commercial/featured-project-exterior-day-1600w.jpg 1600w"
+    },
+    {
+      "name": "Services — infrastructure.jfif",
+      "slug": "services-infrastructure",
+      "folder": "commercial",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/commercial/services-infrastructure.jpg",
+      "fallbackWebp": "/images/commercial/services-infrastructure.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/commercial/services-infrastructure-600w.webp",
+          "900": "/images/commercial/services-infrastructure-900w.webp",
+          "1600": "/images/commercial/services-infrastructure-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/commercial/services-infrastructure-600w.jpg",
+          "900": "/images/commercial/services-infrastructure-900w.jpg",
+          "1600": "/images/commercial/services-infrastructure-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/commercial/services-infrastructure-600w.webp 600w, /images/commercial/services-infrastructure-900w.webp 900w, /images/commercial/services-infrastructure-1600w.webp 1600w",
+      "srcSetJpg": "/images/commercial/services-infrastructure-600w.jpg 600w, /images/commercial/services-infrastructure-900w.jpg 900w, /images/commercial/services-infrastructure-1600w.jpg 1600w"
+    }
+  ],
+  "renovation": [
+    {
+      "name": "9. Featured project — interior.jfif",
+      "slug": "featured-project-interior",
+      "folder": "renovation",
+      "width": 2528,
+      "height": 1696,
+      "aspectRatio": "1.491",
+      "fallbackJpg": "/images/renovation/featured-project-interior.jpg",
+      "fallbackWebp": "/images/renovation/featured-project-interior.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/renovation/featured-project-interior-600w.webp",
+          "900": "/images/renovation/featured-project-interior-900w.webp",
+          "1600": "/images/renovation/featured-project-interior-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/renovation/featured-project-interior-600w.jpg",
+          "900": "/images/renovation/featured-project-interior-900w.jpg",
+          "1600": "/images/renovation/featured-project-interior-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/renovation/featured-project-interior-600w.webp 600w, /images/renovation/featured-project-interior-900w.webp 900w, /images/renovation/featured-project-interior-1600w.webp 1600w",
+      "srcSetJpg": "/images/renovation/featured-project-interior-600w.jpg 600w, /images/renovation/featured-project-interior-900w.jpg 900w, /images/renovation/featured-project-interior-1600w.jpg 1600w"
+    },
+    {
+      "name": "Services — renovation & fit-out.jfif",
+      "slug": "services-renovation--fit-out",
+      "folder": "renovation",
+      "width": 2400,
+      "height": 1792,
+      "aspectRatio": "1.339",
+      "fallbackJpg": "/images/renovation/services-renovation--fit-out.jpg",
+      "fallbackWebp": "/images/renovation/services-renovation--fit-out.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/renovation/services-renovation--fit-out-600w.webp",
+          "900": "/images/renovation/services-renovation--fit-out-900w.webp",
+          "1600": "/images/renovation/services-renovation--fit-out-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/renovation/services-renovation--fit-out-600w.jpg",
+          "900": "/images/renovation/services-renovation--fit-out-900w.jpg",
+          "1600": "/images/renovation/services-renovation--fit-out-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/renovation/services-renovation--fit-out-600w.webp 600w, /images/renovation/services-renovation--fit-out-900w.webp 900w, /images/renovation/services-renovation--fit-out-1600w.webp 1600w",
+      "srcSetJpg": "/images/renovation/services-renovation--fit-out-600w.jpg 600w, /images/renovation/services-renovation--fit-out-900w.jpg 900w, /images/renovation/services-renovation--fit-out-1600w.jpg 1600w"
+    }
+  ],
+  "real-estate": [
+    {
+      "name": "11. Real estate development — dusk render.jfif",
+      "slug": "real-estate-development-dusk-render",
+      "folder": "real-estate",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/real-estate/real-estate-development-dusk-render.jpg",
+      "fallbackWebp": "/images/real-estate/real-estate-development-dusk-render.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/real-estate/real-estate-development-dusk-render-600w.webp",
+          "900": "/images/real-estate/real-estate-development-dusk-render-900w.webp",
+          "1600": "/images/real-estate/real-estate-development-dusk-render-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/real-estate/real-estate-development-dusk-render-600w.jpg",
+          "900": "/images/real-estate/real-estate-development-dusk-render-900w.jpg",
+          "1600": "/images/real-estate/real-estate-development-dusk-render-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/real-estate/real-estate-development-dusk-render-600w.webp 600w, /images/real-estate/real-estate-development-dusk-render-900w.webp 900w, /images/real-estate/real-estate-development-dusk-render-1600w.webp 1600w",
+      "srcSetJpg": "/images/real-estate/real-estate-development-dusk-render-600w.jpg 600w, /images/real-estate/real-estate-development-dusk-render-900w.jpg 900w, /images/real-estate/real-estate-development-dusk-render-1600w.jpg 1600w"
+    },
+    {
+      "name": "Featured project — aerial.jfif",
+      "slug": "featured-project-aerial",
+      "folder": "real-estate",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/real-estate/featured-project-aerial.jpg",
+      "fallbackWebp": "/images/real-estate/featured-project-aerial.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/real-estate/featured-project-aerial-600w.webp",
+          "900": "/images/real-estate/featured-project-aerial-900w.webp",
+          "1600": "/images/real-estate/featured-project-aerial-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/real-estate/featured-project-aerial-600w.jpg",
+          "900": "/images/real-estate/featured-project-aerial-900w.jpg",
+          "1600": "/images/real-estate/featured-project-aerial-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/real-estate/featured-project-aerial-600w.webp 600w, /images/real-estate/featured-project-aerial-900w.webp 900w, /images/real-estate/featured-project-aerial-1600w.webp 1600w",
+      "srcSetJpg": "/images/real-estate/featured-project-aerial-600w.jpg 600w, /images/real-estate/featured-project-aerial-900w.jpg 900w, /images/real-estate/featured-project-aerial-1600w.jpg 1600w"
+    }
+  ],
+  "careers": [
+    {
+      "name": "13. Careers - culture.jfif",
+      "slug": "careers---culture",
+      "folder": "careers",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/careers/careers---culture.jpg",
+      "fallbackWebp": "/images/careers/careers---culture.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/careers/careers---culture-600w.webp",
+          "900": "/images/careers/careers---culture-900w.webp",
+          "1600": "/images/careers/careers---culture-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/careers/careers---culture-600w.jpg",
+          "900": "/images/careers/careers---culture-900w.jpg",
+          "1600": "/images/careers/careers---culture-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/careers/careers---culture-600w.webp 600w, /images/careers/careers---culture-900w.webp 900w, /images/careers/careers---culture-1600w.webp 1600w",
+      "srcSetJpg": "/images/careers/careers---culture-600w.jpg 600w, /images/careers/careers---culture-900w.jpg 900w, /images/careers/careers---culture-1600w.jpg 1600w"
+    }
+  ],
+  "about": [
+    {
+      "name": "13. Careers - culture.jfif",
+      "slug": "careers---culture",
+      "folder": "about",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/about/careers---culture.jpg",
+      "fallbackWebp": "/images/about/careers---culture.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/about/careers---culture-600w.webp",
+          "900": "/images/about/careers---culture-900w.webp",
+          "1600": "/images/about/careers---culture-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/about/careers---culture-600w.jpg",
+          "900": "/images/about/careers---culture-900w.jpg",
+          "1600": "/images/about/careers---culture-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/about/careers---culture-600w.webp 600w, /images/about/careers---culture-900w.webp 900w, /images/about/careers---culture-1600w.webp 1600w",
+      "srcSetJpg": "/images/about/careers---culture-600w.jpg 600w, /images/about/careers---culture-900w.jpg 900w, /images/about/careers---culture-1600w.jpg 1600w"
+    },
+    {
+      "name": "8. Featured project — exterior, day.jfif",
+      "slug": "featured-project-exterior-day",
+      "folder": "about",
+      "width": 2528,
+      "height": 1696,
+      "aspectRatio": "1.491",
+      "fallbackJpg": "/images/about/featured-project-exterior-day.jpg",
+      "fallbackWebp": "/images/about/featured-project-exterior-day.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/about/featured-project-exterior-day-600w.webp",
+          "900": "/images/about/featured-project-exterior-day-900w.webp",
+          "1600": "/images/about/featured-project-exterior-day-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/about/featured-project-exterior-day-600w.jpg",
+          "900": "/images/about/featured-project-exterior-day-900w.jpg",
+          "1600": "/images/about/featured-project-exterior-day-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/about/featured-project-exterior-day-600w.webp 600w, /images/about/featured-project-exterior-day-900w.webp 900w, /images/about/featured-project-exterior-day-1600w.webp 1600w",
+      "srcSetJpg": "/images/about/featured-project-exterior-day-600w.jpg 600w, /images/about/featured-project-exterior-day-900w.jpg 900w, /images/about/featured-project-exterior-day-1600w.jpg 1600w"
+    }
+  ],
+  "hero": [
+    {
+      "name": "1. Homepage hero — desktop.jfif",
+      "slug": "homepage-hero-desktop",
+      "folder": "hero",
+      "width": 2752,
+      "height": 1536,
+      "aspectRatio": "1.792",
+      "fallbackJpg": "/images/hero/homepage-hero-desktop.jpg",
+      "fallbackWebp": "/images/hero/homepage-hero-desktop.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/hero/homepage-hero-desktop-600w.webp",
+          "900": "/images/hero/homepage-hero-desktop-900w.webp",
+          "1600": "/images/hero/homepage-hero-desktop-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/hero/homepage-hero-desktop-600w.jpg",
+          "900": "/images/hero/homepage-hero-desktop-900w.jpg",
+          "1600": "/images/hero/homepage-hero-desktop-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/hero/homepage-hero-desktop-600w.webp 600w, /images/hero/homepage-hero-desktop-900w.webp 900w, /images/hero/homepage-hero-desktop-1600w.webp 1600w",
+      "srcSetJpg": "/images/hero/homepage-hero-desktop-600w.jpg 600w, /images/hero/homepage-hero-desktop-900w.jpg 900w, /images/hero/homepage-hero-desktop-1600w.jpg 1600w"
+    },
+    {
+      "name": "2. Homepage hero - mobile.jfif",
+      "slug": "homepage-hero---mobile",
+      "folder": "hero",
+      "width": 1856,
+      "height": 2304,
+      "aspectRatio": "0.806",
+      "fallbackJpg": "/images/hero/homepage-hero---mobile.jpg",
+      "fallbackWebp": "/images/hero/homepage-hero---mobile.webp",
+      "variants": {
+        "webp": {
+          "600": "/images/hero/homepage-hero---mobile-600w.webp",
+          "900": "/images/hero/homepage-hero---mobile-900w.webp",
+          "1600": "/images/hero/homepage-hero---mobile-1600w.webp"
+        },
+        "jpg": {
+          "600": "/images/hero/homepage-hero---mobile-600w.jpg",
+          "900": "/images/hero/homepage-hero---mobile-900w.jpg",
+          "1600": "/images/hero/homepage-hero---mobile-1600w.jpg"
+        }
+      },
+      "srcSetWebp": "/images/hero/homepage-hero---mobile-600w.webp 600w, /images/hero/homepage-hero---mobile-900w.webp 900w, /images/hero/homepage-hero---mobile-1600w.webp 1600w",
+      "srcSetJpg": "/images/hero/homepage-hero---mobile-600w.jpg 600w, /images/hero/homepage-hero---mobile-900w.jpg 900w, /images/hero/homepage-hero---mobile-1600w.jpg 1600w"
+    }
+  ]
+}

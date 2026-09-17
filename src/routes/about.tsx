@@ -62,7 +62,7 @@ function AboutPage() {
             ]}
             ctaLabel="Discover more"
             ctaHref="/services"
-            image={s?.["about_image_url"] ?? null}
+            image={s?.["about_image_url"] ?? "/images/about/careers---culture.jpg"}
             imageAlt="AMARC construction professional on site"
           />
         </Container>

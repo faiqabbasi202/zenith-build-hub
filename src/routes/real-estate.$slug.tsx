@@ -9,6 +9,7 @@ import {
   SectionHead,
   StatusChip,
 } from "@/components/site/primitives";
+import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { asList, asObjects, statusLabel } from "@/lib/format";
 import { developmentQuery } from "@/lib/queries";
@@ -123,11 +124,12 @@ function DevelopmentDetail() {
               <div className="mt-14 grid gap-4 sm:grid-cols-2">
                 {gallery.map((src, i) => (
                   <Reveal key={src} delay={(i % 2) * 0.06} className="overflow-hidden border border-border">
-                    <img
+                    <ResponsiveImage
                       src={src}
                       alt={`${dev["title"]} — view ${i + 1}`}
-                      loading="lazy"
-                      className="h-full w-full object-cover"
+                      aspectRatio="16/10"
+                      className="h-full w-full"
+                      imgClassName="h-full w-full object-cover"
                     />
                   </Reveal>
                 ))}
