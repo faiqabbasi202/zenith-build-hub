@@ -15,6 +15,8 @@ import {
   getSectors,
   getService,
   getServices,
+  getPageSeo,
+  getAllPageSeo,
   getSiteSettings,
   getTenders,
 } from "./content.functions";
@@ -118,3 +120,17 @@ export const downloadsQuery = queryOptions({
   queryFn: () => getDownloads(),
   staleTime: 60_000,
 });
+
+export const pageSeoQuery = (path: string) =>
+  queryOptions({
+    queryKey: ["page-seo", path],
+    queryFn: () => getPageSeo({ data: { path } }),
+    staleTime: 60_000,
+  });
+
+export const allPageSeoQuery = queryOptions({
+  queryKey: ["all-page-seo"],
+  queryFn: () => getAllPageSeo(),
+  staleTime: 60_000,
+});
+

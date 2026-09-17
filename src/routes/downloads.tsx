@@ -4,23 +4,22 @@ import { Download } from "lucide-react";
 
 import { Container, PageHero, Reveal } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
-import { downloadsQuery } from "@/lib/queries";
+import { downloadsQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/downloads")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(downloadsQuery),
-  head: () => ({
-    meta: [
-      { title: "Downloads | AMARC Company Documents" },
-      {
-        name: "description",
-        content:
-          "Download AMARC's company profile, certifications, method statements and other documents.",
-      },
-      { property: "og:title", content: "Downloads | AMARC Company Documents" },
-      { property: "og:description", content: "Company profile, certificates and brochures." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [downloads, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(downloadsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/downloads")),
+    ]);
+    return { downloads, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/downloads",
+      seo: loaderData?.seo,
+    }),
   }),
   component: DownloadsPage,
 });

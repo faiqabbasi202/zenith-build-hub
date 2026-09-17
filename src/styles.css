@@ -103,7 +103,7 @@
   --secondary:           oklch(0.947 0.004 60);
   --secondary-foreground: oklch(0.12 0.008 30);
   --muted:               oklch(0.947 0.004 60);
-  --muted-foreground:    oklch(0.45 0.01 50);        /* mid-grey body text */
+  --muted-foreground:    oklch(0.38 0.01 50);        /* darker mid-grey for WCAG AA contrast */
   --accent:              oklch(0.93 0.005 60);
   --accent-foreground:   oklch(0.12 0.008 30);
   --steel:               oklch(0.55 0.04 240);

@@ -31,9 +31,9 @@ export function ProjectCard({ project }: { project: Record<string, any> }) {
           {project["city"]}
           {project["sector_slug"] ? ` · ${String(project["sector_slug"]).replace(/-/g, " ")}` : ""}
         </p>
-        <h3 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors group-hover:text-amber">
+        <h2 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors group-hover:text-amber">
           {project["title"]}
-        </h3>
+        </h2>
         <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{project["summary"]}</p>
         {project["value_pkr_millions"] ? (
           <p className="label-mono mt-5 text-amber">{pkr(project["value_pkr_millions"])}</p>

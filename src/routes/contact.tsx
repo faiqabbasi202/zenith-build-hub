@@ -8,31 +8,23 @@ import { Action, Container, PageHero } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { submitLead } from "@/lib/content.functions";
 import { asObjects } from "@/lib/format";
-import { servicesQuery, siteSettingsQuery } from "@/lib/queries";
+import { pageSeoQuery, servicesQuery, siteSettingsQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
   loader: async ({ context }) => {
-    await Promise.all([
+    const [, , seo] = await Promise.all([
       context.queryClient.ensureQueryData(servicesQuery),
       context.queryClient.ensureQueryData(siteSettingsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/contact")),
     ]);
+    return { seo };
   },
-  head: () => ({
-    meta: [
-      { title: "Contact AMARC | Construction Company Lahore, Pakistan" },
-      {
-        name: "description",
-        content:
-          "Request a quote or site visit from AMARC Engineering & Construction. Offices in Lahore, Karachi and Islamabad. Written response within two working days.",
-      },
-      { property: "og:title", content: "Contact AMARC | Construction Company Lahore" },
-      {
-        property: "og:description",
-        content: "Send us the plot details and a rough brief — we reply within two working days.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/contact",
+      seo: loaderData?.seo,
+    }),
   }),
   component: ContactPage,
 });
@@ -85,12 +77,12 @@ function ContactPage() {
       <section className="bg-background py-20 md:py-28">
         <Container className="grid gap-16 lg:grid-cols-[1.5fr_1fr]">
           <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
-            <input required name="name" placeholder="Full name *" className={inputCls} />
-            <input name="email" type="email" placeholder="Email" className={inputCls} />
-            <input name="phone" placeholder="Phone / WhatsApp" className={inputCls} />
-            <input name="company" placeholder="Company" className={inputCls} />
-            <input name="city" placeholder="Project city" className={inputCls} />
-            <select name="service_interest" className={inputCls} defaultValue="">
+            <input required name="name" aria-label="Full name" placeholder="Full name *" className={inputCls} />
+            <input name="email" type="email" aria-label="Email address" placeholder="Email" className={inputCls} />
+            <input name="phone" aria-label="Phone or WhatsApp" placeholder="Phone / WhatsApp" className={inputCls} />
+            <input name="company" aria-label="Company name" placeholder="Company" className={inputCls} />
+            <input name="city" aria-label="Project city" placeholder="Project city" className={inputCls} />
+            <select name="service_interest" aria-label="Service of interest" className={inputCls} defaultValue="">
               <option value="" disabled>
                 Service of interest
               </option>
@@ -100,10 +92,11 @@ function ContactPage() {
                 </option>
               ))}
             </select>
-            <input name="project_type" placeholder="Project type (e.g. plaza, house)" className={inputCls} />
-            <input name="budget" placeholder="Indicative budget (PKR)" className={inputCls} />
+            <input name="project_type" aria-label="Project type" placeholder="Project type (e.g. plaza, house)" className={inputCls} />
+            <input name="budget" aria-label="Indicative budget in PKR" placeholder="Indicative budget (PKR)" className={inputCls} />
             <textarea
               name="message"
+              aria-label="Brief description of the project"
               placeholder="Brief description of the project"
               rows={5}
               className={`${inputCls} sm:col-span-2`}

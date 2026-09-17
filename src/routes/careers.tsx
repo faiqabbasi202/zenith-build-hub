@@ -14,26 +14,22 @@ import {
 import { SiteShell } from "@/components/site/site-shell";
 import { submitApplication } from "@/lib/content.functions";
 import { asList, longDate } from "@/lib/format";
-import { careersQuery } from "@/lib/queries";
+import { careersQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/careers")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(careersQuery),
-  head: () => ({
-    meta: [
-      { title: "Careers at AMARC | Construction Jobs in Pakistan" },
-      {
-        name: "description",
-        content:
-          "Open engineering, site and office positions at AMARC Engineering & Construction across Lahore, Karachi and Islamabad.",
-      },
-      { property: "og:title", content: "Careers at AMARC | Construction Jobs in Pakistan" },
-      {
-        property: "og:description",
-        content: "Join the team building Pakistan's commercial and residential landmarks.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [careersData, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(careersQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/careers")),
+    ]);
+    return { ...careersData, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/careers",
+      seo: loaderData?.seo,
+    }),
   }),
   component: CareersPage,
 });
@@ -149,12 +145,13 @@ function CareersPage() {
                     <h3 className="font-display text-lg font-semibold">Apply for this role</h3>
                     <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
                       <input type="hidden" name="job_title" value={job.title} />
-                      <input required name="name" placeholder="Full name *" className={inputCls} />
-                      <input required name="email" type="email" placeholder="Email *" className={inputCls} />
-                      <input name="phone" placeholder="Phone" className={inputCls} />
-                      <input name="cv_url" placeholder="Link to CV (Drive/Dropbox)" className={inputCls} />
+                      <input required name="name" aria-label="Full name" placeholder="Full name *" className={inputCls} />
+                      <input required name="email" type="email" aria-label="Email address" placeholder="Email *" className={inputCls} />
+                      <input name="phone" aria-label="Phone number" placeholder="Phone" className={inputCls} />
+                      <input name="cv_url" aria-label="Link to CV" placeholder="Link to CV (Drive/Dropbox)" className={inputCls} />
                       <textarea
                         name="cover_letter"
+                        aria-label="Cover letter or note"
                         placeholder="Short cover note"
                         rows={4}
                         className={`${inputCls} sm:col-span-2`}

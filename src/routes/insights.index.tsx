@@ -5,26 +5,22 @@ import { Container, PageHero, Reveal } from "@/components/site/primitives";
 import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { longDate } from "@/lib/format";
-import { postsQuery } from "@/lib/queries";
+import { pageSeoQuery, postsQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/insights/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
-  head: () => ({
-    meta: [
-      { title: "Construction Insights & Cost Guides Pakistan | AMARC" },
-      {
-        name: "description",
-        content:
-          "Practical notes on construction cost per square foot, approvals, materials and method from AMARC's engineers in Pakistan.",
-      },
-      { property: "og:title", content: "Construction Insights & Cost Guides | AMARC" },
-      {
-        property: "og:description",
-        content: "Field-tested guidance on building in Pakistan.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [posts, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(postsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/insights")),
+    ]);
+    return { posts, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/insights",
+      seo: loaderData?.seo,
+    }),
   }),
   component: InsightsPage,
 });

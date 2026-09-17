@@ -21,14 +21,19 @@ export const Route = createFileRoute("/projects/$slug")({
     const p = loaderData.project;
     const title = p["seo_title"] ?? `${p["title"]} | AMARC Projects`;
     const description = p["seo_description"] ?? p["summary"] ?? "";
+    const ogImage = p["cover_image_url"] ?? "/images/hero/homepage-hero-desktop.jpg";
     return {
       meta: [
         { title },
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:image", content: ogImage },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: ogImage },
       ],
     };
   },

@@ -3,23 +3,22 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Container, PageHero } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
-import { faqsQuery } from "@/lib/queries";
+import { faqsQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/faq")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(faqsQuery),
-  head: () => ({
-    meta: [
-      { title: "FAQ | AMARC Engineering & Construction" },
-      {
-        name: "description",
-        content:
-          "Answers to common questions about construction cost, timelines, approvals and working with AMARC in Pakistan.",
-      },
-      { property: "og:title", content: "FAQ | AMARC Engineering & Construction" },
-      { property: "og:description", content: "Common questions about building with AMARC." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [faqs, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(faqsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/faq")),
+    ]);
+    return { faqs, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/faq",
+      seo: loaderData?.seo,
+    }),
   }),
   component: FaqPage,
 });

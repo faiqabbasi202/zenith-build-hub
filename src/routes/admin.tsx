@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import {
@@ -46,6 +47,8 @@ const GROUP_ICONS: Record<string, any> = {
 };
 
 function AdminDashboardPage() {
+  const queryClient = useQueryClient();
+
   // Auth state
   const [session, setSession] = useState<any>(null);
   const [isStaffUser, setIsStaffUser] = useState<boolean | null>(null);
@@ -239,6 +242,9 @@ function AdminDashboardPage() {
           await fetchTableRecords();
         }
       }
+
+      // Invalidate public page queries so changes immediately reflect
+      queryClient.invalidateQueries();
     } catch (err: any) {
       toast.error(err?.message || "Failed to save record.");
     }
@@ -264,6 +270,9 @@ function AdminDashboardPage() {
         toast.success("Record deleted successfully.");
         await fetchTableRecords();
       }
+
+      // Invalidate public page queries so deleted items immediately disappear
+      queryClient.invalidateQueries();
     } catch (err: any) {
       toast.error(err?.message || "Failed to delete record.");
     }

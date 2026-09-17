@@ -76,11 +76,12 @@ export const getHomeData = createServerFn({ method: "GET" }).handler(async () =>
   const enrichedServices = ((services.data ?? []) as Row[]).map(enrichServiceHeroImage);
   const enrichedSectors = ((sectors.data ?? []) as Row[]).map(enrichSectorHeroImage);
 
-  // Combine featured projects from DB with category dummy projects
+  // Combine featured projects from DB with category dummy projects (DB projects take priority)
   const featuredDummies = DUMMY_PROJECTS_BY_CATEGORY.filter((p) => p.is_featured);
+  const dbFeatured = (projects.data ?? []) as Row[];
   const combinedProjects = [
-    ...featuredDummies,
-    ...((projects.data ?? []) as Row[]).filter((p) => !featuredDummies.some((d) => d.slug === p["slug"])),
+    ...dbFeatured,
+    ...featuredDummies.filter((d) => !dbFeatured.some((p) => p["slug"] === d.slug)),
   ].slice(0, 6);
 
   return {
@@ -168,9 +169,10 @@ export const getProjects = createServerFn({ method: "GET" }).handler(async () =>
   ]);
 
   const dbProjects = (projects.data ?? []) as Row[];
+  // Prioritize DB projects: if a project exists in the DB, it takes precedence over dummy data
   const combinedProjects = [
-    ...DUMMY_PROJECTS_BY_CATEGORY,
-    ...dbProjects.filter((p) => !DUMMY_PROJECTS_BY_CATEGORY.some((d) => d.slug === p["slug"])),
+    ...dbProjects,
+    ...DUMMY_PROJECTS_BY_CATEGORY.filter((d) => !dbProjects.some((p) => p["slug"] === d.slug)),
   ];
 
   const dbSectors = (sectors.data ?? []) as Row[];
@@ -198,6 +200,33 @@ export const getProjects = createServerFn({ method: "GET" }).handler(async () =>
 export const getProject = createServerFn({ method: "GET" })
   .inputValidator(slugInput)
   .handler(async ({ data }) => {
+    const sb = publicClient();
+
+    // 1. Check database first so any project edited or created in /admin is used
+    const { data: project } = await sb
+      .from("projects")
+      .select("*")
+      .eq("slug", data.slug)
+      .eq("is_published", true)
+      .maybeSingle();
+
+    if (project) {
+      const { data: related } = await sb
+        .from("projects")
+        .select("slug,title,city,cover_image_url,status,sector_slug,summary")
+        .eq("is_published", true)
+        .eq("sector_slug", (project as Row)["sector_slug"])
+        .neq("slug", data.slug)
+        .limit(3);
+
+      const relatedList = (related && related.length > 0)
+        ? (related as Row[])
+        : DUMMY_PROJECTS_BY_CATEGORY.filter((p) => p.sector_slug === (project as Row)["sector_slug"] && p.slug !== data.slug).slice(0, 3);
+
+      return { project: project as Row, related: relatedList };
+    }
+
+    // 2. Fallback to category dummy project if not found in database
     const dummy = DUMMY_PROJECTS_BY_CATEGORY.find((p) => p.slug === data.slug);
     if (dummy) {
       const related = DUMMY_PROJECTS_BY_CATEGORY
@@ -206,25 +235,7 @@ export const getProject = createServerFn({ method: "GET" })
       return { project: dummy as Row, related: related as Row[] };
     }
 
-    const sb = publicClient();
-    const { data: project } = await sb
-      .from("projects")
-      .select("*")
-      .eq("slug", data.slug)
-      .eq("is_published", true)
-      .maybeSingle();
-
-    if (!project) return { project: null as Row | null, related: [] as Row[] };
-
-    const { data: related } = await sb
-      .from("projects")
-      .select("slug,title,city,cover_image_url,status,sector_slug,summary")
-      .eq("is_published", true)
-      .eq("sector_slug", (project as Row)["sector_slug"])
-      .neq("slug", data.slug)
-      .limit(3);
-
-    return { project: project as Row, related: (related ?? []) as Row[] };
+    return { project: null as Row | null, related: [] as Row[] };
   });
 
 export const getDevelopments = createServerFn({ method: "GET" }).handler(async () => {
@@ -405,3 +416,22 @@ export const submitVendor = createServerFn({ method: "POST" })
     if (error) throw new Error("Could not submit your registration. Please try again.");
     return { ok: true };
   });
+
+export const getPageSeo = createServerFn({ method: "GET" })
+  .inputValidator((d: unknown) => z.object({ path: z.string() }).parse(d))
+  .handler(async ({ data }) => {
+    const sb = publicClient();
+    const { data: row } = await sb
+      .from("page_seo")
+      .select("*")
+      .eq("path", data.path)
+      .maybeSingle();
+    return (row ?? null) as Row | null;
+  });
+
+export const getAllPageSeo = createServerFn({ method: "GET" }).handler(async () => {
+  const sb = publicClient();
+  const { data } = await sb.from("page_seo").select("*");
+  return (data ?? []) as Row[];
+});
+

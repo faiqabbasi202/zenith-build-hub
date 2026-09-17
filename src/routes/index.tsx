@@ -16,35 +16,23 @@ import { ProjectCard } from "@/components/site/project-card";
 import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { asObjects, longDate, pkr, statusLabel } from "@/lib/format";
-import { homeQuery, siteSettingsQuery } from "@/lib/queries";
+import { homeQuery, pageSeoQuery, siteSettingsQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
-    await Promise.all([
+    const [, , seo] = await Promise.all([
       context.queryClient.ensureQueryData(homeQuery),
       context.queryClient.ensureQueryData(siteSettingsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/")),
     ]);
+    return { seo };
   },
-  head: () => ({
-    meta: [
-      { title: "AMARC Engineering & Construction | Builders in Pakistan" },
-      {
-        name: "description",
-        content:
-          "AMARC is a Lahore-based engineering and construction company delivering turnkey commercial, residential, industrial and infrastructure projects across Pakistan since 2004.",
-      },
-      {
-        property: "og:title",
-        content: "AMARC Engineering & Construction | Builders in Pakistan",
-      },
-      {
-        property: "og:description",
-        content:
-          "Turnkey design, engineering and construction across Punjab and Sindh — 184 projects delivered, PEC C-A licensed, ISO 9001 certified.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/",
+      seo: loaderData?.seo,
+    }),
   }),
   component: HomePage,
 });

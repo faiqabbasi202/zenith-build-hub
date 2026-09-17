@@ -7,26 +7,22 @@ import { Action, Container, PageHero, SectionHead } from "@/components/site/prim
 import { SiteShell } from "@/components/site/site-shell";
 import { submitVendor } from "@/lib/content.functions";
 import { longDate } from "@/lib/format";
-import { tendersQuery } from "@/lib/queries";
+import { pageSeoQuery, tendersQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/tenders")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(tendersQuery),
-  head: () => ({
-    meta: [
-      { title: "Tenders & Vendor Registration | AMARC" },
-      {
-        name: "description",
-        content:
-          "Open procurement tenders at AMARC and vendor registration for material suppliers and subcontractors in Pakistan.",
-      },
-      { property: "og:title", content: "Tenders & Vendor Registration | AMARC" },
-      {
-        property: "og:description",
-        content: "Bid on AMARC tenders or register as a supplier or subcontractor.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [tenders, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(tendersQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/tenders")),
+    ]);
+    return { tenders, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/tenders",
+      seo: loaderData?.seo,
+    }),
   }),
   component: TendersPage,
 });
@@ -129,16 +125,17 @@ function TendersPage() {
             />
           </div>
           <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
-            <input required name="company_name" placeholder="Company name *" className={inputCls} />
-            <input name="contact_person" placeholder="Contact person" className={inputCls} />
-            <input required name="email" type="email" placeholder="Email *" className={inputCls} />
-            <input name="phone" placeholder="Phone" className={inputCls} />
-            <input name="category" placeholder="Category (e.g. steel, MEP)" className={inputCls} />
-            <input name="ntn" placeholder="NTN" className={inputCls} />
-            <input name="city" placeholder="City" className={inputCls} />
-            <input name="website" placeholder="Website" className={inputCls} />
+            <input required name="company_name" aria-label="Company name" placeholder="Company name *" className={inputCls} />
+            <input name="contact_person" aria-label="Contact person" placeholder="Contact person" className={inputCls} />
+            <input required name="email" type="email" aria-label="Email address" placeholder="Email *" className={inputCls} />
+            <input name="phone" aria-label="Phone number" placeholder="Phone" className={inputCls} />
+            <input name="category" aria-label="Supply or trade category" placeholder="Category (e.g. steel, MEP)" className={inputCls} />
+            <input name="ntn" aria-label="NTN registration number" placeholder="NTN" className={inputCls} />
+            <input name="city" aria-label="Business city" placeholder="City" className={inputCls} />
+            <input name="website" aria-label="Company website" placeholder="Website" className={inputCls} />
             <textarea
               name="message"
+              aria-label="Products or trades offered"
               placeholder="Products or trades you offer"
               rows={4}
               className={`${inputCls} sm:col-span-2`}

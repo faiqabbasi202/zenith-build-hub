@@ -32,3 +32,5 @@ dist-ssr
 *.sw?
 
 public/amarc/
+lighthouse-reports/
+scratch/

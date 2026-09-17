@@ -18,16 +18,21 @@ export const Route = createFileRoute("/services/$slug")({
       return { meta: [{ title: "Service not found | AMARC" }, { name: "robots", content: "noindex" }] };
     }
     const s = loaderData.service;
-    const title = s["seo_title"] ?? `${s["title"]} | AMARC`;
+    const title = s["seo_title"] ?? `${s["title"]} | AMARC Services`;
     const description = s["seo_description"] ?? s["summary"] ?? "";
+    const ogImage = s["hero_image_url"] ?? "/images/commercial/services-commercial-construction.jpg";
     return {
       meta: [
         { title },
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:image", content: ogImage },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: ogImage },
       ],
     };
   },

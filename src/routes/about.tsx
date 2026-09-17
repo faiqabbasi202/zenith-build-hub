@@ -9,26 +9,22 @@ import {
   SectionHead,
 } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
-import { aboutQuery } from "@/lib/queries";
+import { aboutQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(aboutQuery),
-  head: () => ({
-    meta: [
-      { title: "About AMARC | Engineering & Construction Company in Lahore" },
-      {
-        name: "description",
-        content:
-          "AMARC Engineering & Construction has delivered projects across Pakistan since 2004. Meet the leadership, milestones, certifications and clients behind the company.",
-      },
-      { property: "og:title", content: "About AMARC | Engineering & Construction Company" },
-      {
-        property: "og:description",
-        content: "Leadership, history, certifications and clients of AMARC in Pakistan.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [aboutData, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(aboutQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/about")),
+    ]);
+    return { ...aboutData, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/about",
+      seo: loaderData?.seo,
+    }),
   }),
   component: AboutPage,
 });

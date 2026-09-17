@@ -5,26 +5,22 @@ import { Container, PageHero, Reveal, StatusChip } from "@/components/site/primi
 import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { statusLabel } from "@/lib/format";
-import { developmentsQuery } from "@/lib/queries";
+import { developmentsQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/real-estate/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(developmentsQuery),
-  head: () => ({
-    meta: [
-      { title: "New Real Estate Developments in Pakistan | AMARC" },
-      {
-        name: "description",
-        content:
-          "Newly launched and ongoing AMARC residential and commercial developments in Lahore, Karachi and Islamabad — floor plans, amenities and payment plans.",
-      },
-      { property: "og:title", content: "New Real Estate Developments in Pakistan | AMARC" },
-      {
-        property: "og:description",
-        content: "Apartments, offices and gated communities built and sold by AMARC.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [developments, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(developmentsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/real-estate")),
+    ]);
+    return { developments, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/real-estate",
+      seo: loaderData?.seo,
+    }),
   }),
   component: DevelopmentsPage,
 });

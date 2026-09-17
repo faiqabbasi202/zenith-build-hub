@@ -6,7 +6,8 @@ import { Container, PageHero, Reveal } from "@/components/site/primitives";
 import { ProjectCard } from "@/components/site/project-card";
 import { SiteShell } from "@/components/site/site-shell";
 import { STATUS_LABEL } from "@/lib/format";
-import { projectsQuery } from "@/lib/queries";
+import { projectsQuery, pageSeoQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 type Search = { sector?: string | undefined; status?: string | undefined; city?: string | undefined };
@@ -17,23 +18,18 @@ export const Route = createFileRoute("/projects/")({
     status: typeof search["status"] === "string" ? search["status"] : undefined,
     city: typeof search["city"] === "string" ? search["city"] : undefined,
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
-  head: () => ({
-    meta: [
-      { title: "Projects Portfolio in Pakistan | AMARC" },
-      {
-        name: "description",
-        content:
-          "Browse AMARC's completed and ongoing commercial, residential, industrial, healthcare and infrastructure projects across Lahore, Karachi, Islamabad and beyond.",
-      },
-      { property: "og:title", content: "Projects Portfolio in Pakistan | AMARC" },
-      {
-        property: "og:description",
-        content: "Filter our portfolio by sector, status and city.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [projectsData, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(projectsQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/projects")),
+    ]);
+    return { ...projectsData, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/projects",
+      seo: loaderData?.seo,
+    }),
   }),
   component: ProjectsPage,
 });

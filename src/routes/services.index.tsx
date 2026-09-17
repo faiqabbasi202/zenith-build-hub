@@ -3,26 +3,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { Container, PageHero, Reveal } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
-import { servicesQuery } from "@/lib/queries";
+import { pageSeoQuery, servicesQuery } from "@/lib/queries";
+import { buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/services/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
-  head: () => ({
-    meta: [
-      { title: "Construction & Engineering Services | AMARC" },
-      {
-        name: "description",
-        content:
-          "Design-build, structural engineering, MEP, project management, interior fit-out and infrastructure services delivered across Pakistan by AMARC.",
-      },
-      { property: "og:title", content: "Construction & Engineering Services | AMARC" },
-      {
-        property: "og:description",
-        content: "Nine in-house disciplines covering the full project lifecycle in Pakistan.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  loader: async ({ context }) => {
+    const [services, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(servicesQuery),
+      context.queryClient.ensureQueryData(pageSeoQuery("/services")),
+    ]);
+    return { services, seo };
+  },
+  head: ({ loaderData }) => ({
+    meta: buildSeoMeta({
+      path: "/services",
+      seo: loaderData?.seo,
+    }),
   }),
   component: ServicesPage,
 });
