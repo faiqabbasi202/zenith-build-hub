@@ -32,16 +32,16 @@ export function ProjectCard({ project }: { project: Record<string, any> }) {
 
       {/* Text content */}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <p className="label-mono text-muted-foreground">
+        <p className="label-mono text-[11px] text-muted-foreground sm:text-xs">
           {project["city"]}
           {project["sector_slug"] ? ` · ${String(project["sector_slug"]).replace(/-/g, " ")}` : ""}
         </p>
-        <h2 className="mt-2 font-display text-base font-semibold leading-snug transition-colors md:group-hover:text-amber">
+        <h2 className="mt-2 font-display text-base font-semibold leading-snug transition-colors sm:text-lg md:group-hover:text-amber">
           {project["title"]}
         </h2>
-        <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted-foreground">{project["summary"]}</p>
+        <p className="mt-2 line-clamp-2 flex-1 text-xs text-muted-foreground sm:text-sm">{project["summary"]}</p>
         {project["value_pkr_millions"] ? (
-          <p className="label-mono mt-3 text-amber">{pkr(project["value_pkr_millions"])}</p>
+          <p className="label-mono mt-3 text-xs text-amber sm:text-sm">{pkr(project["value_pkr_millions"])}</p>
         ) : null}
       </div>
     </Link>

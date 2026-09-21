@@ -26,6 +26,7 @@ import { ADMIN_TABLES, ADMIN_GROUPS } from "@/components/admin/admin-tables-conf
 import { AdminModal } from "@/components/admin/admin-modal";
 import { AdminDeleteModal } from "@/components/admin/admin-delete-modal";
 import { DUMMY_PROJECTS_BY_CATEGORY } from "@/lib/image-wiring";
+import { validateRecord, sanitizeFormData } from "@/lib/input-sanitizer";
 
 export const Route = (createFileRoute as any)("/admin")({
   ssr: false,
@@ -206,19 +207,29 @@ function AdminDashboardPage() {
   const handleSaveRecord = async (formData: Record<string, any>) => {
     const isEdit = Boolean(editingRecord?.["id"] || (activeTableKey === "home_sections" && editingRecord?.["key"]));
 
+    // Validation safeguard
+    const validationErrors = validateRecord(formData, activeConfig);
+    if (Object.keys(validationErrors).length > 0) {
+      const firstError = Object.values(validationErrors)[0];
+      toast.error(`Validation failed: ${firstError}`);
+      return;
+    }
+
+    const cleanData = sanitizeFormData(formData, activeConfig);
+
     try {
       if (isEdit) {
         const primaryKey = activeTableKey === "home_sections" ? "key" : "id";
         const primaryVal = editingRecord?.[primaryKey];
         const { error } = await supabase
           .from(activeTableKey as any)
-          .update(formData)
+          .update(cleanData)
           .eq(primaryKey, primaryVal);
 
         if (error) {
           // Optimistic local update
           setRecords((prev) =>
-            prev.map((r) => (r[primaryKey] === primaryVal ? { ...r, ...formData } : r))
+            prev.map((r) => (r[primaryKey] === primaryVal ? { ...r, ...cleanData } : r))
           );
           toast.success("Record updated (optimistic).");
         } else {
@@ -227,8 +238,8 @@ function AdminDashboardPage() {
         }
       } else {
         const newRecord = {
-          ...formData,
-          id: formData["id"] || `rec-${Date.now()}`,
+          ...cleanData,
+          id: cleanData["id"] || `rec-${Date.now()}`,
           created_at: new Date().toISOString(),
         };
 

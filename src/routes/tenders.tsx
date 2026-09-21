@@ -8,7 +8,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { submitVendor } from "@/lib/content.functions";
 import { longDate } from "@/lib/format";
 import { pageSeoQuery, tendersQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/tenders")({
   loader: async ({ context }) => {
@@ -18,12 +18,11 @@ export const Route = createFileRoute("/tenders")({
     ]);
     return { tenders, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/tenders",
       seo: loaderData?.seo,
     }),
-  }),
   component: TendersPage,
 });
 

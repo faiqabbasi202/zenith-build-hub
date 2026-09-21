@@ -17,7 +17,7 @@ import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { asObjects, longDate, pkr, statusLabel } from "@/lib/format";
 import { homeQuery, pageSeoQuery, siteSettingsQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead, buildSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
@@ -28,12 +28,11 @@ export const Route = createFileRoute("/")({
     ]);
     return { seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/",
       seo: loaderData?.seo,
     }),
-  }),
   component: HomePage,
 });
 
@@ -99,17 +98,17 @@ function Hero({ section }: { section?: Row | undefined }) {
             <Eyebrow>{section["eyebrow"]}</Eyebrow>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-6 text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.95] font-bold tracking-tight text-balance">
+            <h1 className="mt-6 text-[clamp(2.4rem,6.5vw,5.5rem)] leading-[0.98] font-bold tracking-tight text-balance sm:text-[clamp(2.8rem,7vw,5.5rem)]">
               {section["heading"]}
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="mt-6 max-w-xl text-lg text-foreground/80 sm:text-xl">
+            <p className="mt-5 max-w-xl text-base text-foreground/80 sm:mt-6 sm:text-lg md:text-xl">
               {section["subheading"]}
             </p>
           </Reveal>
           <Reveal delay={0.22}>
-            <p className="mt-4 max-w-xl text-sm text-muted-foreground">{section["body"]}</p>
+            <p className="mt-3 max-w-xl text-xs text-muted-foreground sm:mt-4 sm:text-sm md:text-base">{section["body"]}</p>
           </Reveal>
           <Reveal delay={0.3}>
             <div className="mt-9 flex flex-wrap gap-3">
@@ -144,9 +143,9 @@ function Credibility({ section }: { section?: Row | undefined }) {
     <section className="border-y border-border bg-surface">
       <Container className="grid grid-cols-2 divide-border md:grid-cols-4 md:divide-x">
         {items.map((item: any, i: number) => (
-          <Reveal key={item.label} delay={i * 0.06} className="px-1 py-8 md:px-8">
-            <p className="label-mono text-muted-foreground">{item.label}</p>
-            <p className="mt-2 font-display text-2xl font-semibold">{item.value}</p>
+          <Reveal key={item.label} delay={i * 0.06} className="px-1 py-6 sm:py-8 md:px-8">
+            <p className="label-mono text-[10px] text-muted-foreground sm:text-xs">{item.label}</p>
+            <p className="mt-1.5 font-display text-xl font-semibold sm:mt-2 sm:text-2xl md:text-3xl">{item.value}</p>
           </Reveal>
         ))}
       </Container>
@@ -173,8 +172,8 @@ function Stats({ section }: { section?: Row | undefined }) {
             const value = Number(item.value);
             const decimals = String(item.value).includes(".") ? 1 : 0;
             return (
-              <Reveal key={item.label} delay={i * 0.07} className="bg-background p-8">
-                <p className="font-display text-4xl font-bold text-amber lg:text-5xl">
+              <Reveal key={item.label} delay={i * 0.07} className="bg-background p-6 sm:p-8">
+                <p className="font-display text-3xl font-bold text-amber sm:text-4xl lg:text-5xl">
                   <Counter
                     value={value}
                     decimals={decimals}
@@ -182,7 +181,7 @@ function Stats({ section }: { section?: Row | undefined }) {
                     suffix={item.suffix ?? ""}
                   />
                 </p>
-                <p className="mt-3 text-sm text-muted-foreground">{item.label}</p>
+                <p className="mt-2 text-xs text-muted-foreground sm:mt-3 sm:text-sm md:text-base">{item.label}</p>
               </Reveal>
             );
           })}
@@ -231,15 +230,15 @@ function Services({ section, services }: { section?: Row | undefined; services: 
                   </>
                 ) : null}
                 
-                <div className="relative z-10 p-8">
-                  <span className="label-mono text-amber">
+                <div className="relative z-10 p-6 sm:p-8">
+                  <span className="label-mono text-xs text-amber sm:text-sm">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors md:group-hover:text-amber">
+                  <h3 className="mt-3 font-display text-xl font-semibold tracking-tight text-foreground transition-colors sm:text-2xl md:group-hover:text-amber">
                     {service["title"]}
                   </h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{service["summary"]}</p>
-                  <span className="label-mono mt-6 block text-foreground/60 transition-colors md:group-hover:text-amber">
+                  <p className="mt-2 line-clamp-2 text-xs text-foreground/80 sm:text-sm md:text-base">{service["summary"]}</p>
+                  <span className="label-mono mt-5 block text-xs text-foreground/60 transition-colors sm:mt-6 sm:text-sm md:group-hover:text-amber">
                     Explore →
                   </span>
                 </div>
@@ -284,7 +283,7 @@ function Sectors({ section, sectors }: { section?: Row | undefined; sectors: Row
                   </>
                 ) : null}
                 <div className="relative z-10 flex w-full items-center justify-between gap-3">
-                  <span className="font-display text-lg font-semibold text-foreground transition-colors md:group-hover:text-amber">
+                  <span className="font-display text-base font-semibold text-foreground transition-colors sm:text-lg md:group-hover:text-amber">
                     {sector["title"]}
                   </span>
                   <span className="label-mono text-amber opacity-0 transition-opacity md:group-hover:opacity-100">→</span>
@@ -344,14 +343,14 @@ function Process({ section }: { section?: Row | undefined }) {
         />
         <ol className="mt-14 grid gap-px border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
           {steps.map((step: any, i: number) => (
-            <Reveal as="li" key={step.title} delay={(i % 3) * 0.07} className="bg-background p-8">
-              <div className="flex items-baseline gap-4">
-                <span className="font-display text-3xl font-bold text-amber/30">
+            <Reveal as="li" key={step.title} delay={(i % 3) * 0.07} className="bg-background p-6 sm:p-8">
+              <div className="flex items-baseline gap-3 sm:gap-4">
+                <span className="font-display text-2xl font-bold text-amber/30 sm:text-3xl">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-display text-lg font-semibold tracking-tight">{step.title}</h3>
+                <h3 className="font-display text-base font-semibold tracking-tight sm:text-lg md:text-xl">{step.title}</h3>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground">{step.body}</p>
+              <p className="mt-3 text-xs text-muted-foreground sm:mt-4 sm:text-sm md:text-base">{step.body}</p>
             </Reveal>
           ))}
         </ol>
@@ -396,14 +395,14 @@ function Developments({ section, developments }: { section?: Row | undefined; de
                   />
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6">
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
                   <StatusChip label={statusLabel(dev["status"])} />
-                  <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight">
+                  <h3 className="mt-3 font-display text-xl font-semibold tracking-tight sm:mt-4 sm:text-2xl">
                     {dev["title"]}
                   </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{dev["location"] ?? dev["city"]}</p>
+                  <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{dev["location"] ?? dev["city"]}</p>
                   {dev["starting_price"] ? (
-                    <p className="label-mono mt-4 text-amber">From {dev["starting_price"]}</p>
+                    <p className="label-mono mt-3 text-xs text-amber sm:mt-4 sm:text-sm">From {dev["starting_price"]}</p>
                   ) : null}
                 </div>
               </Link>
@@ -461,12 +460,12 @@ function Certifications({ section, items }: { section?: Row | undefined; items: 
         />
         <ul className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {items.map((cert, i) => (
-            <Reveal as="li" key={cert["id"]} delay={(i % 4) * 0.06} className="bg-background p-8">
-              <p className="label-mono text-amber">{cert["issued_year"] ?? "—"}</p>
-              <h3 className="mt-4 font-display text-base font-semibold">{cert["title"]}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{cert["issuer"]}</p>
+            <Reveal as="li" key={cert["id"]} delay={(i % 4) * 0.06} className="bg-background p-6 sm:p-8">
+              <p className="label-mono text-xs text-amber">{cert["issued_year"] ?? "—"}</p>
+              <h3 className="mt-3 font-display text-sm font-semibold sm:mt-4 sm:text-base md:text-lg">{cert["title"]}</h3>
+              <p className="mt-1.5 text-xs text-muted-foreground sm:mt-2 sm:text-sm">{cert["issuer"]}</p>
               {cert["reference_no"] ? (
-                <p className="label-mono mt-4 text-muted-foreground">{cert["reference_no"]}</p>
+                <p className="label-mono mt-3 text-[10px] text-muted-foreground sm:mt-4 sm:text-xs">{cert["reference_no"]}</p>
               ) : null}
             </Reveal>
           ))}
@@ -490,15 +489,15 @@ function Testimonials({ section, items }: { section?: Row | undefined; items: Ro
               as="li"
               key={t["id"]}
               delay={(i % 3) * 0.07}
-              className="flex h-full flex-col border border-border bg-background p-8"
+              className="flex h-full flex-col border border-border bg-background p-6 sm:p-8"
             >
-              <p className="font-display text-4xl leading-none text-amber/40">“</p>
-              <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-foreground/85">
+              <p className="font-display text-3xl leading-none text-amber/40 sm:text-4xl">“</p>
+              <blockquote className="mt-3 flex-1 text-xs leading-relaxed text-foreground/85 sm:mt-4 sm:text-sm md:text-base">
                 {t["quote"]}
               </blockquote>
-              <footer className="mt-6 border-t border-border pt-5">
-                <p className="text-sm font-semibold">{t["author"]}</p>
-                <p className="label-mono mt-1 text-muted-foreground">
+              <footer className="mt-5 border-t border-border pt-4 sm:mt-6 sm:pt-5">
+                <p className="text-xs font-semibold sm:text-sm">{t["author"]}</p>
+                <p className="label-mono mt-1 text-[10px] text-muted-foreground sm:text-xs">
                   {[t["author_role"], t["company"]].filter(Boolean).join(" · ")}
                 </p>
               </footer>
@@ -529,33 +528,38 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
             ) : null
           }
         />
-        <ul className="mt-14 grid gap-8 md:grid-cols-3">
+        <ul className="mt-14 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
           {posts.map((post, i) => (
             <Reveal as="li" key={post["slug"]} delay={i * 0.08}>
               <Link
                 to="/insights/$slug"
                 params={{ slug: post["slug"] }}
-                className="group block h-full min-h-[16rem] border border-border bg-surface transition-colors md:hover:border-amber/60"
+                className="group flex h-full min-h-[22rem] flex-col overflow-hidden border border-border bg-surface transition-colors sm:min-h-[24rem] md:hover:border-amber/60"
               >
                 {post["cover_image_url"] ? (
-                  <div className="aspect-16/9 overflow-hidden">
+                  <div className="relative h-48 w-full shrink-0 overflow-hidden sm:h-52">
                     <ResponsiveImage
                       src={post["cover_image_url"]}
                       alt={post["title"]}
                       aspectRatio="16/9"
                       className="h-full w-full"
-                      imgClassName="transition-transform duration-700 md:group-hover:scale-105"
+                      imgClassName="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
                     />
                   </div>
-                ) : null}
-                <div className="p-6">
-                  <p className="label-mono text-muted-foreground">
+                ) : (
+                  <div className="hero-texture h-48 w-full shrink-0 sm:h-52" />
+                )}
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <p className="label-mono text-[10px] text-muted-foreground sm:text-xs">
                     {post["category"]} · {longDate(post["published_at"])}
                   </p>
-                  <h3 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors md:group-hover:text-amber">
+                  <h3 className="mt-3 font-display text-base font-semibold leading-snug transition-colors sm:text-lg md:text-xl md:group-hover:text-amber">
                     {post["title"]}
                   </h3>
-                  <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{post["excerpt"]}</p>
+                  <p className="mt-2 line-clamp-3 flex-1 text-xs text-muted-foreground sm:text-sm md:text-base">{post["excerpt"]}</p>
+                  <span className="label-mono mt-4 block text-xs text-amber opacity-0 transition-opacity sm:text-sm md:group-hover:opacity-100">
+                    Read article →
+                  </span>
                 </div>
               </Link>
             </Reveal>
@@ -576,13 +580,13 @@ function ClosingCta({ section }: { section?: Row | undefined }) {
       <Container className="relative text-center">
         <Reveal>
           <Eyebrow className="justify-center">{section["eyebrow"]}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-3xl text-[clamp(2rem,5vw,3.75rem)] leading-[1.02] font-bold tracking-tight">
+          <h2 className="mx-auto mt-6 max-w-3xl text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl xl:text-[3.75rem] leading-[1.05]">
             {section["heading"]}
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
+          <p className="mx-auto mt-4 max-w-xl text-sm text-muted-foreground sm:mt-6 sm:text-base md:text-lg">
             {section["subheading"]}
           </p>
-          <div className="mt-10 flex justify-center">
+          <div className="mt-8 flex justify-center sm:mt-10">
             <Action to="/contact">{section["cta_label"] ?? "Request a quote"}</Action>
           </div>
         </Reveal>

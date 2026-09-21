@@ -44,12 +44,37 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function applyCacheHeaders(request: Request, response: Response): Response {
+  if (response.status >= 400) return response;
+
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  const contentType = response.headers.get("content-type") || "";
+
+  const headers = new Headers(response.headers);
+
+  if (pathname.startsWith("/assets/")) {
+    headers.set("Cache-Control", "public, max-age=31536000, immutable");
+  } else if (pathname.startsWith("/images/") || pathname.startsWith("/amarc/") || pathname === "/favicon.ico") {
+    headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+  } else if (contentType.includes("text/html")) {
+    headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return applyCacheHeaders(request, normalized);
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
@@ -59,3 +84,4 @@ export default {
     }
   },
 };
+

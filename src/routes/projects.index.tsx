@@ -7,7 +7,7 @@ import { ProjectCard } from "@/components/site/project-card";
 import { SiteShell } from "@/components/site/site-shell";
 import { STATUS_LABEL } from "@/lib/format";
 import { projectsQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 type Search = { sector?: string | undefined; status?: string | undefined; city?: string | undefined };
@@ -25,12 +25,11 @@ export const Route = createFileRoute("/projects/")({
     ]);
     return { ...projectsData, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/projects",
       seo: loaderData?.seo,
     }),
-  }),
   component: ProjectsPage,
 });
 

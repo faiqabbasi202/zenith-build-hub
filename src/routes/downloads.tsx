@@ -5,7 +5,7 @@ import { Download } from "lucide-react";
 import { Container, PageHero, Reveal } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { downloadsQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/downloads")({
   loader: async ({ context }) => {
@@ -15,12 +15,11 @@ export const Route = createFileRoute("/downloads")({
     ]);
     return { downloads, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/downloads",
       seo: loaderData?.seo,
     }),
-  }),
   component: DownloadsPage,
 });
 

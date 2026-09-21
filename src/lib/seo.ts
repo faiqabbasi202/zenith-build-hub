@@ -87,7 +87,22 @@ export interface BuildSeoMetaOptions {
   fallbackTitle?: string | undefined;
   fallbackDescription?: string | undefined;
   fallbackOgImage?: string | undefined;
+  type?: "website" | "article" | undefined;
+  publishedTime?: string | undefined;
+  author?: string | undefined;
   noindex?: boolean | undefined;
+}
+
+export function getCanonicalUrl(path: string): string {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${SITE_ORIGIN}${cleanPath}`;
+}
+
+export function getAbsoluteImageUrl(imageUrl?: string | null): string {
+  if (!imageUrl) return `${SITE_ORIGIN}${DEFAULT_OG_IMAGE}`;
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) return imageUrl;
+  const cleanPath = imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`;
+  return `${SITE_ORIGIN}${cleanPath}`;
 }
 
 export function buildSeoMeta({
@@ -96,6 +111,9 @@ export function buildSeoMeta({
   fallbackTitle,
   fallbackDescription,
   fallbackOgImage,
+  type = "website",
+  publishedTime,
+  author,
   noindex,
 }: BuildSeoMetaOptions) {
   const defaultMeta = DEFAULT_PAGE_SEO[path] ?? {
@@ -106,23 +124,47 @@ export function buildSeoMeta({
 
   const title = seo?.["title"] || fallbackTitle || defaultMeta.title;
   const description = seo?.["description"] || fallbackDescription || defaultMeta.description;
-  const ogImage = seo?.["og_image_url"] || fallbackOgImage || defaultMeta.og_image_url || DEFAULT_OG_IMAGE;
-  const canonicalUrl = `${SITE_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
+  const rawOgImage = seo?.["og_image_url"] || fallbackOgImage || defaultMeta.og_image_url || DEFAULT_OG_IMAGE;
+  const ogImage = getAbsoluteImageUrl(rawOgImage);
+  const canonicalUrl = getCanonicalUrl(path);
   const isNoindex = Boolean(seo?.["noindex"] ?? noindex);
 
-  return [
+  const tags: Array<{ title?: string; name?: string; property?: string; content?: string }> = [
     { title },
     { name: "description", content: description },
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:image", content: ogImage },
     { property: "og:url", content: canonicalUrl },
-    { property: "og:type", content: "website" },
+    { property: "og:type", content: type },
     { property: "og:site_name", content: SITE_NAME },
+    { property: "og:locale", content: "en_PK" },
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: ogImage },
     { name: "robots", content: isNoindex ? "noindex, nofollow" : "index, follow" },
   ];
+
+  if (type === "article") {
+    if (publishedTime) {
+      tags.push({ property: "article:published_time", content: publishedTime });
+    }
+    if (author) {
+      tags.push({ property: "article:author", content: author });
+    }
+  }
+
+  return tags;
 }
+
+export function buildSeoHead(options: BuildSeoMetaOptions) {
+  const canonicalUrl = getCanonicalUrl(options.path);
+  return {
+    meta: buildSeoMeta(options),
+    links: [
+      { rel: "canonical", href: canonicalUrl },
+    ],
+  };
+}
+

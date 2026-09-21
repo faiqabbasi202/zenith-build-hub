@@ -15,7 +15,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { submitApplication } from "@/lib/content.functions";
 import { asList, longDate } from "@/lib/format";
 import { careersQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/careers")({
   loader: async ({ context }) => {
@@ -25,12 +25,11 @@ export const Route = createFileRoute("/careers")({
     ]);
     return { ...careersData, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/careers",
       seo: loaderData?.seo,
     }),
-  }),
   component: CareersPage,
 });
 

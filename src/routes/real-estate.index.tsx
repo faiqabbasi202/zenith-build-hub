@@ -6,7 +6,7 @@ import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { statusLabel } from "@/lib/format";
 import { developmentsQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/real-estate/")({
   loader: async ({ context }) => {
@@ -16,12 +16,11 @@ export const Route = createFileRoute("/real-estate/")({
     ]);
     return { developments, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/real-estate",
       seo: loaderData?.seo,
     }),
-  }),
   component: DevelopmentsPage,
 });
 

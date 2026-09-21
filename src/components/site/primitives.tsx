@@ -58,12 +58,12 @@ export function SectionHead({
           <Eyebrow className={cn(align === "center" && "justify-center")}>{eyebrow}</Eyebrow>
         ) : null}
         {heading ? (
-          <h2 className="mt-4 text-3xl leading-[1.05] font-semibold sm:text-4xl lg:text-5xl">
+          <h2 className="mt-4 text-2xl font-semibold leading-[1.08] sm:text-3xl md:text-4xl lg:text-5xl">
             {heading}
           </h2>
         ) : null}
         {subheading ? (
-          <p className="mt-4 text-base text-muted-foreground sm:text-lg">{subheading}</p>
+          <p className="mt-3 text-sm text-muted-foreground sm:mt-4 sm:text-base md:text-lg">{subheading}</p>
         ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
@@ -274,18 +274,18 @@ export function PageHero({
       )}
 
       {/* Content — centered */}
-      <Container className="relative py-16 text-center md:py-24">
+      <Container className="relative py-12 text-center sm:py-16 md:py-24">
         <Reveal>
           <Eyebrow className="justify-center">{eyebrow}</Eyebrow>
-          <h1 className="mt-5 text-3xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-4 text-2xl font-bold leading-[1.08] tracking-tight sm:mt-5 sm:text-4xl md:text-5xl lg:text-6xl">
             {title}
           </h1>
           {intro ? (
-            <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
+            <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:mt-5 sm:text-base md:text-lg lg:text-xl">
               {intro}
             </p>
           ) : null}
-          {children ? <div className="mt-8">{children}</div> : null}
+          {children ? <div className="mt-6 sm:mt-8">{children}</div> : null}
         </Reveal>
       </Container>
     </header>

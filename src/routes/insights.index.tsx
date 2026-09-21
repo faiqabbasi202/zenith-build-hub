@@ -6,7 +6,7 @@ import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
 import { longDate } from "@/lib/format";
 import { pageSeoQuery, postsQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/insights/")({
   loader: async ({ context }) => {
@@ -16,12 +16,11 @@ export const Route = createFileRoute("/insights/")({
     ]);
     return { posts, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/insights",
       seo: loaderData?.seo,
     }),
-  }),
   component: InsightsPage,
 });
 

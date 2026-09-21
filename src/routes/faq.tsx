@@ -4,7 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Container, PageHero } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { faqsQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/faq")({
   loader: async ({ context }) => {
@@ -14,12 +14,11 @@ export const Route = createFileRoute("/faq")({
     ]);
     return { faqs, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/faq",
       seo: loaderData?.seo,
     }),
-  }),
   component: FaqPage,
 });
 

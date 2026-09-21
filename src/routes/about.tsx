@@ -10,7 +10,7 @@ import {
 } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
 import { aboutQuery, pageSeoQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   loader: async ({ context }) => {
@@ -20,12 +20,11 @@ export const Route = createFileRoute("/about")({
     ]);
     return { ...aboutData, seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/about",
       seo: loaderData?.seo,
     }),
-  }),
   component: AboutPage,
 });
 

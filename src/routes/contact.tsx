@@ -9,7 +9,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { submitLead } from "@/lib/content.functions";
 import { asObjects } from "@/lib/format";
 import { pageSeoQuery, servicesQuery, siteSettingsQuery } from "@/lib/queries";
-import { buildSeoMeta } from "@/lib/seo";
+import { buildSeoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
   loader: async ({ context }) => {
@@ -20,12 +20,11 @@ export const Route = createFileRoute("/contact")({
     ]);
     return { seo };
   },
-  head: ({ loaderData }) => ({
-    meta: buildSeoMeta({
+  head: ({ loaderData }) =>
+    buildSeoHead({
       path: "/contact",
       seo: loaderData?.seo,
     }),
-  }),
   component: ContactPage,
 });
 
