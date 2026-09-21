@@ -29,55 +29,55 @@ const NAV = [
   { label: "Contact",    to: "/contact" },
 ];
 
-/* ─── Utility bar (desktop only) ──────────────────────────────────────── */
+/* ─── Utility bar (responsive topbar) ─────────────────────────────────── */
 function UtilityBar({ settings }: { settings: Settings }) {
   return (
-    <div className="hidden border-b border-border bg-amber md:block">
-      <div className="container-page flex h-9 items-center justify-between gap-4">
-        {/* Left — contact info + office hours */}
-        <div className="flex items-center gap-5 text-primary-foreground">
+    <div className="w-full border-b border-border bg-amber text-primary-foreground">
+      <div className="container-page flex flex-col items-center justify-between gap-2 py-2 sm:h-10 sm:flex-row sm:py-0">
+        {/* Contact info + office hours */}
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 text-sm">
           {settings?.["email"] ? (
             <a
               href={`mailto:${settings["email"]}`}
-              className="label-mono flex items-center gap-1.5 text-[10px] opacity-90 transition-opacity hover:opacity-100"
+              className="flex items-center gap-1.5 font-medium opacity-95 transition-opacity md:hover:opacity-100"
             >
-              <Mail className="h-3 w-3 shrink-0" aria-hidden />
-              {settings["email"]}
+              <Mail className="h-4 w-4 shrink-0" aria-hidden />
+              <span>{settings["email"]}</span>
             </a>
           ) : null}
           {settings?.["phone"] ? (
             <a
               href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`}
-              className="label-mono flex items-center gap-1.5 text-[10px] opacity-90 transition-opacity hover:opacity-100"
+              className="flex items-center gap-1.5 font-medium opacity-95 transition-opacity md:hover:opacity-100"
             >
-              <Phone className="h-3 w-3 shrink-0" aria-hidden />
-              {settings["phone"]}
+              <Phone className="h-4 w-4 shrink-0" aria-hidden />
+              <span>{settings["phone"]}</span>
             </a>
           ) : null}
           {settings?.["office_hours"] ? (
-            <span className="label-mono flex items-center gap-1.5 text-[10px] opacity-90">
-              <Clock className="h-3 w-3 shrink-0" aria-hidden />
-              {settings["office_hours"]}
+            <span className="flex items-center gap-1.5 font-medium opacity-95">
+              <Clock className="h-4 w-4 shrink-0" aria-hidden />
+              <span>{settings["office_hours"]}</span>
             </span>
           ) : (
-            <span className="label-mono flex items-center gap-1.5 text-[10px] opacity-90">
-              <Clock className="h-3 w-3 shrink-0" aria-hidden />
-              Office Hours: 9AM – 6PM
+            <span className="flex items-center gap-1.5 font-medium opacity-95">
+              <Clock className="h-4 w-4 shrink-0" aria-hidden />
+              <span>Office Hours: 9AM – 6PM</span>
             </span>
           )}
         </div>
 
-        {/* Right — social icons */}
-        <div className="flex items-center gap-2">
+        {/* Social icons */}
+        <div className="flex items-center justify-center gap-3">
           {settings?.["facebook_url"] ? (
             <a
               href={settings["facebook_url"]}
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"
-              className="flex h-5 w-5 items-center justify-center text-primary-foreground opacity-80 transition-opacity hover:opacity-100"
+              className="flex h-6 w-6 items-center justify-center opacity-85 transition-opacity md:hover:opacity-100"
             >
-              <Facebook className="h-3 w-3" />
+              <Facebook className="h-4 w-4" />
             </a>
           ) : null}
           {settings?.["twitter_url"] ? (
@@ -86,9 +86,9 @@ function UtilityBar({ settings }: { settings: Settings }) {
               target="_blank"
               rel="noreferrer"
               aria-label="Twitter / X"
-              className="flex h-5 w-5 items-center justify-center text-primary-foreground opacity-80 transition-opacity hover:opacity-100"
+              className="flex h-6 w-6 items-center justify-center opacity-85 transition-opacity md:hover:opacity-100"
             >
-              <Twitter className="h-3 w-3" />
+              <Twitter className="h-4 w-4" />
             </a>
           ) : null}
           {settings?.["linkedin_url"] ? (
@@ -97,9 +97,9 @@ function UtilityBar({ settings }: { settings: Settings }) {
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn"
-              className="flex h-5 w-5 items-center justify-center text-primary-foreground opacity-80 transition-opacity hover:opacity-100"
+              className="flex h-6 w-6 items-center justify-center opacity-85 transition-opacity md:hover:opacity-100"
             >
-              <Linkedin className="h-3 w-3" />
+              <Linkedin className="h-4 w-4" />
             </a>
           ) : null}
           {settings?.["youtube_url"] ? (
@@ -108,9 +108,9 @@ function UtilityBar({ settings }: { settings: Settings }) {
               target="_blank"
               rel="noreferrer"
               aria-label="YouTube"
-              className="flex h-5 w-5 items-center justify-center text-primary-foreground opacity-80 transition-opacity hover:opacity-100"
+              className="flex h-6 w-6 items-center justify-center opacity-85 transition-opacity md:hover:opacity-100"
             >
-              <Youtube className="h-3 w-3" />
+              <Youtube className="h-4 w-4" />
             </a>
           ) : null}
         </div>
@@ -158,7 +158,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
           {/* Logo — left */}
           <Link
             to="/"
-            className="group flex shrink-0 items-center gap-2.5"
+            className="group flex min-h-[44px] min-w-[120px] shrink-0 items-center gap-2.5"
             onClick={() => setOpen(false)}
           >
             <span className="flex h-9 w-9 items-center justify-center bg-amber font-display text-base font-bold text-primary-foreground">
@@ -192,7 +192,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
                     "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
                     isActive
                       ? "bg-amber text-primary-foreground"
-                      : "text-foreground/75 hover:text-amber",
+                      : "text-foreground/75 md:hover:text-amber",
                   )}
                 >
                   {item.label}
@@ -205,7 +205,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
           <button
             type="button"
             aria-label="Search"
-            className="ml-auto hidden h-9 w-9 items-center justify-center rounded-full border border-border text-foreground/60 transition-colors hover:border-amber hover:text-amber lg:flex"
+            className="ml-auto hidden h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center rounded-full border border-border text-foreground/60 transition-colors md:hover:border-amber md:hover:text-amber lg:flex"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -214,7 +214,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="ml-auto flex h-10 w-10 items-center justify-center rounded-sm border border-border text-foreground lg:hidden"
+            className="ml-auto flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-sm border border-border text-foreground lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
@@ -245,7 +245,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
                     to={item.to}
                     onClick={() => setOpen(false)}
                     className={cn(
-                      "border-b border-border py-4 font-display text-xl font-semibold tracking-tight transition-colors",
+                      "flex min-h-[48px] items-center border-b border-border py-4 font-display text-xl font-semibold tracking-tight transition-colors",
                       isActive ? "text-amber" : "text-foreground",
                     )}
                   >
@@ -256,7 +256,7 @@ export function SiteHeader({ settings }: { settings: Settings }) {
               <Link
                 to="/contact"
                 onClick={() => setOpen(false)}
-                className="mt-5 rounded-sm bg-amber px-4 py-3.5 text-center text-sm font-semibold text-primary-foreground"
+                className="mt-5 flex min-h-[48px] items-center justify-center rounded-sm bg-amber px-4 py-3.5 text-center text-sm font-semibold text-primary-foreground"
               >
                 Request a quote
               </Link>

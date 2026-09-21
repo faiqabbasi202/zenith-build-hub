@@ -74,18 +74,18 @@ function PostDetail() {
         <section className="border-t border-border bg-surface py-20">
           <Container>
             <SectionHead eyebrow="Keep reading" heading="More insights" />
-            <ul className="mt-12 grid gap-8 md:grid-cols-3">
+            <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
               {data.more.map((p: any) => (
                 <li key={p.slug}>
                   <Link
                     to="/insights/$slug"
                     params={{ slug: p.slug }}
-                    className="group block h-full border border-border bg-background p-6 transition-colors hover:border-amber/60"
+                    className="group block h-full min-h-[14rem] border border-border bg-background p-6 transition-colors md:hover:border-amber/60"
                   >
                     <p className="label-mono text-muted-foreground">
                       {p.category} · {longDate(p.published_at)}
                     </p>
-                    <h3 className="mt-3 font-display text-lg font-semibold group-hover:text-amber">
+                    <h3 className="mt-3 font-display text-lg font-semibold md:group-hover:text-amber">
                       {p.title}
                     </h3>
                     <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{p.excerpt}</p>

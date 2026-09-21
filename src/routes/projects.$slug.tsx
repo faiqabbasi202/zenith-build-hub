@@ -147,7 +147,7 @@ function ProjectDetail() {
         <section className="border-t border-border bg-surface py-20 md:py-28">
           <Container>
             <SectionHead eyebrow="More work" heading="Related projects" />
-            <ul className="mt-12 grid gap-8 md:grid-cols-3">
+            <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
               {data.related.map((p: any) => (
                 <li key={p.slug}>
                   <ProjectCard project={p} />

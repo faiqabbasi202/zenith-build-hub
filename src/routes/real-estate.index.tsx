@@ -43,7 +43,7 @@ function DevelopmentsPage() {
                 <Link
                   to="/real-estate/$slug"
                   params={{ slug: dev.slug }}
-                  className="group grid gap-8 border border-border bg-surface transition-colors hover:border-amber/60 lg:grid-cols-2"
+                  className="group grid min-h-[20rem] gap-8 border border-border bg-surface transition-colors md:hover:border-amber/60 lg:grid-cols-2"
                 >
                   <div className="relative aspect-16/10 overflow-hidden">
                     {dev.cover_image_url ? (
@@ -52,13 +52,13 @@ function DevelopmentsPage() {
                         alt={dev.title}
                         aspectRatio="16/10"
                         className="h-full w-full"
-                        imgClassName="transition-transform duration-700 group-hover:scale-105"
+                        imgClassName="transition-transform duration-700 md:group-hover:scale-105"
                       />
                     ) : null}
                   </div>
                   <div className="flex flex-col justify-center p-8 lg:p-12">
                     <StatusChip label={statusLabel(dev.status)} />
-                    <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight transition-colors group-hover:text-amber">
+                    <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight transition-colors md:group-hover:text-amber">
                       {dev.title}
                     </h2>
                     <p className="mt-2 text-sm text-muted-foreground">

@@ -281,7 +281,7 @@ function AdminDashboardPage() {
   // ── Auth Gate: Render Login Form if Not Staff
   if (authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-100 text-slate-600 dark:bg-slate-950 dark:text-slate-400">
+      <div className="flex min-h-dvh items-center justify-center bg-slate-100 text-slate-600 dark:bg-slate-950 dark:text-slate-400">
         <div className="text-center space-y-3">
           <Database className="mx-auto h-8 w-8 animate-pulse text-slate-500" />
           <p className="text-sm">Verifying staff permissions…</p>
@@ -292,7 +292,7 @@ function AdminDashboardPage() {
 
   if (!session && !isStaffUser) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4 dark:bg-slate-950">
+      <div className="flex min-h-dvh items-center justify-center bg-slate-100 p-4 dark:bg-slate-950">
         <div className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-md bg-slate-900 text-white font-bold dark:bg-white dark:text-slate-900">
@@ -359,7 +359,7 @@ function AdminDashboardPage() {
 
   // ── Authenticated Admin Layout
   return (
-    <div className="flex min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="flex min-h-dvh bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       {/* ── Sidebar (Desktop) ── */}
       <aside className="hidden w-64 shrink-0 border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 lg:flex lg:flex-col">
         {/* Brand header */}
@@ -456,7 +456,7 @@ function AdminDashboardPage() {
             <button
               type="button"
               onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-              className="rounded p-2 text-slate-500 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800"
+              className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded p-2 text-slate-500 md:hover:bg-slate-100 lg:hidden dark:md:hover:bg-slate-800"
             >
               <Menu className="h-5 w-5" />
             </button>
@@ -488,7 +488,7 @@ function AdminDashboardPage() {
                 setEditingRecord(null);
                 setModalOpen(true);
               }}
-              className="inline-flex items-center gap-1.5 rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+              className="inline-flex min-h-[36px] min-w-[90px] items-center justify-center gap-1.5 rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition md:hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:md:hover:bg-slate-100"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Create New</span>

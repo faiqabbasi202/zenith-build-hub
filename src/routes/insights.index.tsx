@@ -43,7 +43,7 @@ function InsightsPage() {
                 <Link
                   to="/insights/$slug"
                   params={{ slug: post.slug }}
-                  className="group block h-full border border-border bg-surface transition-colors hover:border-amber/60"
+                  className="group block h-full min-h-[16rem] border border-border bg-surface transition-colors md:hover:border-amber/60"
                 >
                   {post["cover_image_url"] ? (
                     <div className="aspect-16/9 overflow-hidden">
@@ -52,7 +52,7 @@ function InsightsPage() {
                         alt={post["title"]}
                         aspectRatio="16/9"
                         className="h-full w-full"
-                        imgClassName="transition-transform duration-700 group-hover:scale-105"
+                        imgClassName="transition-transform duration-700 md:group-hover:scale-105"
                       />
                     </div>
                   ) : null}
@@ -61,7 +61,7 @@ function InsightsPage() {
                       {post.category} · {longDate(post.published_at)}
                       {post.read_minutes ? ` · ${post.read_minutes} min` : ""}
                     </p>
-                    <h2 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors group-hover:text-amber">
+                    <h2 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors md:group-hover:text-amber">
                       {post.title}
                     </h2>
                     <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{post.excerpt}</p>

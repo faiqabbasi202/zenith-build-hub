@@ -53,7 +53,7 @@ function AuthPage() {
     "w-full rounded-sm border border-border bg-background px-4 py-3 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-amber";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-5">
+    <div className="flex min-h-dvh items-center justify-center bg-background px-5">
       <div className="w-full max-w-md border border-border bg-surface p-8">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center bg-amber font-display text-lg font-bold text-primary-foreground">
@@ -78,7 +78,7 @@ function AuthPage() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-sm bg-amber px-5 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 disabled:opacity-60"
+            className="w-full min-h-[44px] rounded-sm bg-amber px-5 py-3 text-sm font-semibold text-primary-foreground transition-all md:hover:brightness-110 disabled:opacity-60"
           >
             {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
           </button>
@@ -87,7 +87,7 @@ function AuthPage() {
         <button
           type="button"
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="mt-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-amber"
+          className="mt-5 inline-flex min-h-[36px] items-center text-sm text-muted-foreground underline underline-offset-4 md:hover:text-amber"
         >
           {mode === "signin" ? "Need an account? Sign up" : "Already have an account? Sign in"}
         </button>

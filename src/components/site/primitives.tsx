@@ -85,13 +85,13 @@ type ActionProps = {
 };
 
 const actionBase =
-  "group inline-flex items-center justify-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold tracking-tight transition-all duration-200 disabled:pointer-events-none disabled:opacity-60";
+  "group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold tracking-tight transition-all duration-200 disabled:pointer-events-none disabled:opacity-60";
 
 const actionVariants = {
-  solid: "bg-amber text-primary-foreground hover:brightness-110 active:brightness-95",
+  solid: "bg-amber text-primary-foreground md:hover:brightness-110 active:brightness-95",
   outline:
-    "border border-border text-foreground hover:border-amber hover:text-amber bg-transparent",
-  ghost: "text-foreground/80 hover:text-amber",
+    "border border-border text-foreground md:hover:border-amber md:hover:text-amber bg-transparent",
+  ghost: "text-foreground/80 md:hover:text-amber",
 } as const;
 
 export function Action({
@@ -137,7 +137,7 @@ function ArrowGlyph() {
   return (
     <span
       aria-hidden
-      className="inline-block translate-x-0 transition-transform duration-200 group-hover:translate-x-1"
+      className="inline-block translate-x-0 transition-transform duration-200 md:group-hover:translate-x-1"
     >
       →
     </span>

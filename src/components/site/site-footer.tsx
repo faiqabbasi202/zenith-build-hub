@@ -39,7 +39,7 @@ function SocialBtn({
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-sm bg-amber text-primary-foreground transition-all hover:brightness-110"
+      className="flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center rounded-sm bg-amber text-primary-foreground transition-all md:hover:brightness-110"
     >
       {children}
     </a>
@@ -138,7 +138,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                     <p className="label-mono text-[10px] opacity-40">Email</p>
                     <a
                       href={`mailto:${settings["email"]}`}
-                      className="mt-0.5 block opacity-75 transition-opacity hover:opacity-100 hover:text-amber"
+                      className="mt-0.5 block opacity-75 transition-opacity md:hover:opacity-100 md:hover:text-amber"
                     >
                       {settings["email"]}
                     </a>
@@ -155,7 +155,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                     <p className="label-mono text-[10px] opacity-40">Phone</p>
                     <a
                       href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`}
-                      className="mt-0.5 block opacity-75 transition-opacity hover:opacity-100 hover:text-amber"
+                      className="mt-0.5 block opacity-75 transition-opacity md:hover:opacity-100 md:hover:text-amber"
                     >
                       {settings["phone"]}
                     </a>
@@ -173,7 +173,7 @@ export function SiteFooter({ settings }: { settings: Settings }) {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="text-sm opacity-65 transition-all hover:opacity-100 hover:text-amber"
+                    className="text-sm opacity-65 transition-all md:hover:opacity-100 md:hover:text-amber"
                   >
                     {link.label}
                   </Link>

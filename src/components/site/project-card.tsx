@@ -9,7 +9,7 @@ export function ProjectCard({ project }: { project: Record<string, any> }) {
     <Link
       to="/projects/$slug"
       params={{ slug: project["slug"] }}
-      className="group flex flex-col overflow-hidden border border-border bg-surface transition-colors hover:border-amber/60"
+      className="group flex min-h-[320px] flex-col overflow-hidden border border-border bg-surface transition-colors md:hover:border-amber/60"
     >
       {/* Image — fixed height, no aspect-ratio tricks that can collapse on Android */}
       <div className="relative h-48 w-full shrink-0 overflow-hidden sm:h-56">
@@ -19,7 +19,7 @@ export function ProjectCard({ project }: { project: Record<string, any> }) {
             alt={project["title"] ?? "AMARC Project"}
             loading="lazy"
             decoding="async"
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
           />
         ) : (
           <div className="hero-texture h-full w-full" />
@@ -36,7 +36,7 @@ export function ProjectCard({ project }: { project: Record<string, any> }) {
           {project["city"]}
           {project["sector_slug"] ? ` · ${String(project["sector_slug"]).replace(/-/g, " ")}` : ""}
         </p>
-        <h2 className="mt-2 font-display text-base font-semibold leading-snug transition-colors group-hover:text-amber">
+        <h2 className="mt-2 font-display text-base font-semibold leading-snug transition-colors md:group-hover:text-amber">
           {project["title"]}
         </h2>
         <p className="mt-2 line-clamp-2 flex-1 text-sm text-muted-foreground">{project["summary"]}</p>

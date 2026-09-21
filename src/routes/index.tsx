@@ -217,7 +217,7 @@ function Services({ section, services }: { section?: Row | undefined; services: 
               <Link
                 to="/services/$slug"
                 params={{ slug: service["slug"] }}
-                className="group relative flex h-[28rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors hover:border-amber/60"
+                className="group relative flex h-[28rem] min-h-[22rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors md:hover:border-amber/60"
               >
                 {service["hero_image_url"] ? (
                   <>
@@ -225,7 +225,7 @@ function Services({ section, services }: { section?: Row | undefined; services: 
                       src={service["hero_image_url"]}
                       alt={service["title"]}
                       className="absolute inset-0 h-full w-full"
-                      imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      imgClassName="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
                   </>
@@ -235,11 +235,11 @@ function Services({ section, services }: { section?: Row | undefined; services: 
                   <span className="label-mono text-amber">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-amber">
+                  <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors md:group-hover:text-amber">
                     {service["title"]}
                   </h3>
                   <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{service["summary"]}</p>
-                  <span className="label-mono mt-6 block text-foreground/60 transition-colors group-hover:text-amber">
+                  <span className="label-mono mt-6 block text-foreground/60 transition-colors md:group-hover:text-amber">
                     Explore →
                   </span>
                 </div>
@@ -270,7 +270,7 @@ function Sectors({ section, sectors }: { section?: Row | undefined; sectors: Row
               <Link
                 to="/projects"
                 search={{ sector: sector["slug"] } as never}
-                className="group relative flex h-48 items-end overflow-hidden rounded-sm border border-border p-5 transition-colors hover:border-amber"
+                className="group relative flex h-48 min-h-[12rem] items-end overflow-hidden rounded-sm border border-border p-5 transition-colors md:hover:border-amber"
               >
                 {sector["hero_image_url"] ? (
                   <>
@@ -278,16 +278,16 @@ function Sectors({ section, sectors }: { section?: Row | undefined; sectors: Row
                       src={sector["hero_image_url"]}
                       alt={sector["title"]}
                       className="absolute inset-0 h-full w-full"
-                      imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      imgClassName="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-background/10" />
                   </>
                 ) : null}
                 <div className="relative z-10 flex w-full items-center justify-between gap-3">
-                  <span className="font-display text-lg font-semibold text-foreground transition-colors group-hover:text-amber">
+                  <span className="font-display text-lg font-semibold text-foreground transition-colors md:group-hover:text-amber">
                     {sector["title"]}
                   </span>
-                  <span className="label-mono text-amber opacity-0 transition-opacity group-hover:opacity-100">→</span>
+                  <span className="label-mono text-amber opacity-0 transition-opacity md:group-hover:opacity-100">→</span>
                 </div>
               </Link>
             </Reveal>
@@ -385,14 +385,14 @@ function Developments({ section, developments }: { section?: Row | undefined; de
               <Link
                 to="/real-estate/$slug"
                 params={{ slug: dev["slug"] }}
-                className="group relative block h-[26rem] overflow-hidden border border-border"
+                className="group relative block h-[26rem] min-h-[20rem] overflow-hidden border border-border"
               >
                 {dev["cover_image_url"] ? (
                   <ResponsiveImage
                     src={dev["cover_image_url"]}
                     alt={dev["title"]}
                     className="absolute inset-0 h-full w-full"
-                    imgClassName="transition-transform duration-700 group-hover:scale-105"
+                    imgClassName="transition-transform duration-700 md:group-hover:scale-105"
                   />
                 ) : null}
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
@@ -434,7 +434,7 @@ function Clients({ section, clients }: { section?: Row | undefined; clients: Row
                   src={client["logo_url"]}
                   alt={client["name"]}
                   loading="lazy"
-                  className="max-h-10 opacity-70 transition-opacity hover:opacity-100"
+                  className="max-h-10 opacity-70 transition-opacity md:hover:opacity-100"
                 />
               ) : (
                 <span className="text-sm font-medium text-muted-foreground">{client["name"]}</span>
@@ -535,7 +535,7 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
               <Link
                 to="/insights/$slug"
                 params={{ slug: post["slug"] }}
-                className="group block h-full border border-border bg-surface transition-colors hover:border-amber/60"
+                className="group block h-full min-h-[16rem] border border-border bg-surface transition-colors md:hover:border-amber/60"
               >
                 {post["cover_image_url"] ? (
                   <div className="aspect-16/9 overflow-hidden">
@@ -544,7 +544,7 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
                       alt={post["title"]}
                       aspectRatio="16/9"
                       className="h-full w-full"
-                      imgClassName="transition-transform duration-700 group-hover:scale-105"
+                      imgClassName="transition-transform duration-700 md:group-hover:scale-105"
                     />
                   </div>
                 ) : null}
@@ -552,7 +552,7 @@ function Insights({ section, posts }: { section?: Row | undefined; posts: Row[] 
                   <p className="label-mono text-muted-foreground">
                     {post["category"]} · {longDate(post["published_at"])}
                   </p>
-                  <h3 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors group-hover:text-amber">
+                  <h3 className="mt-3 font-display text-lg leading-snug font-semibold transition-colors md:group-hover:text-amber">
                     {post["title"]}
                   </h3>
                   <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{post["excerpt"]}</p>

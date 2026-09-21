@@ -113,7 +113,7 @@ function ServiceDetail() {
         <section className="bg-background py-20 md:py-28">
           <Container>
             <SectionHead eyebrow="Related work" heading="Projects using this service" />
-            <ul className="mt-12 grid gap-8 md:grid-cols-3">
+            <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
               {data.projects.map((p: any) => (
                 <li key={p.slug}>
                   <ProjectCard project={p} />
@@ -131,7 +131,7 @@ function ServiceDetail() {
             <div className="mt-12 divide-y divide-border border-y border-border">
               {faqs.map((faq: any, i: number) => (
                 <details key={i} className="group py-6">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 font-display text-lg font-semibold">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-6 font-display text-lg font-semibold">
                     {faq.question}
                     <span aria-hidden className="text-amber transition-transform group-open:rotate-45">
                       +

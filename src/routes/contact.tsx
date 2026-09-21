@@ -111,17 +111,17 @@ function ContactPage() {
           <aside className="space-y-8">
             <div className="space-y-4 border border-border bg-surface p-7">
               {settings?.["phone"] ? (
-                <a href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+                <a href={`tel:${String(settings["phone"]).replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm transition-colors md:hover:text-amber">
                   <Phone className="h-4 w-4 text-amber" aria-hidden /> {settings["phone"]}
                 </a>
               ) : null}
               {settings?.["email"] ? (
-                <a href={`mailto:${settings["email"]}`} className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+                <a href={`mailto:${settings["email"]}`} className="flex items-center gap-3 text-sm transition-colors md:hover:text-amber">
                   <Mail className="h-4 w-4 text-amber" aria-hidden /> {settings["email"]}
                 </a>
               ) : null}
               {settings?.["google_maps_url"] ? (
-                <a href={settings["google_maps_url"]} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm transition-colors hover:text-amber">
+                <a href={settings["google_maps_url"]} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm transition-colors md:hover:text-amber">
                   <MapPin className="h-4 w-4 text-amber" aria-hidden /> Find us on Google Maps
                 </a>
               ) : null}

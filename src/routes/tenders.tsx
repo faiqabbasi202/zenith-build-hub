@@ -93,7 +93,7 @@ function TendersPage() {
                     <td className="px-5 py-4 text-amber">{longDate(t.closes_at)}</td>
                     <td className="px-5 py-4">
                       {t.document_url ? (
-                        <a href={t.document_url} className="underline underline-offset-4 hover:text-amber">
+                        <a href={t.document_url} className="underline underline-offset-4 md:hover:text-amber">
                           Download
                         </a>
                       ) : (

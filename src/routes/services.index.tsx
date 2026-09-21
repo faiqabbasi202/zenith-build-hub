@@ -42,7 +42,7 @@ function ServicesPage() {
                 <Link
                   to="/services/$slug"
                   params={{ slug: service.slug }}
-                  className="group relative flex h-[28rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors hover:border-amber/60"
+                  className="group relative flex h-[28rem] min-h-[22rem] flex-col justify-end overflow-hidden border border-border bg-surface transition-colors md:hover:border-amber/60"
                 >
                   {service.hero_image_url ? (
                     <>
@@ -50,7 +50,7 @@ function ServicesPage() {
                         src={service.hero_image_url}
                         alt={service.title}
                         className="absolute inset-0 h-full w-full"
-                        imgClassName="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        imgClassName="h-full w-full object-cover transition-transform duration-700 md:group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-transparent" />
                     </>
@@ -60,11 +60,11 @@ function ServicesPage() {
                     <span className="label-mono text-amber">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-amber">
+                    <h2 className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground transition-colors md:group-hover:text-amber">
                       {service.title}
                     </h2>
                     <p className="mt-2 line-clamp-2 text-sm text-foreground/80">{service.summary}</p>
-                    <span className="label-mono mt-6 block text-foreground/60 transition-colors group-hover:text-amber">
+                    <span className="label-mono mt-6 block text-foreground/60 transition-colors md:group-hover:text-amber">
                       Explore →
                     </span>
                   </div>

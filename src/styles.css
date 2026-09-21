@@ -307,13 +307,23 @@
 html {
   overflow-x: clip;
   max-width: 100%;
+  width: 100%;
+  touch-action: pan-y;
 }
 
 /* Level 2 — body as a second fence */
 body {
   overflow-x: clip;
   max-width: 100%;
+  width: 100%;
   position: relative; /* creates a new stacking context */
+  touch-action: pan-y;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Level 3 — every section and the main wrapper clips its children */

@@ -138,10 +138,10 @@ function FilterRow({
               type="button"
               onClick={() => onSelect(opt.value)}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-1.5 text-sm transition-colors",
+                "inline-flex shrink-0 min-h-[36px] min-w-[48px] items-center justify-center rounded-full border px-4 py-1.5 text-sm transition-colors",
                 isActive
                   ? "border-amber bg-amber text-primary-foreground"
-                  : "border-border text-foreground/75 hover:border-amber hover:text-amber",
+                  : "border-border text-foreground/75 md:hover:border-amber md:hover:text-amber",
               )}
             >
               {opt.label}
