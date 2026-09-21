@@ -357,3 +357,23 @@ footer {
   }
 }
 
+/* ─── Admin Portal Typography Isolation ─────────────────────────────────── */
+.admin-portal,
+.admin-portal * {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: normal !important;
+  font-variation-settings: normal !important;
+}
+
+.admin-portal h1,
+.admin-portal h2,
+.admin-portal h3,
+.admin-portal h4,
+.admin-portal h5,
+.admin-portal h6 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-feature-settings: normal !important;
+  letter-spacing: -0.02em;
+}
+
+

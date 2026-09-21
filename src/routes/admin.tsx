@@ -39,6 +39,21 @@ import {
   Globe,
   SlidersHorizontal,
   Info,
+  Image as ImageIcon,
+  HardHat,
+  DraftingCompass,
+  Frame,
+  Mountain,
+  PackageCheck,
+  Sofa,
+  Scale,
+  GanttChartSquare,
+  Wrench,
+  Hammer,
+  Truck,
+  Home,
+  Award,
+  Users,
 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -66,6 +81,26 @@ const GROUP_ICONS: Record<string, any> = {
   Company: Building2,
   Content: FileText,
   Operations: Briefcase,
+};
+
+// Lucide icon lookup for tables with icon columns
+const ICON_LOOKUP: Record<string, any> = {
+  Building2,
+  HardHat,
+  DraftingCompass,
+  Frame,
+  Mountain,
+  PackageCheck,
+  Sofa,
+  Scale,
+  GanttChartSquare,
+  Wrench,
+  Hammer,
+  Truck,
+  Home,
+  ShieldCheck,
+  Award,
+  Users,
 };
 
 function getPublicRouteForRecord(tableKey: string, rec: Record<string, any>): string | null {
@@ -660,43 +695,49 @@ function AdminDashboardPage() {
 
   // ── Authenticated Admin Layout
   return (
-    <div className="flex min-h-dvh bg-slate-100/70 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans">
+    <div
+      className="admin-portal flex min-h-dvh bg-[#F1F5F9] text-slate-900 selection:bg-amber selection:text-slate-950 antialiased"
+      style={{
+        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        fontFeatureSettings: 'normal',
+      }}
+    >
       {/* ──────────────────────────────────────────────────────────────────
           DESKTOP SIDEBAR (hidden on mobile)
       ────────────────────────────────────────────────────────────────── */}
-      <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 lg:flex lg:flex-col shadow-xs">
+      <aside className="hidden w-72 shrink-0 border-r border-slate-800/80 bg-[#0B0F19] lg:flex lg:flex-col shadow-2xl select-none">
         {/* Brand header */}
-        <div className="flex h-20 items-center justify-between border-b border-slate-200 px-6 dark:border-slate-800">
+        <div className="flex h-20 items-center justify-between border-b border-slate-800/80 px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-base font-bold text-amber shadow-sm dark:bg-white dark:text-slate-900">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber to-amber-500 text-base font-black text-slate-950 shadow-md shadow-amber/20">
               A
             </div>
             <div>
-              <p className="text-base font-bold leading-tight text-slate-900 dark:text-white">AMARC Admin</p>
-              <p className="text-xs text-slate-500 font-medium">Management Portal</p>
+              <p className="text-base font-extrabold leading-tight text-white tracking-tight">AMARC Admin</p>
+              <p className="text-xs text-slate-400 font-medium">Management Portal</p>
             </div>
           </div>
-          <span title="Staff authenticated" className="rounded-full bg-emerald-50 p-1.5 dark:bg-emerald-950/40">
-            <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          <span title="Staff authenticated" className="rounded-full bg-emerald-500/15 border border-emerald-500/30 p-1.5 text-emerald-400">
+            <ShieldCheck className="h-4 w-4" />
           </span>
         </div>
 
         {/* Quick sidebar filter */}
-        <div className="p-3 border-b border-slate-100 dark:border-slate-800/80">
+        <div className="p-3.5 border-b border-slate-800/60">
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
             <input
               type="text"
               placeholder="Filter collections…"
               value={sidebarSearch}
               onChange={(e) => setSidebarSearch(e.target.value)}
-              className="w-full rounded-md border border-slate-200 bg-slate-50 pl-8 pr-2.5 py-1.5 text-xs text-slate-800 outline-none focus:border-amber dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200"
+              className="w-full rounded-xl border border-slate-800 bg-slate-900/90 pl-9 pr-3 py-2 text-xs font-medium text-slate-200 placeholder-slate-500 outline-none transition focus:border-amber focus:ring-1 focus:ring-amber"
             />
           </div>
         </div>
 
         {/* Grouped Sidebar Navigation */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {ADMIN_GROUPS.map((group) => {
             const GroupIcon = GROUP_ICONS[group] || Layers;
             let tablesInGroup = Object.values(ADMIN_TABLES).filter((t) => t.group === group);
@@ -709,13 +750,13 @@ function AdminDashboardPage() {
             if (tablesInGroup.length === 0) return null;
 
             return (
-              <div key={group} className="space-y-1">
-                <div className="flex items-center gap-2 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                  <GroupIcon className="h-3.5 w-3.5" />
+              <div key={group} className="space-y-1.5">
+                <div className="flex items-center gap-2 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                  <GroupIcon className="h-3.5 w-3.5 text-slate-500" />
                   <span>{group}</span>
                 </div>
 
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   {tablesInGroup.map((table) => {
                     const isActive = activeTableKey === table.key;
                     return (
@@ -729,17 +770,17 @@ function AdminDashboardPage() {
                           setSelectedCategory("all");
                           setSortField(null);
                         }}
-                        className={`group flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition ${
+                        className={`group flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
                           isActive
-                            ? "bg-slate-900 text-white font-bold shadow-sm dark:bg-white dark:text-slate-900"
-                            : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/80"
+                            ? "bg-gradient-to-r from-amber to-amber-500 text-slate-950 font-black shadow-md shadow-amber/25"
+                            : "text-slate-300 hover:bg-slate-800/80 hover:text-white"
                         }`}
                       >
                         <span className="truncate">{table.title}</span>
                         {isActive ? (
-                          <ChevronRight className="h-4 w-4 shrink-0 text-amber" />
+                          <ChevronRight className="h-4 w-4 shrink-0 text-slate-950" />
                         ) : (
-                          <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-600 dark:text-slate-500">
+                          <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-200 bg-slate-800/60 px-2 py-0.5 rounded-md">
                             {table.fields.length}
                           </span>
                         )}
@@ -753,12 +794,12 @@ function AdminDashboardPage() {
         </div>
 
         {/* User footer & Live Status */}
-        <div className="border-t border-slate-200 p-4 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="border-t border-slate-800/80 p-4 bg-slate-950/70">
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1 pr-2">
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <p className="truncate text-xs font-bold text-slate-900 dark:text-white">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <p className="truncate text-xs font-bold text-slate-200">
                   {session?.user?.email || "Staff Engineer"}
                 </p>
               </div>
@@ -766,7 +807,7 @@ function AdminDashboardPage() {
                 href="/"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-1 inline-flex items-center gap-1 text-xs text-slate-500 hover:text-amber font-medium transition"
+                className="mt-1 inline-flex items-center gap-1.5 text-xs text-amber hover:underline font-semibold transition"
               >
                 <span>Live Website</span>
                 <ExternalLink className="h-3 w-3" />
@@ -775,7 +816,7 @@ function AdminDashboardPage() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="rounded-lg p-2 text-slate-400 hover:bg-slate-200/60 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition"
+              className="rounded-xl p-2 text-slate-400 hover:bg-slate-800 hover:text-red-400 transition"
               title="Sign out"
             >
               <LogOut className="h-4 w-4" />
@@ -866,18 +907,19 @@ function AdminDashboardPage() {
         )}
 
         {/* ── B. Desktop Top Navbar (hidden on mobile) ── */}
-        <header className="hidden lg:flex h-20 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-8 dark:border-slate-800 dark:bg-slate-900 shadow-xs">
+        {/* ── B. Desktop Top Navbar (hidden on mobile) ── */}
+        <header className="hidden lg:flex h-20 shrink-0 items-center justify-between border-b border-slate-200/90 bg-white px-8 shadow-xs select-none">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                 {activeConfig.title}
               </h1>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+              <span className="rounded-full bg-amber/10 border border-amber/25 px-3 py-1 text-xs font-bold text-amber-950">
                 {filteredRecords.length} records
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Collection: <span className="font-semibold text-slate-700 dark:text-slate-300">{activeConfig.group}</span> • Table: <span className="font-mono">{activeTableKey}</span>
+            <p className="text-xs text-slate-500 font-medium mt-1">
+              Collection: <span className="font-bold text-slate-800">{activeConfig.group}</span> • Table: <span className="font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 font-medium">{activeTableKey}</span>
             </p>
           </div>
 
@@ -888,9 +930,9 @@ function AdminDashboardPage() {
               onClick={handlePurgeCache}
               disabled={isPurgingCache}
               title="Purge SSR Cache and reload fresh data from Supabase"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-300 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 shadow-xs transition hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 disabled:opacity-50"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-3.5 w-3.5 ${isPurgingCache ? "animate-spin text-amber" : "text-slate-500"}`} />
               <span>{isPurgingCache ? "Purging…" : "Purge Cache"}</span>
             </button>
 
@@ -901,9 +943,9 @@ function AdminDashboardPage() {
                 setEditingRecord(null);
                 setModalOpen(true);
               }}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber px-5 py-2.5 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-amber/90 active:scale-98"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber hover:bg-amber-400 px-5 py-2.5 text-sm font-black text-slate-950 shadow-sm transition hover:shadow-md active:scale-95"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4 stroke-[2.5]" />
               <span>Add {activeConfig.title.replace(/s$/, "")}</span>
             </button>
           </div>
@@ -918,7 +960,7 @@ function AdminDashboardPage() {
               type="button"
               onClick={() => setFilterStatus("all")}
               className={`flex items-center gap-2.5 rounded-xl border p-3 shadow-2xs shrink-0 transition ${
-                filterStatus === "all" ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-white"
+                filterStatus === "all" ? "border-slate-900 bg-slate-900 text-white" : "border-slate-200 bg-white text-slate-900"
               }`}
             >
               <span className="text-xl font-bold">{stats.total}</span>
@@ -931,7 +973,7 @@ function AdminDashboardPage() {
               className={`flex items-center gap-2.5 rounded-xl border p-3 shadow-2xs shrink-0 transition ${
                 filterStatus === "published"
                   ? "border-emerald-600 bg-emerald-600 text-white"
-                  : "border-emerald-200 bg-emerald-50/70 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-300"
+                  : "border-emerald-200 bg-emerald-50/70 text-emerald-800"
               }`}
             >
               <span className="text-xl font-bold">{stats.published}</span>
@@ -945,7 +987,7 @@ function AdminDashboardPage() {
                 className={`flex items-center gap-2.5 rounded-xl border p-3 shadow-2xs shrink-0 transition ${
                   filterStatus === "featured"
                     ? "border-amber bg-amber text-slate-950 font-bold"
-                    : "border-amber/30 bg-amber/10 text-amber-800 dark:bg-amber/15 dark:text-amber-300"
+                    : "border-amber/30 bg-amber/10 text-amber-800"
                 }`}
               >
                 <span className="text-xl font-bold">{stats.featured}</span>
@@ -960,7 +1002,7 @@ function AdminDashboardPage() {
                 className={`flex items-center gap-2.5 rounded-xl border p-3 shadow-2xs shrink-0 transition ${
                   filterStatus === "draft"
                     ? "border-slate-700 bg-slate-700 text-white"
-                    : "border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300"
+                    : "border-slate-200 bg-slate-100 text-slate-700"
                 }`}
               >
                 <span className="text-xl font-bold">{stats.drafts}</span>
@@ -974,50 +1016,50 @@ function AdminDashboardPage() {
             {/* Total Items Card */}
             <div
               onClick={() => setFilterStatus("all")}
-              className={`group cursor-pointer rounded-2xl border p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+              className={`group cursor-pointer rounded-2xl border p-5 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
                 filterStatus === "all"
-                  ? "border-slate-900 bg-white ring-2 ring-slate-900/10 dark:border-white dark:bg-slate-900 dark:ring-white/10"
-                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
+                  ? "border-slate-900 ring-2 ring-slate-900/15"
+                  : "border-slate-200/90 hover:border-slate-300"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Total Items
                 </span>
-                <div className="rounded-xl bg-slate-100 p-2.5 text-slate-700 dark:bg-slate-800 dark:text-slate-300 group-hover:scale-110 transition">
+                <div className="rounded-xl bg-blue-50 border border-blue-100 p-2.5 text-blue-600 group-hover:scale-110 transition">
                   <Database className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-slate-900 dark:text-white">
+                <span className="text-3xl font-black text-slate-900">
                   {stats.total}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">entries in {activeConfig.title}</span>
+                <span className="text-xs text-slate-500 font-semibold">entries in {activeConfig.title}</span>
               </div>
             </div>
 
             {/* Published Card */}
             <div
               onClick={() => setFilterStatus(filterStatus === "published" ? "all" : "published")}
-              className={`group cursor-pointer rounded-2xl border p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+              className={`group cursor-pointer rounded-2xl border p-5 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
                 filterStatus === "published"
-                  ? "border-emerald-500 bg-emerald-50/50 ring-2 ring-emerald-500/20 dark:bg-emerald-950/30"
-                  : "border-slate-200 bg-white hover:border-emerald-300 dark:border-slate-800 dark:bg-slate-900"
+                  ? "border-emerald-600 ring-2 ring-emerald-600/20 bg-emerald-50/20"
+                  : "border-slate-200/90 hover:border-emerald-300"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Live on Site
                 </span>
-                <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 group-hover:scale-110 transition">
+                <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-2.5 text-emerald-600 group-hover:scale-110 transition">
                   <CheckCircle2 className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="text-3xl font-black text-emerald-700">
                   {stats.published}
                 </span>
-                <span className="text-xs text-emerald-700 dark:text-emerald-300 font-semibold">
+                <span className="rounded-full bg-emerald-100/80 px-2 py-0.5 text-xs font-extrabold text-emerald-800">
                   {stats.publishedPercent}% active
                 </span>
               </div>
@@ -1026,65 +1068,69 @@ function AdminDashboardPage() {
             {/* Featured Card */}
             <div
               onClick={() => setFilterStatus(filterStatus === "featured" ? "all" : "featured")}
-              className={`group cursor-pointer rounded-2xl border p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+              className={`group cursor-pointer rounded-2xl border p-5 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
                 filterStatus === "featured"
-                  ? "border-amber bg-amber/10 ring-2 ring-amber/20 dark:bg-amber/15"
-                  : "border-slate-200 bg-white hover:border-amber/40 dark:border-slate-800 dark:bg-slate-900"
+                  ? "border-amber ring-2 ring-amber/25 bg-amber/10"
+                  : "border-slate-200/90 hover:border-amber/40"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Featured
                 </span>
-                <div className="rounded-xl bg-amber/15 p-2.5 text-amber-700 dark:text-amber-400 group-hover:scale-110 transition">
+                <div className="rounded-xl bg-amber/15 border border-amber/30 p-2.5 text-amber-800 group-hover:scale-110 transition">
                   <Star className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-amber-700 dark:text-amber-400">
+                <span className="text-3xl font-black text-amber-900">
                   {stats.featured}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">hero highlights</span>
+                <span className="rounded-full bg-amber-100/80 px-2 py-0.5 text-xs font-extrabold text-amber-900">
+                  hero highlights
+                </span>
               </div>
             </div>
 
             {/* Drafts Card */}
             <div
               onClick={() => setFilterStatus(filterStatus === "draft" ? "all" : "draft")}
-              className={`group cursor-pointer rounded-2xl border p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+              className={`group cursor-pointer rounded-2xl border p-5 bg-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
                 filterStatus === "draft"
-                  ? "border-slate-700 bg-slate-100 ring-2 ring-slate-700/20 dark:border-slate-500 dark:bg-slate-800"
-                  : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
+                  ? "border-slate-700 ring-2 ring-slate-700/20 bg-slate-50"
+                  : "border-slate-200/90 hover:border-slate-300"
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
                   Drafts
                 </span>
-                <div className="rounded-xl bg-slate-100 p-2.5 text-slate-600 dark:bg-slate-800 dark:text-slate-400 group-hover:scale-110 transition">
+                <div className="rounded-xl bg-slate-100 border border-slate-200 p-2.5 text-slate-600 group-hover:scale-110 transition">
                   <Clock className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-slate-700 dark:text-slate-300">
+                <span className="text-3xl font-black text-slate-800">
                   {stats.drafts}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">unpublished</span>
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">
+                  unpublished
+                </span>
               </div>
             </div>
           </div>
 
           {/* ── 2. Interactive Filter & Toolbar ── */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-xs">
             {/* Filter Pills */}
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
               <button
                 type="button"
                 onClick={() => setFilterStatus("all")}
-                className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition ${
+                className={`shrink-0 rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition ${
                   filterStatus === "all"
-                    ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    ? "bg-slate-900 text-white shadow-xs"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 }`}
               >
                 All ({stats.total})
@@ -1092,10 +1138,10 @@ function AdminDashboardPage() {
               <button
                 type="button"
                 onClick={() => setFilterStatus("published")}
-                className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition ${
+                className={`shrink-0 rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition ${
                   filterStatus === "published"
-                    ? "bg-emerald-600 text-white shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                    ? "bg-emerald-600 text-white shadow-xs"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 }`}
               >
                 Published ({stats.published})
@@ -1104,10 +1150,10 @@ function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setFilterStatus("featured")}
-                  className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition ${
+                  className={`shrink-0 rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition ${
                     filterStatus === "featured"
-                      ? "bg-amber text-slate-950 shadow-sm"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-amber text-slate-950 shadow-xs"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
                   Featured ({stats.featured})
@@ -1117,10 +1163,10 @@ function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setFilterStatus("draft")}
-                  className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition ${
+                  className={`shrink-0 rounded-xl px-4 py-2 text-xs sm:text-sm font-bold transition ${
                     filterStatus === "draft"
-                      ? "bg-slate-800 text-white shadow-sm dark:bg-slate-700"
-                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                      ? "bg-slate-800 text-white shadow-xs"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                   }`}
                 >
                   Drafts ({stats.drafts})
@@ -1135,7 +1181,7 @@ function AdminDashboardPage() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-amber dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200"
+                  className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-bold text-slate-700 outline-none focus:border-amber focus:bg-white"
                 >
                   <option value="all">All Sectors ({availableCategories.length})</option>
                   {availableCategories.map((c) => (
@@ -1154,19 +1200,19 @@ function AdminDashboardPage() {
                   placeholder={`Search ${activeConfig.title.toLowerCase()}…`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-3 py-2 text-xs font-medium text-slate-900 outline-none transition focus:border-amber focus:bg-white dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-3 py-2 text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-amber focus:bg-white focus:ring-1 focus:ring-amber"
                 />
               </div>
 
               {/* View Switcher: Table vs Cards */}
-              <div className="flex items-center rounded-xl border border-slate-200 p-1 dark:border-slate-800">
+              <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
                 <button
                   type="button"
                   onClick={() => setViewMode("table")}
                   className={`rounded-lg p-2 transition ${
                     viewMode === "table"
-                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs"
-                      : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-white text-slate-950 font-bold shadow-xs border border-slate-200/60"
+                      : "text-slate-500 hover:text-slate-900"
                   }`}
                   title="Table View"
                 >
@@ -1177,8 +1223,8 @@ function AdminDashboardPage() {
                   onClick={() => setViewMode("grid")}
                   className={`rounded-lg p-2 transition ${
                     viewMode === "grid"
-                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs"
-                      : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-white text-slate-950 font-bold shadow-xs border border-slate-200/60"
+                      : "text-slate-500 hover:text-slate-900"
                   }`}
                   title="Card Grid View"
                 >
@@ -1239,7 +1285,7 @@ function AdminDashboardPage() {
                   return (
                     <div
                       key={rec["id"] || rec["key"] || index}
-                      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 space-y-3.5"
+                      className="rounded-2xl border border-slate-200/90 bg-white p-4.5 shadow-xs space-y-3.5"
                     >
                       {/* Top row: Image & Title */}
                       <div className="flex items-start gap-3.5">
@@ -1247,10 +1293,10 @@ function AdminDashboardPage() {
                           <img
                             src={imageUrl}
                             alt={title}
-                            className="h-16 w-20 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shrink-0 shadow-2xs"
+                            className="h-16 w-20 rounded-xl object-cover border border-slate-200 shrink-0 shadow-2xs"
                           />
                         ) : (
-                          <div className="flex h-16 w-20 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 shrink-0 border border-slate-200 dark:border-slate-700">
+                          <div className="flex h-16 w-20 items-center justify-center rounded-xl bg-slate-100 text-slate-400 shrink-0 border border-slate-200">
                             <Database className="h-6 w-6" />
                           </div>
                         )}
@@ -1258,16 +1304,16 @@ function AdminDashboardPage() {
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             {category && (
-                              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
                                 {category}
                               </span>
                             )}
                           </div>
-                          <h3 className="font-bold text-sm text-slate-900 dark:text-white leading-snug line-clamp-2">
+                          <h3 className="font-black text-base text-slate-900 leading-snug line-clamp-2">
                             {title}
                           </h3>
                           {subtitle && (
-                            <p className="mt-0.5 font-mono text-xs text-slate-400 truncate">
+                            <p className="mt-1 font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/60 w-fit truncate">
                               {subtitle}
                             </p>
                           )}
@@ -1275,14 +1321,14 @@ function AdminDashboardPage() {
                       </div>
 
                       {/* Middle row: Badges & Quick Toggles */}
-                      <div className="flex items-center gap-2 border-t border-slate-100 pt-3 dark:border-slate-800/80">
+                      <div className="flex items-center gap-2 border-t border-slate-100 pt-3">
                         <button
                           type="button"
                           onClick={() => handleQuickToggle(rec, "is_published")}
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition active:scale-95 ${
+                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold transition active:scale-95 ${
                             isPublished
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300"
-                              : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                              : "bg-slate-100 text-slate-600 border border-slate-200"
                           }`}
                         >
                           <span className={`h-1.5 w-1.5 rounded-full ${isPublished ? "bg-emerald-500" : "bg-slate-400"}`} />
@@ -1292,10 +1338,10 @@ function AdminDashboardPage() {
                         <button
                           type="button"
                           onClick={() => handleQuickToggle(rec, "is_featured")}
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold transition active:scale-95 ${
+                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-extrabold transition active:scale-95 ${
                             isFeatured
-                              ? "bg-amber/20 text-amber-800 dark:text-amber-300 border border-amber/40"
-                              : "bg-slate-100 text-slate-400 dark:bg-slate-800"
+                              ? "bg-amber/20 text-amber-900 border border-amber/40"
+                              : "bg-slate-100 text-slate-500 border border-slate-200"
                           }`}
                         >
                           <Star className={`h-3 w-3 ${isFeatured ? "fill-amber-600 text-amber-600" : ""}`} />
@@ -1323,7 +1369,7 @@ function AdminDashboardPage() {
                             setEditingRecord(rec);
                             setModalOpen(true);
                           }}
-                          className="flex-1 h-11 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs active:scale-98 transition"
+                          className="flex-1 h-11 rounded-xl bg-amber text-slate-950 text-xs font-black flex items-center justify-center gap-1.5 shadow-sm active:scale-98 transition hover:bg-amber/90"
                         >
                           <Edit2 className="h-3.5 w-3.5" />
                           <span>Edit Record</span>
@@ -1334,7 +1380,7 @@ function AdminDashboardPage() {
                             setDeletingRecord(rec);
                             setDeleteModalOpen(true);
                           }}
-                          className="h-11 w-12 rounded-xl bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-400 flex items-center justify-center active:scale-98 transition"
+                          className="h-11 w-12 rounded-xl bg-red-50 border border-red-100 text-red-600 flex items-center justify-center active:scale-98 transition hover:bg-red-100"
                           title="Delete Record"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -1351,17 +1397,17 @@ function AdminDashboardPage() {
               <div className="hidden lg:block">
                 {viewMode === "table" ? (
                   /* Interactive Table View */
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+                  <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs">
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left text-sm text-slate-600 dark:text-slate-300">
-                        <thead className="border-b border-slate-200 bg-slate-50/90 text-xs font-bold uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-800/70 dark:text-slate-400 select-none">
+                      <table className="w-full text-left text-sm text-slate-700">
+                        <thead className="border-b border-slate-200 bg-slate-100/80 text-xs font-black uppercase tracking-wider text-slate-700 select-none">
                           <tr>
                             {/* Checkbox for Select All */}
                             <th className="px-4 py-4 w-10">
                               <button
                                 type="button"
                                 onClick={handleToggleSelectAll}
-                                className="text-slate-400 hover:text-slate-800 dark:hover:text-white"
+                                className="text-slate-400 hover:text-slate-800"
                                 title="Select All"
                               >
                                 {selectedIds.size > 0 && selectedIds.size === filteredRecords.length ? (
@@ -1372,7 +1418,7 @@ function AdminDashboardPage() {
                               </button>
                             </th>
 
-                            <th className="px-4 py-4 w-12">#</th>
+                            <th className="px-4 py-4 w-12 font-black text-slate-500">#</th>
 
                             {activeConfig.fields.slice(0, 5).map((f) => {
                               const isSorted = sortField === f.key;
@@ -1380,15 +1426,15 @@ function AdminDashboardPage() {
                                 <th
                                   key={f.key}
                                   onClick={() => handleSort(f.key)}
-                                  className="px-5 py-4 cursor-pointer hover:text-slate-900 dark:hover:text-white transition group"
+                                  className="px-5 py-4 cursor-pointer hover:text-slate-950 transition group font-black"
                                 >
                                   <div className="flex items-center gap-1.5">
                                     <span>{f.label}</span>
                                     {isSorted ? (
                                       sortDirection === "asc" ? (
-                                        <ArrowUp className="h-3.5 w-3.5 text-amber" />
+                                        <ArrowUp className="h-3.5 w-3.5 text-amber stroke-[2.5]" />
                                       ) : (
-                                        <ArrowDown className="h-3.5 w-3.5 text-amber" />
+                                        <ArrowDown className="h-3.5 w-3.5 text-amber stroke-[2.5]" />
                                       )
                                     ) : (
                                       <ArrowUpDown className="h-3 w-3 opacity-0 group-hover:opacity-60 transition" />
@@ -1397,11 +1443,11 @@ function AdminDashboardPage() {
                                 </th>
                               );
                             })}
-                            <th className="px-5 py-4 text-right">Quick Actions</th>
+                            <th className="px-5 py-4 text-right font-black">Quick Actions</th>
                           </tr>
                         </thead>
 
-                        <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                        <tbody className="divide-y divide-slate-200/80">
                           {filteredRecords.map((rec, index) => {
                             const primaryKey = activeTableKey === "home_sections" ? "key" : "id";
                             const rowId = String(rec[primaryKey] || `row-${index}`);
@@ -1415,8 +1461,8 @@ function AdminDashboardPage() {
                                 key={rowId}
                                 className={`group transition duration-150 ${
                                   isSelected
-                                    ? "bg-amber/10 dark:bg-amber/15"
-                                    : "hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
+                                    ? "bg-amber/10"
+                                    : "hover:bg-slate-50/90"
                                 }`}
                               >
                                 {/* Row Checkbox */}
@@ -1424,7 +1470,7 @@ function AdminDashboardPage() {
                                   <button
                                     type="button"
                                     onClick={() => handleToggleSelectOne(rowId)}
-                                    className="text-slate-400 hover:text-slate-800 dark:hover:text-white"
+                                    className="text-slate-400 hover:text-slate-800"
                                   >
                                     {isSelected ? (
                                       <CheckSquare className="h-4 w-4 text-amber" />
@@ -1434,7 +1480,7 @@ function AdminDashboardPage() {
                                   </button>
                                 </td>
 
-                                <td className="px-4 py-4 font-mono text-xs font-medium text-slate-400">
+                                <td className="px-4 py-4 font-mono text-xs font-bold text-slate-400">
                                   {index + 1}
                                 </td>
 
@@ -1448,7 +1494,7 @@ function AdminDashboardPage() {
                                         {val ? (
                                           <div
                                             onClick={() => setPreviewRecord(rec)}
-                                            className="relative h-12 w-16 cursor-pointer overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700 shadow-2xs group/img"
+                                            className="relative h-12 w-16 cursor-pointer overflow-hidden rounded-xl border border-slate-200 shadow-2xs group/img"
                                             title="Click to view details"
                                           >
                                             <img
@@ -1456,12 +1502,37 @@ function AdminDashboardPage() {
                                               alt="Thumbnail"
                                               className="h-full w-full object-cover transition duration-200 group-hover/img:scale-110"
                                             />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center transition">
+                                            <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover/img:opacity-100 flex items-center justify-center transition">
                                               <Eye className="h-4 w-4 text-white" />
                                             </div>
                                           </div>
                                         ) : (
-                                          <span className="text-xs italic text-slate-400">No image</span>
+                                          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400 bg-slate-50 border border-dashed border-slate-200 rounded-lg px-2.5 py-1.5 w-fit">
+                                            <ImageIcon className="h-3.5 w-3.5" />
+                                            <span>No image</span>
+                                          </div>
+                                        )}
+                                      </td>
+                                    );
+                                  }
+
+                                  // Icon column with visual rendered Lucide icon
+                                  if (f.key === "icon" || f.key === "icon_name") {
+                                    const iconName = String(val || "");
+                                    const IconCmp = ICON_LOOKUP[iconName];
+                                    return (
+                                      <td key={f.key} className="px-5 py-4">
+                                        {val ? (
+                                          <div className="inline-flex items-center gap-2 rounded-xl bg-slate-100 border border-slate-200/80 px-3 py-1.5 text-xs font-bold text-slate-800">
+                                            {IconCmp ? (
+                                              <IconCmp className="h-4 w-4 text-amber-700 shrink-0" />
+                                            ) : (
+                                              <Sparkles className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                            )}
+                                            <span>{iconName}</span>
+                                          </div>
+                                        ) : (
+                                          <span className="text-xs text-slate-400 italic">—</span>
                                         )}
                                       </td>
                                     );
@@ -1474,14 +1545,14 @@ function AdminDashboardPage() {
                                         <button
                                           type="button"
                                           onClick={() => handleQuickToggle(rec, f.key as any)}
-                                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold shadow-2xs transition active:scale-95 ${
+                                          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold shadow-2xs transition active:scale-95 ${
                                             val
-                                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:border-emerald-800 dark:text-emerald-300"
-                                              : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400"
+                                              ? "bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100"
+                                              : "bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200"
                                           }`}
                                           title="Click to toggle status"
                                         >
-                                          <span className={`h-1.5 w-1.5 rounded-full ${val ? "bg-emerald-500" : "bg-slate-400"}`} />
+                                          <span className={`h-2 w-2 rounded-full ${val ? "bg-emerald-500" : "bg-slate-400"}`} />
                                           {val ? "Yes" : "No"}
                                         </button>
                                       </td>
@@ -1496,20 +1567,20 @@ function AdminDashboardPage() {
                                           <button
                                             type="button"
                                             onClick={() => setPreviewRecord(rec)}
-                                            className="text-left font-bold text-slate-900 hover:text-amber dark:text-white dark:hover:text-amber transition line-clamp-1"
+                                            className="text-left font-black text-base text-slate-900 hover:text-amber transition line-clamp-1"
                                           >
                                             {val || "—"}
                                           </button>
                                         </div>
                                         {rec["slug"] && (
-                                          <div className="flex items-center gap-1.5 mt-0.5">
-                                            <span className="font-mono text-xs text-slate-400">
+                                          <div className="flex items-center gap-1.5 mt-1">
+                                            <span className="font-mono text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200/80">
                                               /{rec["slug"]}
                                             </span>
                                             <button
                                               type="button"
                                               onClick={() => handleCopyLink(rec)}
-                                              className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-700 dark:hover:text-white transition"
+                                              className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-800 transition"
                                               title="Copy public route link"
                                             >
                                               <Copy className="h-3 w-3" />
@@ -1521,7 +1592,7 @@ function AdminDashboardPage() {
                                   }
 
                                   return (
-                                    <td key={f.key} className="px-5 py-4 font-medium text-slate-800 dark:text-slate-200 max-w-[240px] truncate">
+                                    <td key={f.key} className="px-5 py-4 font-semibold text-sm text-slate-800 max-w-[240px] truncate">
                                       {val != null ? String(val) : "—"}
                                     </td>
                                   );
@@ -1534,10 +1605,10 @@ function AdminDashboardPage() {
                                     <button
                                       type="button"
                                       onClick={() => setPreviewRecord(rec)}
-                                      className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-slate-200 bg-white text-slate-600 shadow-2xs hover:bg-slate-50 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition"
+                                      className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 bg-white text-slate-600 shadow-2xs hover:bg-slate-100 hover:text-slate-900 transition"
                                       title="Quick View Inspector"
                                     >
-                                      <Eye className="h-3.5 w-3.5" />
+                                      <Eye className="h-4 w-4" />
                                     </button>
 
                                     {/* Edit Button */}
@@ -1547,9 +1618,9 @@ function AdminDashboardPage() {
                                         setEditingRecord(rec);
                                         setModalOpen(true);
                                       }}
-                                      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition"
+                                      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-xl bg-amber/15 border border-amber/30 text-xs font-black text-amber-950 shadow-2xs hover:bg-amber hover:text-slate-950 transition"
                                     >
-                                      <Edit2 className="h-3 w-3 text-slate-500" />
+                                      <Edit2 className="h-3.5 w-3.5" />
                                       <span>Edit</span>
                                     </button>
 
@@ -1559,10 +1630,10 @@ function AdminDashboardPage() {
                                         href={publicRoute}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="inline-flex items-center justify-center h-8 w-8 rounded-lg border border-slate-200 bg-white text-slate-500 hover:text-amber dark:border-slate-700 dark:bg-slate-800 transition"
+                                        className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-slate-200 bg-white text-slate-500 hover:text-amber hover:border-amber/40 shadow-2xs transition"
                                         title="Open public page in new tab"
                                       >
-                                        <ExternalLink className="h-3.5 w-3.5" />
+                                        <ExternalLink className="h-4 w-4" />
                                       </a>
                                     )}
 
@@ -1573,10 +1644,10 @@ function AdminDashboardPage() {
                                         setDeletingRecord(rec);
                                         setDeleteModalOpen(true);
                                       }}
-                                      className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 transition"
+                                      className="inline-flex items-center justify-center h-8 w-8 rounded-xl border border-red-100 bg-red-50 text-red-600 hover:bg-red-100 hover:border-red-200 shadow-2xs transition"
                                       title="Delete record"
                                     >
-                                      <Trash2 className="h-3.5 w-3.5" />
+                                      <Trash2 className="h-4 w-4" />
                                     </button>
                                   </div>
                                 </td>
@@ -1658,25 +1729,25 @@ function AdminDashboardPage() {
                           <div className="flex-1 p-5 flex flex-col justify-between space-y-4">
                             <div>
                               {rec["sector_slug"] || rec["category"] ? (
-                                <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                                <p className="text-xs font-bold uppercase tracking-wider text-amber-800">
                                   {rec["sector_slug"] || rec["category"]}
                                 </p>
                               ) : null}
                               <h3
                                 onClick={() => setPreviewRecord(rec)}
-                                className="mt-1 text-base font-bold text-slate-900 dark:text-white line-clamp-1 cursor-pointer hover:text-amber transition"
+                                className="mt-1 text-base font-black text-slate-900 line-clamp-1 cursor-pointer hover:text-amber transition"
                               >
                                 {title}
                               </h3>
                               {summary && (
-                                <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-2">
+                                <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-2 font-medium">
                                   {summary}
                                 </p>
                               )}
                             </div>
 
-                            <div className="flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
-                              <span className="text-xs font-mono text-slate-400">
+                            <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                              <span className="text-xs font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
                                 {rec["city"] || rec["slug"] || `#${index + 1}`}
                               </span>
 
@@ -1698,9 +1769,9 @@ function AdminDashboardPage() {
                                     setEditingRecord(rec);
                                     setModalOpen(true);
                                   }}
-                                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                                  className="inline-flex items-center gap-1.5 rounded-xl bg-amber/15 border border-amber/30 px-3 py-1.5 text-xs font-black text-amber-950 shadow-2xs hover:bg-amber hover:text-slate-950 transition"
                                 >
-                                  <Edit2 className="h-3 w-3 text-slate-500" />
+                                  <Edit2 className="h-3 w-3" />
                                   <span>Edit</span>
                                 </button>
                                 <button
@@ -1709,7 +1780,7 @@ function AdminDashboardPage() {
                                     setDeletingRecord(rec);
                                     setDeleteModalOpen(true);
                                   }}
-                                  className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40"
+                                  className="p-1.5 rounded-xl border border-red-100 bg-red-50 text-red-600 hover:bg-red-100 transition"
                                   title="Delete record"
                                 >
                                   <Trash2 className="h-3.5 w-3.5" />
@@ -1796,21 +1867,21 @@ function AdminDashboardPage() {
             className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"
             onClick={() => setPreviewRecord(null)}
           />
-          <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-white shadow-2xl dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 animate-in slide-in-from-right duration-200">
+          <div className="relative z-10 flex h-full w-full max-w-md flex-col bg-white shadow-2xl border-l border-slate-200 animate-in slide-in-from-right duration-200">
             {/* Drawer Header */}
-            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+            <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                <span className="text-xs font-black uppercase tracking-wider text-amber-800">
                   Quick Inspector
                 </span>
-                <h2 className="text-base font-bold text-slate-900 dark:text-white truncate max-w-[280px]">
+                <h2 className="text-lg font-black text-slate-900 truncate max-w-[280px]">
                   {previewRecord["title"] || previewRecord["name"] || "Record Details"}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setPreviewRecord(null)}
-                className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-800 transition"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -1820,7 +1891,7 @@ function AdminDashboardPage() {
             <div className="flex-1 overflow-y-auto p-6 space-y-5">
               {/* Cover Image if available */}
               {(previewRecord["cover_image_url"] || previewRecord["hero_image_url"] || previewRecord["image_url"]) && (
-                <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
+                <div className="overflow-hidden rounded-xl border border-slate-200 shadow-xs">
                   <img
                     src={previewRecord["cover_image_url"] || previewRecord["hero_image_url"] || previewRecord["image_url"]}
                     alt="Cover preview"
@@ -1834,10 +1905,10 @@ function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => handleQuickToggle(previewRecord, "is_published")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold shadow-xs transition active:scale-95 ${
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold shadow-xs transition active:scale-95 ${
                     previewRecord["is_published"] !== false
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+                      ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                      : "bg-slate-100 text-slate-600 border border-slate-200"
                   }`}
                 >
                   <span className={`h-1.5 w-1.5 rounded-full ${previewRecord["is_published"] !== false ? "bg-emerald-500" : "bg-slate-400"}`} />
@@ -1847,10 +1918,10 @@ function AdminDashboardPage() {
                 <button
                   type="button"
                   onClick={() => handleQuickToggle(previewRecord, "is_featured")}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold transition active:scale-95 ${
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-extrabold transition active:scale-95 ${
                     Boolean(previewRecord["is_featured"])
-                      ? "bg-amber/20 text-amber-800 border border-amber/40"
-                      : "bg-slate-100 text-slate-500 dark:bg-slate-800"
+                      ? "bg-amber/20 text-amber-900 border border-amber/40"
+                      : "bg-slate-100 text-slate-500 border border-slate-200"
                   }`}
                 >
                   <Star className={`h-3.5 w-3.5 ${previewRecord["is_featured"] ? "fill-amber-600 text-amber-600" : ""}`} />
@@ -1859,17 +1930,17 @@ function AdminDashboardPage() {
               </div>
 
               {/* Field Attributes Table */}
-              <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+              <div className="space-y-3 rounded-2xl border border-slate-200/90 bg-slate-50 p-4">
                 {activeConfig.fields.map((field) => {
                   const val = previewRecord[field.key];
                   if (val == null || val === "" || field.type === "image") return null;
 
                   return (
-                    <div key={field.key} className="border-b border-slate-200/60 pb-2 last:border-b-0 dark:border-slate-800/60">
-                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    <div key={field.key} className="border-b border-slate-200/80 pb-2.5 last:border-b-0">
+                      <p className="text-[11px] font-black uppercase tracking-wider text-slate-500">
                         {field.label}
                       </p>
-                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mt-0.5 whitespace-pre-wrap">
+                      <p className="text-sm font-bold text-slate-900 mt-0.5 whitespace-pre-wrap">
                         {String(val)}
                       </p>
                     </div>
@@ -1879,13 +1950,13 @@ function AdminDashboardPage() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="border-t border-slate-200 p-5 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex items-center gap-3">
+            <div className="border-t border-slate-200 p-5 bg-slate-50 flex items-center gap-3">
               {getPublicRouteForRecord(activeTableKey, previewRecord) && (
                 <a
                   href={getPublicRouteForRecord(activeTableKey, previewRecord)!}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white py-2.5 text-xs font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition"
                 >
                   <ExternalLink className="h-4 w-4" />
                   <span>View Live</span>
@@ -1898,7 +1969,7 @@ function AdminDashboardPage() {
                   setModalOpen(true);
                   setPreviewRecord(null);
                 }}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-amber text-slate-950 py-2.5 text-xs font-black shadow-xs hover:bg-amber/90 transition"
               >
                 <Edit2 className="h-4 w-4" />
                 <span>Full Edit</span>

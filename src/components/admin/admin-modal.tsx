@@ -90,16 +90,22 @@ export function AdminModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center overflow-y-auto bg-slate-900/60 p-0 sm:p-6 backdrop-blur-xs">
-      <div className="relative flex h-full sm:h-auto max-h-screen sm:max-h-[92vh] w-full max-w-3xl flex-col rounded-none sm:rounded-xl border-0 sm:border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+    <div
+      className="admin-portal fixed inset-0 z-50 flex items-end sm:items-center justify-center overflow-y-auto bg-slate-900/60 p-0 sm:p-6 backdrop-blur-xs"
+      style={{
+        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        fontFeatureSettings: 'normal',
+      }}
+    >
+      <div className="relative flex h-full sm:h-auto max-h-screen sm:max-h-[92vh] w-full max-w-3xl flex-col rounded-none sm:rounded-2xl border-0 sm:border border-slate-200 bg-white shadow-2xl">
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7 sm:py-5 dark:border-slate-800 bg-white dark:bg-slate-900">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7 sm:py-5 bg-white">
           <div>
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+            <h2 className="text-lg sm:text-xl font-black text-slate-900">
               {isEdit ? `Edit ${config.title}` : `Create New ${config.title}`}
             </h2>
-            <p className="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              Database Table: <span className="font-mono font-medium text-slate-700 dark:text-slate-300">{config.key}</span>
+            <p className="mt-0.5 text-xs sm:text-sm text-slate-500">
+              Database Table: <span className="font-mono font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded">{config.key}</span>
             </p>
           </div>
           <button

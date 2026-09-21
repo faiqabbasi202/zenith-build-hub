@@ -31,17 +31,23 @@ export function AdminDeleteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs">
-      <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-7 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex items-center gap-3.5 text-red-600 dark:text-red-400">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-100 dark:bg-red-950/60">
+    <div
+      className="admin-portal fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      style={{
+        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        fontFeatureSettings: 'normal',
+      }}
+    >
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-7 shadow-2xl">
+        <div className="flex items-center gap-3.5 text-red-600">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 border border-red-100">
             <AlertTriangle className="h-6 w-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-black text-slate-900">
               Delete {title}
             </h3>
-            <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <p className="text-xs font-semibold text-slate-500">
               This action cannot be undone.
             </p>
           </div>
