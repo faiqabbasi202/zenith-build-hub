@@ -53,12 +53,15 @@ function applyCacheHeaders(request: Request, response: Response): Response {
 
   const headers = new Headers(response.headers);
 
-  if (pathname.startsWith("/assets/")) {
+  if (pathname.startsWith("/admin") || request.method !== "GET") {
+    headers.set("Cache-Control", "private, no-cache, no-store, must-revalidate");
+  } else if (pathname.startsWith("/assets/")) {
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
   } else if (pathname.startsWith("/images/") || pathname.startsWith("/amarc/") || pathname === "/favicon.ico") {
     headers.set("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
   } else if (contentType.includes("text/html")) {
-    headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    // Edge & browser cache for fast SSR rendering with SWR background revalidation
+    headers.set("Cache-Control", "public, max-age=60, s-maxage=300, stale-while-revalidate=86400");
   }
 
   return new Response(response.body, {

@@ -90,22 +90,22 @@ export function AdminModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/60 p-4 backdrop-blur-xs">
-      <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col rounded-lg border border-slate-200 bg-white shadow-xl dark:border-slate-800 dark:bg-slate-900">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center overflow-y-auto bg-slate-900/60 p-0 sm:p-6 backdrop-blur-xs">
+      <div className="relative flex h-full sm:h-auto max-h-screen sm:max-h-[92vh] w-full max-w-3xl flex-col rounded-none sm:rounded-xl border-0 sm:border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-7 sm:py-5 dark:border-slate-800 bg-white dark:bg-slate-900">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
               {isEdit ? `Edit ${config.title}` : `Create New ${config.title}`}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Table: <span className="font-mono">{config.key}</span>
+            <p className="mt-0.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Database Table: <span className="font-mono font-medium text-slate-700 dark:text-slate-300">{config.key}</span>
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200 transition"
           >
             <X className="h-5 w-5" />
           </button>
@@ -113,44 +113,45 @@ export function AdminModal({
 
         {/* Global Error Banner if any */}
         {Object.keys(errors).length > 0 && (
-          <div className="flex items-center gap-2 border-b border-red-200 bg-red-50 px-6 py-2.5 text-xs font-medium text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-400">
-            <AlertCircle className="h-4 w-4 shrink-0" />
-            <span>Please correct the highlighted fields before saving.</span>
+          <div className="flex items-center gap-2.5 border-b border-red-200 bg-red-50 px-5 py-3 sm:px-7 text-xs sm:text-sm font-medium text-red-700 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300">
+            <AlertCircle className="h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
+            <span>Please correct the highlighted errors below before saving.</span>
           </div>
         )}
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="flex-1 space-y-4 overflow-y-auto p-6">
-          <div className="grid gap-4 sm:grid-cols-2">
-            {config.fields.map((field) => {
-              const fullWidth =
-                field.type === "textarea" ||
-                field.type === "image" ||
-                field.key === "title" ||
-                field.key === "name" ||
-                field.key === "description";
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 space-y-5 overflow-y-auto p-5 sm:p-7">
+            <div className="grid gap-5 sm:grid-cols-2">
+              {config.fields.map((field) => {
+                const fullWidth =
+                  field.type === "textarea" ||
+                  field.type === "image" ||
+                  field.key === "title" ||
+                  field.key === "name" ||
+                  field.key === "description";
 
-              const fieldError = errors[field.key];
+                const fieldError = errors[field.key];
 
-              const inputBaseCls = cn(
-                "w-full rounded-md border bg-white px-3 py-2 text-sm text-slate-900 outline-none transition dark:bg-slate-800 dark:text-white",
-                fieldError
-                  ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                  : "border-slate-300 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 dark:border-slate-700 dark:focus:border-slate-300",
-              );
+                const inputBaseCls = cn(
+                  "w-full rounded-lg border bg-white px-3.5 py-2.5 text-base sm:text-sm text-slate-900 shadow-xs outline-none transition dark:bg-slate-800 dark:text-white",
+                  fieldError
+                    ? "border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    : "border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 dark:border-slate-700 dark:focus:border-slate-300",
+                );
 
               return (
                 <div
                   key={field.key}
-                  className={fullWidth ? "space-y-1.5 sm:col-span-2" : "space-y-1.5"}
+                  className={fullWidth ? "space-y-2 sm:col-span-2" : "space-y-2"}
                 >
                   {field.type !== "image" && (
                     <div className="flex items-center justify-between">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                        {field.label} {field.required && <span className="text-red-500">*</span>}
+                      <label className="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        {field.label} {field.required && <span className="text-red-500 font-bold">*</span>}
                       </label>
                       {field.key === "slug" && !isEdit && (
-                        <span className="text-[10px] text-slate-400">Auto-generated</span>
+                        <span className="text-xs text-slate-400 font-normal">Auto-generated</span>
                       )}
                     </div>
                   )}
@@ -168,7 +169,7 @@ export function AdminModal({
                   {/* Textarea */}
                   {field.type === "textarea" && (
                     <textarea
-                      rows={3}
+                      rows={4}
                       value={formData[field.key] ?? ""}
                       onChange={(e) => handleChange(field.key, e.target.value)}
                       className={inputBaseCls}
@@ -216,14 +217,14 @@ export function AdminModal({
                   {/* Boolean Checkbox */}
                   {field.type === "boolean" && (
                     <div className="pt-2">
-                      <label className="inline-flex cursor-pointer items-center gap-2">
+                      <label className="inline-flex cursor-pointer items-center gap-3">
                         <input
                           type="checkbox"
                           checked={Boolean(formData[field.key])}
                           onChange={(e) => handleChange(field.key, e.target.checked)}
-                          className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-700"
+                          className="h-5 w-5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 dark:border-slate-700"
                         />
-                        <span className="text-xs text-slate-700 dark:text-slate-300">
+                        <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                           {field.label}
                         </span>
                       </label>
@@ -242,8 +243,8 @@ export function AdminModal({
 
                   {/* Inline Error Message */}
                   {fieldError && (
-                    <p className="flex items-center gap-1 text-xs text-red-500">
-                      <AlertCircle className="h-3 w-3 shrink-0" />
+                    <p className="flex items-center gap-1.5 text-xs font-semibold text-red-500">
+                      <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                       {fieldError}
                     </p>
                   )}
@@ -251,30 +252,31 @@ export function AdminModal({
               );
             })}
           </div>
+        </div>
 
           {/* Footer actions */}
-          <div className="flex items-center justify-end gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
+          <div className="shrink-0 flex items-center justify-end gap-3 border-t border-slate-200 p-4 sm:px-7 sm:py-5 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+              className="flex-1 sm:flex-none rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-xs transition hover:bg-slate-800 disabled:opacity-50 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-amber px-5 py-2.5 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-amber/90 disabled:opacity-50"
             >
               {saving ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Saving…
+                  Saving changes…
                 </>
               ) : (
                 <>
                   <Save className="h-4 w-4" />
-                  {isEdit ? "Update Record" : "Create Record"}
+                  {isEdit ? "Update Record" : "Save New Record"}
                 </>
               )}
             </button>
