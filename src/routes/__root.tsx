@@ -131,6 +131,21 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // Strip any injected Lovable badge or floating branding
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stripBadges = () => {
+      const badges = document.querySelectorAll(
+        '#lovable-badge, .lovable-badge, [id*="lovable-badge"], [class*="lovable-badge"], a[href*="lovable.dev"], a[href*="lovable.app"]'
+      );
+      badges.forEach((node) => node.remove());
+    };
+    stripBadges();
+    const observer = new MutationObserver(stripBadges);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

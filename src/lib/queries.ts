@@ -42,7 +42,31 @@ export const servicesQuery = queryOptions({
 export const serviceQuery = (slug: string) =>
   queryOptions({
     queryKey: ["service", slug],
-    queryFn: () => getService({ data: { slug } }),
+    queryFn: async () => {
+      const serverResult = await getService({ data: { slug } });
+      if (typeof window !== "undefined") {
+        const { getLocalProjects } = await import("./data-store");
+        const localProjects = getLocalProjects();
+        const serviceWords = slug.split("-");
+        const localMatches = localProjects.filter((p) => {
+          if (p["service_slug"] === slug || p["sector_slug"] === slug) return true;
+          const scopeStr = Array.isArray(p["scope"])
+            ? p["scope"].join(" ").toLowerCase()
+            : String(p["scope"] || "").toLowerCase();
+          return serviceWords.some((w) => w.length > 3 && scopeStr.includes(w));
+        });
+
+        if (localMatches.length > 0) {
+          const existingSlugs = new Set(serverResult.projects.map((p: any) => p["slug"]));
+          const newUnique = localMatches.filter((p) => !existingSlugs.has(p["slug"]));
+          return {
+            ...serverResult,
+            projects: [...newUnique, ...serverResult.projects],
+          };
+        }
+      }
+      return serverResult;
+    },
     staleTime: 60_000,
   });
 
@@ -54,14 +78,50 @@ export const sectorsQuery = queryOptions({
 
 export const projectsQuery = queryOptions({
   queryKey: ["projects"],
-  queryFn: () => getProjects(),
+  queryFn: async () => {
+    const serverResult = await getProjects();
+    if (typeof window !== "undefined") {
+      const { mergeWithLocalRecords } = await import("./data-store");
+      return {
+        ...serverResult,
+        projects: mergeWithLocalRecords("projects", serverResult.projects),
+      };
+    }
+    return serverResult;
+  },
   staleTime: 60_000,
 });
 
 export const projectQuery = (slug: string) =>
   queryOptions({
     queryKey: ["project", slug],
-    queryFn: () => getProject({ data: { slug } }),
+    queryFn: async () => {
+      const serverResult = await getProject({ data: { slug } });
+      if (serverResult.project) {
+        if (typeof window !== "undefined") {
+          const { getLocalProjectBySlug } = await import("./data-store");
+          const local = getLocalProjectBySlug(slug);
+          if (local) {
+            return {
+              ...serverResult,
+              project: { ...serverResult.project, ...local },
+            };
+          }
+        }
+        return serverResult;
+      }
+
+      // If not on server, check local store
+      if (typeof window !== "undefined") {
+        const { getLocalProjectBySlug } = await import("./data-store");
+        const local = getLocalProjectBySlug(slug);
+        if (local) {
+          return { project: local, related: [] };
+        }
+      }
+
+      return serverResult;
+    },
     staleTime: 60_000,
   });
 

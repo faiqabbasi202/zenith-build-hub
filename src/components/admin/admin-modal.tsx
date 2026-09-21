@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Loader2, Save, AlertCircle } from "lucide-react";
 import { AdminImageInput } from "./admin-image-input";
+import { AdminGalleryInput } from "./admin-gallery-input";
 import type { TableConfig } from "./admin-tables-config";
 import { validateRecord, sanitizeFormData, sanitizeSlug } from "@/lib/input-sanitizer";
 import { cn } from "@/lib/utils";
@@ -28,12 +29,17 @@ export function AdminModal({
   useEffect(() => {
     setErrors({});
     if (initialData) {
-      setFormData({ ...initialData });
+      const clone = { ...initialData };
+      if (Array.isArray(clone["scope"])) {
+        clone["scope"] = clone["scope"].join(", ");
+      }
+      setFormData(clone);
     } else {
       const defaults: Record<string, any> = {};
       config.fields.forEach((f) => {
         if (f.type === "boolean") defaults[f.key] = true;
         else if (f.type === "number") defaults[f.key] = 0;
+        else if (f.type === "gallery") defaults[f.key] = [];
         else defaults[f.key] = "";
       });
       setFormData(defaults);
@@ -133,6 +139,7 @@ export function AdminModal({
                 const fullWidth =
                   field.type === "textarea" ||
                   field.type === "image" ||
+                  field.type === "gallery" ||
                   field.key === "title" ||
                   field.key === "name" ||
                   field.key === "description";
@@ -151,7 +158,7 @@ export function AdminModal({
                   key={field.key}
                   className={fullWidth ? "space-y-2 sm:col-span-2" : "space-y-2"}
                 >
-                  {field.type !== "image" && (
+                  {field.type !== "image" && field.type !== "gallery" && (
                     <div className="flex items-center justify-between">
                       <label className="block text-sm font-semibold text-slate-800 dark:text-slate-200">
                         {field.label} {field.required && <span className="text-red-500 font-bold">*</span>}
@@ -244,6 +251,23 @@ export function AdminModal({
                       value={formData[field.key]}
                       onChange={(url) => handleChange(field.key, url)}
                       categoryHint={field.categoryHint || formData["sector_slug"] || formData["category"]}
+                    />
+                  )}
+
+                  {/* Multi-Image Gallery */}
+                  {field.type === "gallery" && (
+                    <AdminGalleryInput
+                      label={field.label}
+                      value={formData[field.key]}
+                      onChange={(urls) => {
+                        handleChange(field.key, urls);
+                        if (!formData["cover_image_url"] && urls.length > 0) {
+                          handleChange("cover_image_url", urls[0]);
+                        }
+                      }}
+                      onSetCover={(url) => handleChange("cover_image_url", url)}
+                      coverImageUrl={formData["cover_image_url"]}
+                      categoryHint={field.categoryHint || formData["sector_slug"]}
                     />
                   )}
 

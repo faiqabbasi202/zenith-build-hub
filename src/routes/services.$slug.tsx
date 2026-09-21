@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { Maximize2 } from "lucide-react";
 
 import { ProjectCard } from "@/components/site/project-card";
 import { Action, Container, PageHero, Reveal, SectionHead } from "@/components/site/primitives";
 import { SiteShell } from "@/components/site/site-shell";
+import { ImageLightbox } from "@/components/site/image-lightbox";
 import { asList, asObjects } from "@/lib/format";
 import { serviceQuery } from "@/lib/queries";
 import { buildSeoHead } from "@/lib/seo";
@@ -51,14 +54,30 @@ function ServiceDetail() {
   const steps = asObjects(service["process_steps"]);
   const faqs = asObjects(service["faqs"]);
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const heroImage = service["hero_image_url"];
+
   return (
     <SiteShell>
       <PageHero
         eyebrow="Service"
         title={service["title"]}
         intro={service["summary"]}
-        image={service["hero_image_url"]}
-      />
+        image={heroImage}
+      >
+        {heroImage && (
+          <div className="mt-6 flex items-center">
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3.5 py-1 text-xs font-semibold text-foreground/85 hover:border-amber hover:text-amber transition shadow-xs"
+            >
+              <Maximize2 className="h-3.5 w-3.5 text-amber" />
+              View Full Photo
+            </button>
+          </div>
+        )}
+      </PageHero>
 
       <section className="bg-background py-10 sm:py-16 md:py-24 lg:py-28">
         <Container className="grid gap-8 md:gap-12 lg:grid-cols-[1.6fr_1fr] lg:gap-16">
@@ -143,6 +162,18 @@ function ServiceDetail() {
           </Container>
         </section>
       ) : null}
+
+      {/* ── Responsive Image Lightbox ── */}
+      {heroImage && (
+        <ImageLightbox
+          images={[heroImage]}
+          initialIndex={0}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          title={service["title"]}
+          caption={service["summary"]}
+        />
+      )}
     </SiteShell>
   );
 }

@@ -126,21 +126,46 @@ export const getService = createServerFn({ method: "GET" })
         sb.from("services").select("*").eq("slug", data.slug).eq("is_published", true).maybeSingle(),
         sb
           .from("projects")
-          .select("slug,title,city,cover_image_url,status,sector_slug")
+          .select("*")
           .eq("is_published", true)
-          .order("sort_order")
-          .limit(3),
+          .order("sort_order"),
       ]);
 
       const enrichedService = service.data ? enrichServiceHeroImage(service.data as Row) : null;
-      const relatedDummies = DUMMY_PROJECTS_BY_CATEGORY.slice(0, 3);
-      const combinedProjects = (projects.data && projects.data.length > 0)
-        ? (projects.data as Row[])
-        : relatedDummies;
+      const allProjects = (projects.data ?? []) as Row[];
+
+      // Filter projects that match this service by:
+      // 1) sector_slug === data.slug
+      // 2) service_slug === data.slug
+      // 3) scope contains service keywords
+      const serviceWords = data.slug.split("-");
+      const matchingProjects = allProjects.filter((p) => {
+        if (p["sector_slug"] === data.slug) return true;
+        if (p["service_slug"] === data.slug) return true;
+        const scopeStr = Array.isArray(p["scope"])
+          ? p["scope"].join(" ").toLowerCase()
+          : String(p["scope"] || "").toLowerCase();
+        return serviceWords.some((w) => w.length > 3 && scopeStr.includes(w));
+      });
+
+      // Dummy fallback matching category if any
+      const matchingDummies = DUMMY_PROJECTS_BY_CATEGORY.filter((d) => {
+        if (d.sector_slug === data.slug) return true;
+        const scopeStr = d.scope.join(" ").toLowerCase();
+        return serviceWords.some((w) => w.length > 3 && scopeStr.includes(w));
+      });
+
+      const relatedDummies = matchingDummies.length > 0
+        ? matchingDummies.slice(0, 3)
+        : DUMMY_PROJECTS_BY_CATEGORY.slice(0, 3);
+
+      const finalProjects = matchingProjects.length > 0
+        ? matchingProjects
+        : (allProjects.slice(0, 3).length > 0 ? allProjects.slice(0, 3) : relatedDummies);
 
       return {
         service: enrichedService,
-        projects: combinedProjects,
+        projects: finalProjects,
       };
     });
   });

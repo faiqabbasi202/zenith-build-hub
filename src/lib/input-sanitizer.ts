@@ -111,9 +111,10 @@ export function validateRecord(
     }
 
     // 5. URL format check
-    if (field.key.includes("url") || field.key.includes("href") || field.key.includes("website")) {
+    if (field.type === "image" || ((field.key.includes("url") || field.key.includes("href") || field.key.includes("website")) && !Array.isArray(val))) {
       const urlStr = String(val).trim();
       if (
+        urlStr &&
         !urlStr.startsWith("http://") &&
         !urlStr.startsWith("https://") &&
         !urlStr.startsWith("/") &&
@@ -140,7 +141,31 @@ export function sanitizeFormData(
     const val = sanitized[field.key];
     if (val == null) return;
 
-    if (field.type === "text" || field.type === "textarea") {
+    if (field.type === "gallery" || field.key === "gallery") {
+      if (Array.isArray(val)) {
+        sanitized[field.key] = val
+          .map((url) => sanitizeUrl(String(url)))
+          .filter(Boolean);
+      } else if (typeof val === "string" && val.trim()) {
+        sanitized[field.key] = val
+          .split(/[\n,]+/)
+          .map((u) => sanitizeUrl(u.trim()))
+          .filter(Boolean);
+      } else {
+        sanitized[field.key] = [];
+      }
+    } else if (field.key === "scope") {
+      if (Array.isArray(val)) {
+        sanitized[field.key] = val.map(sanitizeText).filter(Boolean);
+      } else if (typeof val === "string" && val.trim()) {
+        sanitized[field.key] = val
+          .split(/[\n,]+/)
+          .map((s) => sanitizeText(s))
+          .filter(Boolean);
+      } else {
+        sanitized[field.key] = [];
+      }
+    } else if (field.type === "text" || field.type === "textarea") {
       if (field.key === "slug" || field.key.endsWith("_slug")) {
         sanitized[field.key] = sanitizeSlug(val);
       } else if (field.key.includes("url") || field.key.includes("href") || field.key.includes("website")) {

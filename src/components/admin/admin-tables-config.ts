@@ -4,6 +4,7 @@ export type FieldType =
   | "number"
   | "boolean"
   | "image"
+  | "gallery"
   | "select"
   | "date"
   | "tags";
@@ -38,7 +39,7 @@ export const ADMIN_TABLES: Record<string, TableConfig> = {
     key: "projects",
     title: "Projects",
     group: "Portfolio",
-    searchFields: ["title", "slug", "city", "sector_slug", "client"],
+    searchFields: ["title", "slug", "city", "sector_slug", "service_slug", "client"],
     fields: [
       { key: "title", label: "Project Title", type: "text", required: true },
       { key: "slug", label: "Slug", type: "text", required: true },
@@ -46,7 +47,35 @@ export const ADMIN_TABLES: Record<string, TableConfig> = {
         key: "sector_slug",
         label: "Sector",
         type: "select",
-        options: ["residential", "commercial", "renovation", "real-estate", "infrastructure", "industrial", "healthcare", "education"],
+        options: [
+          "residential",
+          "commercial",
+          "industrial",
+          "infrastructure",
+          "healthcare",
+          "education",
+          "hospitality",
+          "institutional",
+          "renovation",
+          "real-estate",
+        ],
+        required: true,
+      },
+      {
+        key: "service_slug",
+        label: "Primary Service / Category",
+        type: "select",
+        options: [
+          "construction-services",
+          "architectural-design",
+          "interior-design",
+          "structural-design",
+          "project-management",
+          "real-estate",
+          "material-supplies",
+          "contracts-consultancy",
+          "topography-soil-testing",
+        ],
       },
       {
         key: "status",
@@ -66,7 +95,9 @@ export const ADMIN_TABLES: Record<string, TableConfig> = {
       { key: "storeys", label: "Storeys", type: "text" },
       { key: "start_date", label: "Start Date", type: "date" },
       { key: "completion_date", label: "Completion Date", type: "date" },
-      { key: "cover_image_url", label: "Cover Image", type: "image", categoryHint: "commercial" },
+      { key: "cover_image_url", label: "Cover Image (Main)", type: "image", categoryHint: "commercial" },
+      { key: "gallery", label: "Project Gallery (Multiple Pictures)", type: "gallery", categoryHint: "commercial" },
+      { key: "scope", label: "Scope of Works (e.g. Turnkey Civil, Structural MEP, Finishes)", type: "textarea" },
       { key: "summary", label: "Summary", type: "textarea" },
       { key: "description", label: "Full Description", type: "textarea" },
       { key: "is_featured", label: "Featured on Homepage", type: "boolean" },

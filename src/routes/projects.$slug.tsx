@@ -1,10 +1,13 @@
+import { useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { Maximize2, ExternalLink } from "lucide-react";
 
 import { Action, Container, PageHero, Reveal, SectionHead, StatusChip } from "@/components/site/primitives";
 import { ProjectCard } from "@/components/site/project-card";
 import { ResponsiveImage } from "@/components/site/responsive-image";
 import { SiteShell } from "@/components/site/site-shell";
+import { ImageLightbox } from "@/components/site/image-lightbox";
 import { asList, longDate, pkr, statusLabel } from "@/lib/format";
 import { projectQuery } from "@/lib/queries";
 import { buildSeoHead } from "@/lib/seo";
@@ -51,6 +54,20 @@ function ProjectDetail() {
   const scope = asList(project["scope"]);
   const gallery = asList(project["gallery"]);
 
+  // Build combined array of all project images for the lightbox
+  const allImages = Array.from(
+    new Set([project["cover_image_url"], ...gallery].filter(Boolean) as string[]),
+  );
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (src: string) => {
+    const idx = allImages.indexOf(src);
+    setLightboxIndex(idx >= 0 ? idx : 0);
+    setLightboxOpen(true);
+  };
+
   const facts = [
     ["Client", project["client"]],
     ["Location", [project["location"], project["city"]].filter(Boolean).join(", ")],
@@ -74,11 +91,49 @@ function ProjectDetail() {
       >
         <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3">
           <StatusChip label={statusLabel(project["status"])} />
+
+          {/* Sector Badge with Interconnection Link */}
+          {project["sector_slug"] && (
+            <Link
+              to="/projects"
+              search={{ sector: project["sector_slug"] }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface/80 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-foreground/80 hover:border-amber hover:text-amber transition"
+            >
+              Sector: {project["sector_slug"].replace(/-/g, " ")}
+            </Link>
+          )}
+
+          {/* Service Badge with Interconnection Link */}
+          {project["service_slug"] && (
+            <Link
+              to="/services/$slug"
+              params={{ slug: project["service_slug"] }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-amber/30 bg-amber/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber hover:bg-amber/25 transition"
+            >
+              Service: {project["service_slug"].replace(/-/g, " ")}
+            </Link>
+          )}
+
           {project["progress_percent"] != null && project["status"] === "ongoing" ? (
             <span className="label-mono text-xs text-muted-foreground sm:text-sm">
               {project["progress_percent"]}% complete
             </span>
           ) : null}
+
+          {/* View Full Photos Button */}
+          {allImages.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setLightboxIndex(0);
+                setLightboxOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-xs font-semibold text-foreground/85 hover:border-amber hover:text-amber transition shadow-xs"
+            >
+              <Maximize2 className="h-3.5 w-3.5 text-amber" />
+              View Full Photos ({allImages.length})
+            </button>
+          )}
         </div>
       </PageHero>
 
@@ -103,19 +158,40 @@ function ProjectDetail() {
               </div>
             ) : null}
 
+            {/* Gallery Grid with Click to View Full Size */}
             {gallery.length ? (
-              <div className="mt-8 grid gap-3 sm:mt-14 sm:grid-cols-2 sm:gap-4">
-                {gallery.map((src, i) => (
-                  <Reveal key={src} delay={(i % 2) * 0.06} className="overflow-hidden border border-border">
-                    <ResponsiveImage
-                      src={src}
-                      alt={`${project["title"]} — view ${i + 1}`}
-                      aspectRatio="16/10"
-                      className="h-full w-full"
-                      imgClassName="h-full w-full object-cover"
-                    />
-                  </Reveal>
-                ))}
+              <div className="mt-8 sm:mt-14">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="label-mono text-xs text-amber sm:text-sm">
+                    Project Gallery ({gallery.length} photos)
+                  </h2>
+                  <span className="text-xs text-muted-foreground">Click any photo to view full size</span>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+                  {gallery.map((src, i) => (
+                    <Reveal key={src + i} delay={(i % 2) * 0.06} className="overflow-hidden">
+                      <div
+                        onClick={() => openLightbox(src)}
+                        className="group relative cursor-pointer overflow-hidden border border-border bg-surface transition duration-200 hover:border-amber hover:shadow-lg"
+                        title="Click to view full picture of perfect size"
+                      >
+                        <ResponsiveImage
+                          src={src}
+                          alt={`${project["title"]} — view ${i + 1}`}
+                          aspectRatio="16/10"
+                          className="h-full w-full"
+                          imgClassName="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition">
+                          <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/75 px-3 py-1.5 text-xs font-bold text-white shadow-md backdrop-blur-xs">
+                            <Maximize2 className="h-4 w-4 text-amber" />
+                            View Full Picture
+                          </span>
+                        </div>
+                      </div>
+                    </Reveal>
+                  ))}
+                </div>
               </div>
             ) : null}
           </div>
@@ -156,6 +232,16 @@ function ProjectDetail() {
           </Container>
         </section>
       ) : null}
+
+      {/* ── Responsive Image Lightbox Modal ── */}
+      <ImageLightbox
+        images={allImages.length ? allImages : gallery}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        title={project["title"]}
+        caption={project["summary"]}
+      />
     </SiteShell>
   );
 }

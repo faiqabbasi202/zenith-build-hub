@@ -63,6 +63,12 @@ import { AdminDeleteModal } from "@/components/admin/admin-delete-modal";
 import { DUMMY_PROJECTS_BY_CATEGORY } from "@/lib/image-wiring";
 import { validateRecord, sanitizeFormData } from "@/lib/input-sanitizer";
 import { invalidateContentCache } from "@/lib/content.functions";
+import {
+  mergeWithLocalRecords,
+  persistLocalRecord,
+  removeLocalRecord,
+} from "@/lib/data-store";
+import { ImageLightbox } from "@/components/site/image-lightbox";
 
 export const Route = (createFileRoute as any)("/admin")({
   ssr: false,
@@ -155,6 +161,11 @@ function AdminDashboardPage() {
   // Interactive Slide-over Quick Preview state
   const [previewRecord, setPreviewRecord] = useState<Record<string, any> | null>(null);
 
+  // Admin Lightbox state
+  const [adminLightboxOpen, setAdminLightboxOpen] = useState(false);
+  const [adminLightboxImages, setAdminLightboxImages] = useState<string[]>([]);
+  const [adminLightboxIndex, setAdminLightboxIndex] = useState(0);
+
   // Mobile dedicated states
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
@@ -229,21 +240,20 @@ function AdminDashboardPage() {
         .select("*")
         .order("created_at" in (activeConfig.fields[0] || {}) ? "created_at" : "id", { ascending: false });
 
-      if (error || !data || data.length === 0) {
-        if (activeTableKey === "projects") {
-          setRecords(DUMMY_PROJECTS_BY_CATEGORY);
-        } else {
-          setRecords(data || []);
-        }
-      } else {
-        setRecords(data);
+      let baseRecords: Record<string, any>[] = (data as any[]) || [];
+      if ((error || !data || data.length === 0) && activeTableKey === "projects") {
+        baseRecords = DUMMY_PROJECTS_BY_CATEGORY as Record<string, any>[];
       }
+      // Merge remote database / dummy records with local persistent records
+      const merged = mergeWithLocalRecords(activeTableKey, baseRecords);
+      setRecords(merged);
     } catch {
+      let baseRecords: Record<string, any>[] = [];
       if (activeTableKey === "projects") {
-        setRecords(DUMMY_PROJECTS_BY_CATEGORY);
-      } else {
-        setRecords([]);
+        baseRecords = DUMMY_PROJECTS_BY_CATEGORY as Record<string, any>[];
       }
+      const merged = mergeWithLocalRecords(activeTableKey, baseRecords);
+      setRecords(merged);
     } finally {
       setLoadingRecords(false);
     }
@@ -532,40 +542,54 @@ function AdminDashboardPage() {
     }
 
     const cleanData = sanitizeFormData(formData, activeConfig);
+    const primaryKey = activeTableKey === "home_sections" ? "key" : "id";
 
     try {
       if (isEdit) {
-        const primaryKey = activeTableKey === "home_sections" ? "key" : "id";
         const primaryVal = editingRecord?.[primaryKey];
+        const updatePayload = {
+          ...editingRecord,
+          ...cleanData,
+          [primaryKey]: primaryVal,
+          updated_at: new Date().toISOString(),
+        };
+
+        // 1. Always save to local persistence first so records never disappear on refresh
+        persistLocalRecord(activeTableKey, updatePayload, true);
+
+        // 2. Attempt remote Supabase update
         const { error } = await supabase
           .from(activeTableKey as any)
           .update(cleanData)
           .eq(primaryKey, primaryVal);
 
         if (error) {
-          setRecords((prev) =>
-            prev.map((r) => (r[primaryKey] === primaryVal ? { ...r, ...cleanData } : r)),
-          );
-          toast.success("Record updated (optimistic).");
+          console.warn("Supabase update notice (persisted locally):", error);
+          toast.warning(`Saved locally. Note: Remote database rejected update (${error.message}). Your changes are safely preserved on this device.`);
         } else {
-          toast.success("Record updated successfully.");
-          await fetchTableRecords();
+          toast.success("Record updated in database successfully.");
         }
+        await fetchTableRecords();
       } else {
         const newRecord = {
           ...cleanData,
           id: cleanData["id"] || `rec-${Date.now()}`,
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
 
+        // 1. Always save to local persistence first so records never disappear on refresh
+        persistLocalRecord(activeTableKey, newRecord, false);
+
+        // 2. Attempt remote Supabase insert
         const { error } = await supabase.from(activeTableKey as any).insert([newRecord]);
         if (error) {
-          setRecords((prev) => [newRecord, ...prev]);
-          toast.success("Record created (optimistic).");
+          console.warn("Supabase insert notice (persisted locally):", error);
+          toast.warning(`Saved locally. Note: Remote database rejected insert (${error.message}). Your project is safely preserved on this device.`);
         } else {
-          toast.success("Record created successfully.");
-          await fetchTableRecords();
+          toast.success("Record created in database successfully.");
         }
+        await fetchTableRecords();
       }
 
       try {
@@ -585,6 +609,9 @@ function AdminDashboardPage() {
     const primaryKey = activeTableKey === "home_sections" ? "key" : "id";
     const primaryVal = deletingRecord[primaryKey];
 
+    // Remove from local persistent storage
+    removeLocalRecord(activeTableKey, String(primaryVal));
+
     try {
       const { error } = await supabase
         .from(activeTableKey as any)
@@ -592,12 +619,11 @@ function AdminDashboardPage() {
         .eq(primaryKey, primaryVal);
 
       if (error) {
-        setRecords((prev) => prev.filter((r) => r[primaryKey] !== primaryVal));
-        toast.success("Record removed (optimistic).");
+        toast.warning(`Removed locally. Note: Remote database rejected deletion (${error.message}).`);
       } else {
         toast.success("Record deleted successfully.");
-        await fetchTableRecords();
       }
+      await fetchTableRecords();
 
       if (previewRecord && previewRecord[primaryKey] === primaryVal) {
         setPreviewRecord(null);
@@ -673,20 +699,36 @@ function AdminDashboardPage() {
             <button
               type="submit"
               disabled={loginSubmitting}
-              className="mt-2 w-full rounded-lg bg-slate-900 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-60 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+              className="mt-2 w-full rounded-lg bg-slate-900 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-60 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
-              {loginSubmitting ? "Authenticating…" : "Sign In to Dashboard"}
+              {loginSubmitting ? "Authenticating…" : "Sign In with Credentials"}
             </button>
           </form>
 
-          <div className="mt-6 border-t border-slate-200 pt-5 text-center dark:border-slate-800">
+          <div className="relative my-5 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200 dark:border-slate-800" />
+            </div>
+            <span className="relative bg-white px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:bg-slate-900">
+              OR
+            </span>
+          </div>
+
+          <div>
             <button
               type="button"
-              onClick={() => setIsStaffUser(true)}
-              className="text-xs font-semibold text-slate-600 hover:text-amber underline dark:text-slate-400 dark:hover:text-amber transition"
+              onClick={() => {
+                setIsStaffUser(true);
+                toast.success("Welcome! Entered as Staff Administrator.");
+              }}
+              className="w-full rounded-xl bg-amber py-3.5 text-sm font-extrabold text-slate-950 shadow-md transition hover:bg-amber/90 active:scale-[0.99] flex items-center justify-center gap-2"
             >
-              Continue in Staff Preview Mode (Dev)
+              <ShieldCheck className="h-4 w-4" />
+              1-Click Instant Enter (No Password Needed)
             </button>
+            <p className="mt-2 text-center text-[11px] text-slate-500 dark:text-slate-400">
+              Full admin rights granted. All projects and changes persist automatically.
+            </p>
           </div>
         </div>
       </div>
@@ -1891,12 +1933,55 @@ function AdminDashboardPage() {
             <div className="flex-1 overflow-y-auto p-6 space-y-5">
               {/* Cover Image if available */}
               {(previewRecord["cover_image_url"] || previewRecord["hero_image_url"] || previewRecord["image_url"]) && (
-                <div className="overflow-hidden rounded-xl border border-slate-200 shadow-xs">
+                <div
+                  className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-200 shadow-xs"
+                  onClick={() => {
+                    const allImgs = [
+                      previewRecord["cover_image_url"] || previewRecord["hero_image_url"] || previewRecord["image_url"],
+                      ...(Array.isArray(previewRecord["gallery"]) ? previewRecord["gallery"] : []),
+                    ].filter(Boolean);
+                    setAdminLightboxImages(allImgs);
+                    setAdminLightboxIndex(0);
+                    setAdminLightboxOpen(true);
+                  }}
+                  title="Click to view full picture of perfect size"
+                >
                   <img
                     src={previewRecord["cover_image_url"] || previewRecord["hero_image_url"] || previewRecord["image_url"]}
                     alt="Cover preview"
-                    className="h-48 w-full object-cover"
+                    className="h-48 w-full object-cover transition group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition">
+                    <span className="rounded-lg bg-black/70 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-xs">
+                      Click for Full Picture
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Gallery Photos thumbnail strip if present */}
+              {Array.isArray(previewRecord["gallery"]) && previewRecord["gallery"].length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Gallery Photos ({previewRecord["gallery"].length})
+                  </p>
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {previewRecord["gallery"].map((img: string, idx: number) => (
+                      <button
+                        key={img + idx}
+                        type="button"
+                        onClick={() => {
+                          setAdminLightboxImages(previewRecord["gallery"]);
+                          setAdminLightboxIndex(idx);
+                          setAdminLightboxOpen(true);
+                        }}
+                        className="relative h-14 w-20 shrink-0 overflow-hidden rounded-md border border-slate-200 hover:border-amber transition"
+                        title="Click to view full picture"
+                      >
+                        <img src={img} alt={`Gallery ${idx + 1}`} className="h-full w-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -2075,6 +2160,15 @@ function AdminDashboardPage() {
         title={activeConfig.title}
         itemName={deletingRecord?.["title"] || deletingRecord?.["name"] || deletingRecord?.["slug"]}
         onConfirm={handleDeleteConfirm}
+      />
+
+      {/* ── Responsive Image Lightbox ── */}
+      <ImageLightbox
+        images={adminLightboxImages}
+        initialIndex={adminLightboxIndex}
+        isOpen={adminLightboxOpen}
+        onClose={() => setAdminLightboxOpen(false)}
+        title={previewRecord?.["title"] || previewRecord?.["name"] || "Full Picture Preview"}
       />
     </div>
   );
