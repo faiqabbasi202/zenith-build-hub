@@ -364,23 +364,41 @@ export function enrichSectorHeroImage(sector: Record<string, any>): Record<strin
   return sector;
 }
 
+/** Per-service image map — filename matches what you save in public/images/services/ */
+const SERVICE_IMAGE_MAP: Record<string, string> = {
+  // existing mapped images
+  "architectural-design":    "/images/residential/services-residential-construction.jpg",
+  "structural-design":       "/images/commercial/services-commercial-construction.jpg",
+  "construction-services":   "/images/commercial/featured-project-exterior-day.jpg",
+  "project-management":      "/images/commercial/services-commercial-construction.jpg",
+  "real-estate":             "/images/real-estate/real-estate-development-dusk-render.jpg",
+  "material-supplies":       "/images/commercial/services-infrastructure.jpg",
+  "contracts-consultancy":   "/images/renovation/services-renovation--fit-out.jpg",
+  "topography-soil-testing": "/images/commercial/featured-project-aerial.jpg",
+  "interior-design":         "/images/renovation/featured-project-interior.jpg",
+};
+
 /** Enrich database services with the first image from the matching category */
 export function enrichServiceHeroImage(service: Record<string, any>): Record<string, any> {
-  const slug = String(service["slug"] ?? "");
-  let match: string | undefined;
+  // If the DB already has a hero_image_url set, use it directly
+  if (service["hero_image_url"]) return service;
 
-  if (slug in CATEGORY_HERO_IMAGES) {
-    match = CATEGORY_HERO_IMAGES[slug as CategoryKey];
-  } else if (slug.includes("residential") || slug.includes("architectural") || slug.includes("interior")) {
-    match = CATEGORY_HERO_IMAGES["residential"];
-  } else if (slug.includes("commercial") || slug.includes("construction") || slug.includes("structural")) {
-    match = CATEGORY_HERO_IMAGES["commercial"];
-  } else if (slug.includes("renovation") || slug.includes("fit-out")) {
-    match = CATEGORY_HERO_IMAGES["renovation"];
-  } else if (slug.includes("real-estate")) {
-    match = CATEGORY_HERO_IMAGES["real-estate"];
-  } else {
-    match = CATEGORY_HERO_IMAGES["commercial"];
+  const slug = String(service["slug"] ?? "");
+  let match: string | undefined = SERVICE_IMAGE_MAP[slug];
+
+  // Fallback heuristics if slug not in map
+  if (!match) {
+    if (slug.includes("residential") || slug.includes("architectural") || slug.includes("interior")) {
+      match = CATEGORY_HERO_IMAGES["residential"];
+    } else if (slug.includes("real-estate")) {
+      match = CATEGORY_HERO_IMAGES["real-estate"];
+    } else if (slug.includes("renovation") || slug.includes("fit-out") || slug.includes("contract")) {
+      match = CATEGORY_HERO_IMAGES["renovation"];
+    } else if (slug.includes("infrastructure") || slug.includes("soil") || slug.includes("topo")) {
+      match = CATEGORY_HERO_IMAGES["infrastructure"];
+    } else {
+      match = CATEGORY_HERO_IMAGES["commercial"];
+    }
   }
 
   return { ...service, hero_image_url: match };

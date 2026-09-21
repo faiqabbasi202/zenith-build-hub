@@ -109,6 +109,21 @@ function ServiceDetail() {
         </Container>
       </section>
 
+      {data.projects.length ? (
+        <section className="bg-background py-20 md:py-28">
+          <Container>
+            <SectionHead eyebrow="Related work" heading="Projects using this service" />
+            <ul className="mt-12 grid gap-8 md:grid-cols-3">
+              {data.projects.map((p: any) => (
+                <li key={p.slug}>
+                  <ProjectCard project={p} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      ) : null}
+
       {faqs.length ? (
         <section className="border-t border-border bg-surface py-20 md:py-28">
           <Container>
@@ -126,21 +141,6 @@ function ServiceDetail() {
                 </details>
               ))}
             </div>
-          </Container>
-        </section>
-      ) : null}
-
-      {data.projects.length ? (
-        <section className="bg-background py-20 md:py-28">
-          <Container>
-            <SectionHead eyebrow="Related work" heading="Projects using this service" />
-            <ul className="mt-12 grid gap-8 md:grid-cols-3">
-              {data.projects.map((p: any) => (
-                <li key={p.slug}>
-                  <ProjectCard project={p} />
-                </li>
-              ))}
-            </ul>
           </Container>
         </section>
       ) : null}

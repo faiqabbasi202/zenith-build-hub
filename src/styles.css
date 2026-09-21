@@ -295,7 +295,41 @@
     padding-inline: 3rem;
   }
 }
-body { overflow-x: hidden; }
+
+/* ─── Mobile layout hardening ──────────────────────────────────────────── */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Prevent absolutely-positioned children from escaping the viewport */
+#root,
+[data-reactroot] {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Project / service image cards: cap height on very small screens */
+@media (max-width: 640px) {
+  .group.relative.flex.h-\[28rem\] {
+    height: 22rem;
+  }
+}
+
+/* Fix for cards whose aspect-ratio wrappers collapse on some Android browsers */
+.aspect-4\/3 {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+.aspect-4\/3 > img,
+.aspect-4\/3 > picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
