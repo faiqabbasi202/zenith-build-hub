@@ -364,18 +364,17 @@ export function enrichSectorHeroImage(sector: Record<string, any>): Record<strin
   return sector;
 }
 
-/** Per-service image map — filename matches what you save in public/images/services/ */
+/** Per-service image map — each service now has its own unique AI-generated image */
 const SERVICE_IMAGE_MAP: Record<string, string> = {
-  // existing mapped images
-  "architectural-design":    "/images/residential/services-residential-construction.jpg",
-  "structural-design":       "/images/commercial/services-commercial-construction.jpg",
-  "construction-services":   "/images/commercial/featured-project-exterior-day.jpg",
-  "project-management":      "/images/commercial/services-commercial-construction.jpg",
-  "real-estate":             "/images/real-estate/real-estate-development-dusk-render.jpg",
-  "material-supplies":       "/images/commercial/services-infrastructure.jpg",
-  "contracts-consultancy":   "/images/renovation/services-renovation--fit-out.jpg",
-  "topography-soil-testing": "/images/commercial/featured-project-aerial.jpg",
-  "interior-design":         "/images/renovation/featured-project-interior.jpg",
+  "architectural-design":    "/images/services/services-architectural-design.jpg",
+  "structural-design":       "/images/services/services-structural-design.jpg",
+  "construction-services":   "/images/services/services-construction-services.jpg",
+  "project-management":      "/images/services/services-project-management.jpg",
+  "real-estate":             "/images/services/services-real-estate.jpg",
+  "material-supplies":       "/images/services/services-material-supplies.jpg",
+  "contracts-consultancy":   "/images/services/services-contracts-consultancy.jpg",
+  "topography-soil-testing": "/images/services/services-topography-soil-testing.jpg",
+  "interior-design":         "/images/services/services-interior-design.jpg",
 };
 
 /** Enrich database services with the first image from the matching category */
