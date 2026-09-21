@@ -97,11 +97,11 @@ function ProjectsPage() {
             {filtered.length} project{filtered.length === 1 ? "" : "s"}
           </p>
           {filtered.length ? (
-            <ul className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((project: any, i: number) => (
-                <Reveal as="li" key={project.slug} delay={(i % 3) * 0.06}>
+                <li key={project.slug}>
                   <ProjectCard project={project} />
-                </Reveal>
+                </li>
               ))}
             </ul>
           ) : (
