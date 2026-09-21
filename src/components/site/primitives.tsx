@@ -165,6 +165,7 @@ export function Reveal({
     <MotionTag
       ref={ref as never}
       className={className}
+      style={{ willChange: "opacity, transform" }}
       {...(reduce
         ? {}
         : {

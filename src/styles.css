@@ -296,39 +296,45 @@
   }
 }
 
-/* ─── Mobile layout hardening ──────────────────────────────────────────── */
-html,
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE LAYOUT HARDENING — prevents horizontal scroll & layout break on touch
+   The root cause: Framer Motion y-transforms temporarily push elements outside
+   the viewport. `overflow: clip` on html/body is the only reliable fix across
+   all mobile browsers (unlike overflow:hidden which can be defeated by transforms).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Level 1 — prevent the document from ever scrolling horizontally */
+html {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+/* Level 2 — body as a second fence */
 body {
-  overflow-x: hidden;
-  max-width: 100vw;
+  overflow-x: clip;
+  max-width: 100%;
+  position: relative; /* creates a new stacking context */
 }
 
-/* Prevent absolutely-positioned children from escaping the viewport */
-#root,
-[data-reactroot] {
-  overflow-x: hidden;
-  max-width: 100vw;
+/* Level 3 — every section and the main wrapper clips its children */
+main > section,
+main > div,
+header,
+footer {
+  overflow-x: clip;
+  max-width: 100%;
 }
 
-/* Project / service image cards: cap height on very small screens */
-@media (max-width: 640px) {
-  .group.relative.flex.h-\[28rem\] {
-    height: 22rem;
-  }
-}
-
-/* Fix for cards whose aspect-ratio wrappers collapse on some Android browsers */
-.aspect-4\/3 {
+/* Level 4 — all direct children of the container that use absolute positioning */
+.container-page {
   position: relative;
-  aspect-ratio: 4 / 3;
 }
-.aspect-4\/3 > img,
-.aspect-4\/3 > picture {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+
+/* Service / sector image cards on very small phones */
+@media (max-width: 480px) {
+  [class*="h-\[28rem\]"] {
+    height: 20rem !important;
+  }
 }
 
 @layer utilities {
@@ -340,3 +346,4 @@ body {
     scrollbar-width: none;
   }
 }
+
