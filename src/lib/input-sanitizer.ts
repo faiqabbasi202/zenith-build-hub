@@ -168,19 +168,23 @@ export function sanitizeFormData(
       } else {
         sanitized[field.key] = [];
       }
-    } else if (field.type === "date") {
+    } else if (
+      field.type === "date" ||
+      field.key.endsWith("_date") ||
+      field.key.endsWith("_at") ||
+      field.key.endsWith("_on") ||
+      field.key === "date"
+    ) {
       // Prevent Postgres 22007 invalid input syntax for type date: ""
-      if (typeof val === "string" && val.trim() === "") {
+      if (!val || (typeof val === "string" && val.trim() === "")) {
         sanitized[field.key] = null;
-      } else if (val) {
-        sanitized[field.key] = String(val).trim();
       } else {
-        sanitized[field.key] = null;
+        sanitized[field.key] = String(val).trim();
       }
     } else if (field.type === "number") {
       // Prevent Postgres 22P02 invalid input syntax for type numeric/integer: ""
       if (val === "" || val == null || isNaN(Number(val))) {
-        sanitized[field.key] = null;
+        sanitized[field.key] = field.key === "sort_order" ? 0 : null;
       } else {
         sanitized[field.key] = Number(val);
       }

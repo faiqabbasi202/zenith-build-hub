@@ -44,6 +44,7 @@ export function AdminModal({
         if (f.type === "boolean") defaults[f.key] = true;
         else if (f.type === "number") defaults[f.key] = 0;
         else if (f.type === "gallery") defaults[f.key] = [];
+        else if (f.type === "date") defaults[f.key] = null;
         else defaults[f.key] = "";
       });
       setFormData(defaults);
@@ -92,6 +93,15 @@ export function AdminModal({
     try {
       // 2. Security sanitization (XSS stripping, URL normalization, trimming)
       const sanitized = sanitizeFormData(formData, config);
+      // Absolute guard: Ensure all date and numeric fields never pass empty strings to Supabase
+      for (const field of config.fields) {
+        if (field.type === "date") {
+          const v = sanitized[field.key];
+          if (!v || (typeof v === "string" && v.trim() === "")) {
+            sanitized[field.key] = null;
+          }
+        }
+      }
       await onSave(sanitized);
       onClose();
     } finally {
@@ -210,7 +220,7 @@ export function AdminModal({
                     <input
                       type="date"
                       value={formData[field.key] ? String(formData[field.key]).split("T")[0] : ""}
-                      onChange={(e) => handleChange(field.key, e.target.value)}
+                      onChange={(e) => handleChange(field.key, e.target.value.trim() ? e.target.value.trim() : null)}
                       className={inputBaseCls}
                     />
                   )}

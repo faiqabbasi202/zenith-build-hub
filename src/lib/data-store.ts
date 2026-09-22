@@ -15,6 +15,16 @@ interface TableStoreData {
   deleted: string[]; // ids or primary keys that have been deleted
 }
 
+function sanitizeStoreRecord(rec: Record<string, any>): Record<string, any> {
+  const clean = { ...rec };
+  for (const [k, v] of Object.entries(clean)) {
+    if ((k.endsWith("_date") || k.endsWith("_at") || k.endsWith("_on") || k === "date") && v === "") {
+      clean[k] = null;
+    }
+  }
+  return clean;
+}
+
 function getStoreData(tableKey: string): TableStoreData {
   if (typeof window === "undefined") {
     return { created: [], updated: {}, deleted: [] };
@@ -23,9 +33,16 @@ function getStoreData(tableKey: string): TableStoreData {
     const raw = localStorage.getItem(`${STORAGE_PREFIX}${tableKey}`);
     if (!raw) return { created: [], updated: {}, deleted: [] };
     const parsed = JSON.parse(raw);
+    const created = Array.isArray(parsed.created) ? parsed.created.map(sanitizeStoreRecord) : [];
+    const updated: Record<string, Record<string, any>> = {};
+    if (typeof parsed.updated === "object" && parsed.updated !== null) {
+      for (const [k, v] of Object.entries(parsed.updated)) {
+        updated[k] = typeof v === "object" && v !== null ? sanitizeStoreRecord(v as any) : (v as any);
+      }
+    }
     return {
-      created: Array.isArray(parsed.created) ? parsed.created : [],
-      updated: typeof parsed.updated === "object" && parsed.updated !== null ? parsed.updated : {},
+      created,
+      updated,
       deleted: Array.isArray(parsed.deleted) ? parsed.deleted : [],
     };
   } catch (err) {
@@ -56,23 +73,24 @@ export function persistLocalRecord(
   const store = getStoreData(tableKey);
   const primaryKey = tableKey === "home_sections" ? "key" : "id";
   const recordId = String(record[primaryKey] || record["slug"] || Date.now());
+  const cleanRecord = sanitizeStoreRecord(record);
 
   if (isEdit) {
     // If it was originally created in this session/store, update it in created array
     const existingIndex = store.created.findIndex((r) => String(r[primaryKey]) === recordId);
     if (existingIndex >= 0) {
-      store.created[existingIndex] = { ...store.created[existingIndex], ...record };
+      store.created[existingIndex] = { ...store.created[existingIndex], ...cleanRecord };
     } else {
       // Otherwise record updated diff
-      store.updated[recordId] = { ...(store.updated[recordId] || {}), ...record };
+      store.updated[recordId] = { ...(store.updated[recordId] || {}), ...cleanRecord };
     }
   } else {
     // Add to created list (at top)
     const existingIndex = store.created.findIndex((r) => String(r[primaryKey]) === recordId);
     if (existingIndex >= 0) {
-      store.created[existingIndex] = { ...store.created[existingIndex], ...record };
+      store.created[existingIndex] = { ...store.created[existingIndex], ...cleanRecord };
     } else {
-      store.created.unshift(record);
+      store.created.unshift(cleanRecord);
     }
     // If it was previously marked deleted, un-delete it
     store.deleted = store.deleted.filter((id) => id !== recordId);
