@@ -29,7 +29,17 @@ export const siteSettingsQuery = queryOptions({
 
 export const homeQuery = queryOptions({
   queryKey: ["home"],
-  queryFn: () => getHomeData(),
+  queryFn: async () => {
+    const data = await getHomeData();
+    if (typeof window !== "undefined") {
+      const { mergeWithLocalRecords } = await import("./data-store");
+      return {
+        ...data,
+        projects: mergeWithLocalRecords("projects", data.projects),
+      };
+    }
+    return data;
+  },
   staleTime: 60_000,
 });
 

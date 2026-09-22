@@ -42,3 +42,6 @@ CREATE POLICY "developments staff write" ON public.developments
   TO authenticated
   USING (true)
   WITH CHECK (true);
+
+-- Ensure projects table has service_slug column
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS service_slug text;
