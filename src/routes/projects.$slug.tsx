@@ -238,11 +238,16 @@ function ProjectDetail() {
           {allImages.length > 0 && (
             <button
               type="button"
-              onClick={() => openLightbox(activePhoto || allImages[0] || "")}
+              onClick={() => {
+                const el = document.getElementById("architectural-showcase");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }
+              }}
               className="inline-flex items-center gap-1.5 rounded-full border border-amber bg-amber px-4 py-1 text-xs font-extrabold text-slate-950 hover:bg-amber/90 transition shadow-sm"
             >
-              <Maximize2 className="h-3.5 w-3.5" />
-              View Full Resolution ({allImages.length} {allImages.length === 1 ? "Photo" : "Photos"})
+              <Eye className="h-3.5 w-3.5" />
+              View Gallery ({allImages.length} {allImages.length === 1 ? "Photo" : "Photos"})
             </button>
           )}
         </div>
@@ -250,7 +255,7 @@ function ProjectDetail() {
 
       {/* ── Main Clean Architectural Showcase Stage ── */}
       {allImages.length > 0 && (
-        <section className="border-b border-border bg-background py-6 sm:py-10">
+        <section id="architectural-showcase" className="border-b border-border bg-background py-6 sm:py-10">
           <Container>
             <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-surface/50 p-3 sm:p-5 shadow-sm">
               {/* Showcase Top Control Strip */}
@@ -356,9 +361,9 @@ function ProjectDetail() {
                       key={src + idx}
                       type="button"
                       onClick={() => setActivePhoto(src)}
-                      className={`group relative h-16 w-24 sm:h-20 sm:w-32 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                      className={`group relative h-16 w-24 sm:h-20 sm:w-32 shrink-0 overflow-hidden rounded-lg border-2 transition-colors duration-200 ${
                         src === activePhoto
-                          ? "border-amber ring-2 ring-amber/40 scale-105 shadow-md"
+                          ? "border-amber ring-2 ring-amber/40 shadow-md"
                           : "border-border/80 opacity-65 hover:opacity-100 hover:border-amber/60"
                       }`}
                     >
@@ -366,7 +371,7 @@ function ProjectDetail() {
                         src={src}
                         alt={`Perspective ${idx + 1}`}
                         loading="lazy"
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-cover"
                       />
                       <span className="absolute bottom-1 right-1 rounded-xs bg-slate-950/80 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white">
                         {idx + 1}
@@ -426,7 +431,7 @@ function ProjectDetail() {
                       All Perspectives &amp; Photographs
                     </h2>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {allImages.length} high-resolution photographs available. Tap any photo to inspect full size.
+                      {allImages.length} architectural perspectives available. Tap any photo to showcase it above.
                     </p>
                   </div>
                 </div>
@@ -435,9 +440,15 @@ function ProjectDetail() {
                   {allImages.map((src, i) => (
                     <Reveal key={src + i} delay={(i % 2) * 0.06} className="overflow-hidden">
                       <div
-                        onClick={() => openLightbox(src)}
-                        className="group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-surface shadow-xs transition duration-300 hover:border-amber hover:shadow-lg"
-                        title="Click to view full uncropped photo"
+                        onClick={() => {
+                          setActivePhoto(src);
+                          const el = document.getElementById("architectural-showcase");
+                          if (el) {
+                            el.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }
+                        }}
+                        className="group relative cursor-pointer overflow-hidden rounded-xl border border-border bg-surface shadow-xs transition duration-300 hover:border-amber hover:shadow-md"
+                        title="Click to showcase this perspective"
                       >
                         <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-surface">
                           <img
@@ -445,7 +456,7 @@ function ProjectDetail() {
                             alt={`${project["title"]} view ${i + 1}`}
                             loading="lazy"
                             decoding="async"
-                            className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
+                            className="h-full w-full object-cover object-top"
                           />
                         </div>
 
@@ -455,8 +466,8 @@ function ProjectDetail() {
                             Perspective {i + 1} of {allImages.length}
                           </span>
                           <span className="inline-flex items-center gap-1.5 self-start rounded-md bg-amber px-3 py-1.5 text-xs font-extrabold text-slate-950 shadow-md">
-                            <Maximize2 className="h-3.5 w-3.5" />
-                            View Full Resolution
+                            <Eye className="h-3.5 w-3.5" />
+                            Showcase This Photo
                           </span>
                         </div>
                       </div>

@@ -6,8 +6,6 @@ import {
   Maximize2,
   Minimize2,
   ExternalLink,
-  ZoomIn,
-  ZoomOut,
   Image as ImageIcon,
   Loader2,
 } from "lucide-react";
@@ -30,7 +28,6 @@ export function ImageLightbox({
   caption,
 }: ImageLightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [isZoomed, setIsZoomed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -38,7 +35,6 @@ export function ImageLightbox({
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(Math.max(0, Math.min(initialIndex, images.length - 1)));
-      setIsZoomed(false);
       setIsLoading(true);
       setHasError(false);
     }
@@ -55,7 +51,6 @@ export function ImageLightbox({
     if (images.length <= 1) return;
     setIsLoading(true);
     setHasError(false);
-    setIsZoomed(false);
     setCurrentIndex((prev) => (prev + 1) % images.length);
   }, [images.length]);
 
@@ -63,7 +58,6 @@ export function ImageLightbox({
     if (images.length <= 1) return;
     setIsLoading(true);
     setHasError(false);
-    setIsZoomed(false);
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
   }, [images.length]);
 
@@ -121,16 +115,6 @@ export function ImageLightbox({
               {currentIndex + 1} / {images.length}
             </span>
           )}
-
-          {/* Zoom Toggle */}
-          <button
-            type="button"
-            onClick={() => setIsZoomed(!isZoomed)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white hover:bg-white/20 transition"
-            title={isZoomed ? "Fit to screen" : "Zoom in"}
-          >
-            {isZoomed ? <ZoomOut className="h-4 w-4" /> : <ZoomIn className="h-4 w-4" />}
-          </button>
 
           {/* Open Original in New Tab */}
           <a
@@ -224,17 +208,12 @@ export function ImageLightbox({
                 setHasError(true);
               }}
               style={{
-                // Automatic sizing according to desktop and window dimensions:
-                // Perfectly bounded by viewport, keeping natural aspect ratio
-                maxHeight: isZoomed ? "none" : "80vh",
-                maxWidth: isZoomed ? "none" : "90vw",
+                maxHeight: "82vh",
+                maxWidth: "92vw",
               }}
-              className={`select-none rounded-lg shadow-2xl transition-all duration-300 ${
-                isZoomed
-                  ? "cursor-zoom-out object-none"
-                  : "cursor-zoom-in object-contain w-auto h-auto"
-              } ${isLoading ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
-              onClick={() => setIsZoomed(!isZoomed)}
+              className={`select-none rounded-lg shadow-2xl object-contain w-auto h-auto transition-all duration-300 ${
+                isLoading ? "opacity-0 scale-95" : "opacity-100 scale-100"
+              }`}
             />
           )}
         </div>
