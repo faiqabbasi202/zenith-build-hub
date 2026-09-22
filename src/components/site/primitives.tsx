@@ -25,8 +25,8 @@ export function Eyebrow({
   className?: string;
 }) {
   return (
-    <p className={cn("label-mono flex items-center gap-2 text-amber", className)}>
-      <span aria-hidden className="inline-block h-px w-6 bg-amber" />
+    <p className={cn("label-mono flex items-center gap-2.5 text-amber font-semibold tracking-[0.24em] text-xs uppercase", className)}>
+      <span aria-hidden className="inline-block h-px w-5 bg-amber" />
       {children}
     </p>
   );
@@ -58,12 +58,12 @@ export function SectionHead({
           <Eyebrow className={cn(align === "center" && "justify-center")}>{eyebrow}</Eyebrow>
         ) : null}
         {heading ? (
-          <h2 className="mt-4 text-2xl font-semibold leading-[1.08] sm:text-3xl md:text-4xl lg:text-5xl">
+          <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-[1.12]">
             {heading}
           </h2>
         ) : null}
         {subheading ? (
-          <p className="mt-3 text-sm text-muted-foreground sm:mt-4 sm:text-base md:text-lg">{subheading}</p>
+          <p className="mt-3 text-sm text-muted-foreground leading-relaxed sm:mt-4 sm:text-base md:text-lg">{subheading}</p>
         ) : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
@@ -85,10 +85,10 @@ type ActionProps = {
 };
 
 const actionBase =
-  "group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold tracking-tight transition-all duration-200 disabled:pointer-events-none disabled:opacity-60";
+  "group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xs px-6 py-3 text-xs sm:text-sm font-semibold tracking-[0.14em] uppercase transition-all duration-200 disabled:pointer-events-none disabled:opacity-60";
 
 const actionVariants = {
-  solid: "bg-amber text-primary-foreground md:hover:brightness-110 active:brightness-95",
+  solid: "bg-amber text-primary-foreground md:hover:brightness-110 active:brightness-95 shadow-xs",
   outline:
     "border border-border text-foreground md:hover:border-amber md:hover:text-amber bg-transparent",
   ghost: "text-foreground/80 md:hover:text-amber",

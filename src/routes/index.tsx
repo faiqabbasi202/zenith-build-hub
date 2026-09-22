@@ -98,17 +98,17 @@ function Hero({ section }: { section?: Row | undefined }) {
             <Eyebrow>{section["eyebrow"]}</Eyebrow>
           </Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-6 text-[clamp(2.4rem,6.5vw,5.5rem)] leading-[0.98] font-bold tracking-tight text-balance sm:text-[clamp(2.8rem,7vw,5.5rem)]">
+            <h1 className="mt-6 text-[clamp(2.4rem,6.5vw,5.5rem)] leading-[1.04] font-medium tracking-tight text-balance sm:text-[clamp(2.8rem,7vw,5.5rem)] font-display">
               {section["heading"]}
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="mt-5 max-w-xl text-base text-foreground/80 sm:mt-6 sm:text-lg md:text-xl">
+            <p className="mt-5 max-w-xl text-base text-foreground/85 leading-relaxed font-normal sm:mt-6 sm:text-lg md:text-xl">
               {section["subheading"]}
             </p>
           </Reveal>
           <Reveal delay={0.22}>
-            <p className="mt-3 max-w-xl text-xs text-muted-foreground sm:mt-4 sm:text-sm md:text-base">{section["body"]}</p>
+            <p className="mt-3 max-w-xl text-xs text-muted-foreground leading-relaxed sm:mt-4 sm:text-sm md:text-base">{section["body"]}</p>
           </Reveal>
           <Reveal delay={0.3}>
             <div className="mt-9 flex flex-wrap gap-3">

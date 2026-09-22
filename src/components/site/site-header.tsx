@@ -53,10 +53,10 @@ function AmarcBrandLogo() {
 
       {/* Brand Typographic Wordmark */}
       <div className="leading-tight">
-        <span className="block font-display text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+        <span className="block font-display text-xl sm:text-2xl font-bold tracking-[0.16em] text-slate-900 dark:text-white uppercase">
           AMARC
         </span>
-        <span className="block font-mono text-[8.5px] sm:text-[9.5px] font-medium tracking-[0.2em] text-slate-500 uppercase">
+        <span className="block text-[8.5px] sm:text-[9.5px] font-semibold tracking-[0.24em] text-slate-500 uppercase">
           Engineering &amp; Construction
         </span>
       </div>
@@ -212,9 +212,9 @@ export function SiteHeader({ settings }: { settings: Settings }) {
                   key={item.to}
                   to={item.to}
                   className={cn(
-                    "relative px-3.5 py-2 text-sm font-semibold tracking-tight transition-colors duration-200",
+                    "relative px-3 py-2 text-xs sm:text-[13px] font-medium tracking-[0.08em] uppercase transition-colors duration-200",
                     isActive
-                      ? "text-slate-950 dark:text-white"
+                      ? "text-slate-950 dark:text-white font-semibold"
                       : "text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white"
                   )}
                 >
