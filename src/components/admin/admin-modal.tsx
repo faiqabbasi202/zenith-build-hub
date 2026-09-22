@@ -4,6 +4,7 @@ import { AdminImageInput } from "./admin-image-input";
 import { AdminGalleryInput } from "./admin-gallery-input";
 import type { TableConfig } from "./admin-tables-config";
 import { validateRecord, sanitizeFormData, sanitizeSlug } from "@/lib/input-sanitizer";
+import { asList } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 interface AdminModalProps {
@@ -32,6 +33,9 @@ export function AdminModal({
       const clone = { ...initialData };
       if (Array.isArray(clone["scope"])) {
         clone["scope"] = clone["scope"].join(", ");
+      }
+      if (clone["gallery"] !== undefined) {
+        clone["gallery"] = asList(clone["gallery"]);
       }
       setFormData(clone);
     } else {

@@ -33,11 +33,48 @@ export function longDate(date?: string | null) {
 }
 
 export function asList(value: unknown): string[] {
-  if (Array.isArray(value)) return value.filter((v) => typeof v === "string");
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value
+      .map((v) => (typeof v === "string" ? v.trim() : String(v || "").trim()))
+      .filter(Boolean);
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (!trimmed) return [];
+    // Try JSON parse if it looks like an array
+    if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.map((v) => String(v || "").trim()).filter(Boolean);
+        }
+      } catch {
+        // Fall back to splitting
+      }
+    }
+    // Check for comma or newline separated values
+    if (trimmed.includes(",") || trimmed.includes("\n")) {
+      return trimmed
+        .split(/[\n,]+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+    // Single string or URL
+    return [trimmed];
+  }
   return [];
 }
 
 export function asObjects<T = Record<string, any>>(value: unknown): T[] {
   if (Array.isArray(value)) return value.filter((v) => v && typeof v === "object") as T[];
+  if (typeof value === "string" && value.trim().startsWith("[") && value.trim().endsWith("]")) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed.filter((v) => v && typeof v === "object") as T[];
+    } catch {
+      return [];
+    }
+  }
   return [];
 }

@@ -44,7 +44,12 @@ export function ImageLightbox({
     }
   }, [isOpen, initialIndex, images.length]);
 
-  const currentSrc = images[currentIndex] || "";
+  const rawSrc = images[currentIndex] || "";
+  const currentSrc = !rawSrc
+    ? ""
+    : rawSrc.startsWith("http") || rawSrc.startsWith("data:") || rawSrc.startsWith("/")
+    ? rawSrc
+    : `/${rawSrc}`;
 
   const handleNext = useCallback(() => {
     if (images.length <= 1) return;
@@ -183,10 +188,30 @@ export function ImageLightbox({
           onClick={(e) => e.stopPropagation()}
         >
           {hasError ? (
-            <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900/60 rounded-xl border border-white/10">
-              <ImageIcon className="h-12 w-12 text-slate-500 mb-3" />
-              <p className="text-sm font-semibold text-slate-300">Unable to load full-size photo</p>
-              <p className="text-xs text-slate-500 mt-1 font-mono">{currentSrc}</p>
+            <div className="flex flex-col items-center justify-center text-center p-8 bg-slate-900/90 rounded-2xl border border-white/10 max-w-md shadow-2xl">
+              <ImageIcon className="h-12 w-12 text-amber mb-3" />
+              <p className="text-base font-bold text-white">Photo Loading Notice</p>
+              <p className="text-xs text-slate-400 mt-1 max-w-xs break-all font-mono">{currentSrc}</p>
+              <div className="mt-4 flex gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setHasError(false);
+                    setIsLoading(true);
+                  }}
+                  className="rounded-lg bg-amber px-3.5 py-1.5 text-xs font-bold text-slate-950 hover:bg-amber/90 transition"
+                >
+                  Retry
+                </button>
+                <a
+                  href={currentSrc}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-white/20 transition"
+                >
+                  Direct Link
+                </a>
+              </div>
             </div>
           ) : (
             <img

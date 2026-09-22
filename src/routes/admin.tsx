@@ -299,6 +299,25 @@ function AdminDashboardPage() {
       // Merge remote database / dummy records with local persistent records
       const merged = mergeWithLocalRecords(activeTableKey, baseRecords);
       setRecords(merged);
+
+      // Proactive cloud sync: If user is authenticated, push any local projects to Supabase cloud
+      if (session?.user && activeTableKey === "projects") {
+        try {
+          const { getLocalProjects } = await import("@/lib/data-store");
+          const localProjects = getLocalProjects();
+          if (localProjects.length > 0 && Array.isArray(data)) {
+            const remoteSlugs = new Set(data.map((r: any) => r["slug"]));
+            for (const lp of localProjects) {
+              if (lp["slug"] && !remoteSlugs.has(lp["slug"])) {
+                const payload = prepareSupabasePayload("projects", lp);
+                await (supabase.from("projects") as any).insert([payload]);
+              }
+            }
+          }
+        } catch {
+          // Silent background sync
+        }
+      }
     } catch {
       let baseRecords: Record<string, any>[] = [];
       if (activeTableKey === "projects") {
@@ -309,7 +328,7 @@ function AdminDashboardPage() {
     } finally {
       setLoadingRecords(false);
     }
-  }, [activeTableKey, activeConfig]);
+  }, [activeTableKey, activeConfig, session]);
 
   useEffect(() => {
     if (session || isStaffUser) {

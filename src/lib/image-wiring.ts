@@ -72,7 +72,31 @@ export const CATEGORY_GALLERIES: Record<CategoryKey, string[]> = {
 
 /** 2-3 Dummy projects per category */
 export const DUMMY_PROJECTS_BY_CATEGORY: DummyProject[] = [
-  // ── Residential (3 projects)
+  // ── Residential
+  {
+    id: "proj-res-bajwa",
+    slug: "bajwa-heights",
+    title: "Bajwa Heights",
+    summary:
+      "Experience elite vertical living at Bajwa Heights, featuring ultra-modern two and three-bedroom luxury apartments equipped with smart-home architecture, panoramic city views, and world-class building amenities.",
+    description:
+      "Bajwa Heights sets a new benchmark for contemporary urban real estate. Designed with structural sophistication and sustainable engineering, each residence delivers panoramic city vistas, refined interior layouts, and direct access to premier lifestyle amenities.",
+    sector_slug: "residential",
+    status: "newly_launched",
+    city: "Islamabad",
+    location: "Islamabad",
+    cover_image_url: "/images/projects/bajwa-heights/cover.jpg",
+    gallery: [
+      "/images/projects/bajwa-heights/cover.jpg",
+      "/images/projects/bajwa-heights/interior.jpg",
+      "/images/projects/bajwa-heights/perspective-1.jpg",
+      "/images/projects/bajwa-heights/perspective-2.jpg",
+    ],
+    scope: [],
+    is_featured: true,
+    is_published: true,
+    sort_order: 0,
+  },
   {
     id: "proj-res-01",
     slug: "al-hafiz-executive-residence",
