@@ -126,6 +126,55 @@ function ProjectDetail() {
     setActivePhoto(allImages[prevIdx] || allImages[0] || "");
   };
 
+  // Touch swipe support on phone
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (diff > 40) {
+      handleNextPhoto();
+    } else if (diff < -40) {
+      handlePrevPhoto();
+    }
+    setTouchStartX(null);
+  };
+
+  // Self-heal any stale localStorage draft for this project on desktop
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("amarc_store_projects");
+        if (raw && raw.includes(slug)) {
+          const parsed = JSON.parse(raw);
+          let changed = false;
+          if (parsed.created) {
+            const before = parsed.created.length;
+            parsed.created = parsed.created.filter((p: any) => p.slug !== slug);
+            if (parsed.created.length !== before) changed = true;
+          }
+          if (parsed.updated) {
+            for (const k of Object.keys(parsed.updated)) {
+              if (parsed.updated[k]?.slug === slug) {
+                delete parsed.updated[k];
+                changed = true;
+              }
+            }
+          }
+          if (changed) {
+            localStorage.setItem("amarc_store_projects", JSON.stringify(parsed));
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, [slug]);
+
   // Build facts dynamically: ONLY include fields that were ACTUALLY ENTERED
   const factsList: [string, string][] = [];
   if (hasValue(project["client"])) factsList.push(["Client", String(project["client"])]);
@@ -240,8 +289,22 @@ function ProjectDetail() {
                 </div>
               </div>
 
-              {/* Central Uncropped Image Stage */}
-              <div className="relative flex min-h-[340px] sm:min-h-[480px] md:min-h-[580px] w-full items-center justify-center overflow-hidden py-4 sm:py-6">
+              {/* Central Architectural Showcase Stage with Consistent Height & Ambient Glow */}
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                className="relative flex h-[340px] xs:h-[400px] sm:h-[480px] md:h-[560px] lg:h-[620px] w-full items-center justify-center overflow-hidden rounded-xl bg-slate-950/5 dark:bg-white/5 my-3 sm:my-4 select-none"
+              >
+                {/* Subtle ambient blurred background layer: keeps lighting & color consistent across landscape & portrait */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <img
+                    src={activePhoto}
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-cover blur-3xl opacity-20 dark:opacity-30 scale-110 transition-opacity duration-700"
+                  />
+                </div>
+
                 {/* Previous Arrow */}
                 {allImages.length > 1 && (
                   <button
@@ -251,22 +314,23 @@ function ProjectDetail() {
                       handlePrevPhoto();
                     }}
                     aria-label="Previous photograph"
-                    className="absolute left-2 sm:left-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-lg border border-border hover:bg-amber hover:text-slate-950 transition backdrop-blur-xs"
+                    className="absolute left-2 sm:left-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 dark:bg-slate-900/90 text-foreground shadow-lg border border-border hover:bg-amber hover:text-slate-950 transition backdrop-blur-xs active:scale-95"
                   >
                     <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
                 )}
 
-                {/* Main Uncropped Photo */}
-                <img
-                  key={activePhoto}
-                  src={activePhoto}
-                  alt={project["title"]}
-                  loading="eager"
-                  decoding="async"
-                  onClick={() => openLightbox(activePhoto)}
-                  className="max-h-[75vh] w-auto max-w-full cursor-zoom-in rounded-xl object-contain shadow-md transition-all duration-300 hover:scale-[1.008]"
-                />
+                {/* Main Crisp Photo: NO auto-zoom on click! Stays rock-solid inside consistent frame */}
+                <div className="relative z-10 flex h-full w-full items-center justify-center p-2 sm:p-4">
+                  <img
+                    key={activePhoto}
+                    src={activePhoto}
+                    alt={project["title"]}
+                    loading="eager"
+                    decoding="async"
+                    className="max-h-full max-w-full h-auto w-auto object-contain mx-auto rounded-lg shadow-md transition-all duration-300"
+                  />
+                </div>
 
                 {/* Next Arrow */}
                 {allImages.length > 1 && (
@@ -277,7 +341,7 @@ function ProjectDetail() {
                       handleNextPhoto();
                     }}
                     aria-label="Next photograph"
-                    className="absolute right-2 sm:right-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-surface/90 text-foreground shadow-lg border border-border hover:bg-amber hover:text-slate-950 transition backdrop-blur-xs"
+                    className="absolute right-2 sm:right-4 z-20 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 dark:bg-slate-900/90 text-foreground shadow-lg border border-border hover:bg-amber hover:text-slate-950 transition backdrop-blur-xs active:scale-95"
                   >
                     <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
                   </button>
@@ -286,24 +350,27 @@ function ProjectDetail() {
 
               {/* Bottom Thumbnail Strip for Photo Shuffling / Selection */}
               {allImages.length > 1 && (
-                <div className="flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto pt-3 sm:pt-4 border-t border-border/70">
+                <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto pt-3 sm:pt-4 border-t border-border/70 pb-1 scrollbar-none">
                   {allImages.map((src, idx) => (
                     <button
                       key={src + idx}
                       type="button"
                       onClick={() => setActivePhoto(src)}
-                      className={`relative h-16 w-24 sm:h-20 sm:w-32 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
+                      className={`group relative h-16 w-24 sm:h-20 sm:w-32 shrink-0 overflow-hidden rounded-lg border-2 transition-all duration-200 ${
                         src === activePhoto
-                          ? "border-amber ring-2 ring-amber/30 scale-105 shadow-md"
-                          : "border-border/80 opacity-70 hover:opacity-100 hover:border-amber/60"
+                          ? "border-amber ring-2 ring-amber/40 scale-105 shadow-md"
+                          : "border-border/80 opacity-65 hover:opacity-100 hover:border-amber/60"
                       }`}
                     >
                       <img
                         src={src}
-                        alt={`Perspective thumbnail ${idx + 1}`}
+                        alt={`Perspective ${idx + 1}`}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
+                      <span className="absolute bottom-1 right-1 rounded-xs bg-slate-950/80 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white">
+                        {idx + 1}
+                      </span>
                     </button>
                   ))}
                 </div>

@@ -275,7 +275,7 @@ export const getProject = createServerFn({ method: "GET" })
       }
 
       return { project: null as Row | null, related: [] as Row[] };
-    });
+    }, 5_000, 15_000);
   });
 
 export const getDevelopments = createServerFn({ method: "GET" }).handler(async () => {

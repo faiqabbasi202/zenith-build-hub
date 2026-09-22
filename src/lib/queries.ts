@@ -109,12 +109,29 @@ export const projectQuery = (slug: string) =>
       const serverResult = await getProject({ data: { slug } });
       if (serverResult.project) {
         if (typeof window !== "undefined") {
-          const { getLocalProjectBySlug } = await import("./data-store");
+          const { getLocalProjectBySlug, cleanupSyncedProject } = await import("./data-store");
           const local = getLocalProjectBySlug(slug);
           if (local) {
+            const serverGallery = Array.isArray(serverResult.project["gallery"])
+              ? serverResult.project["gallery"]
+              : [];
+            const localGallery = Array.isArray(local["gallery"])
+              ? local["gallery"]
+              : [];
+
+            // If the server database project has gallery items, remote DB is the canonical source
+            if (serverGallery.length >= localGallery.length) {
+              cleanupSyncedProject(slug);
+              return serverResult;
+            }
+
             return {
               ...serverResult,
-              project: { ...serverResult.project, ...local },
+              project: {
+                ...local,
+                ...serverResult.project,
+                gallery: localGallery,
+              },
             };
           }
         }
@@ -132,7 +149,7 @@ export const projectQuery = (slug: string) =>
 
       return serverResult;
     },
-    staleTime: 60_000,
+    staleTime: 5_000,
   });
 
 export const developmentsQuery = queryOptions({

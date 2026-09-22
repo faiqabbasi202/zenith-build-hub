@@ -42,26 +42,21 @@ const NAV = [
 function AmarcBrandLogo() {
   return (
     <div className="flex items-center gap-3">
-      {/* Brand Logo from user upload */}
-      <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-border group-hover:ring-amber transition-all duration-300">
+      {/* Brand Logo Emblem */}
+      <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center">
         <img
-          src="/logo.png"
+          src="/logo.png?v=4"
           alt="AMARC Logo"
-          className="h-full w-full object-contain p-1"
+          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </div>
 
       {/* Brand Typographic Wordmark */}
-      <div className="leading-none">
-        <div className="flex items-center gap-1.5">
-          <span className="font-display text-xl font-black tracking-tight text-slate-900 dark:text-white">
-            AMARC
-          </span>
-          <span className="rounded-xs bg-amber/20 px-1 py-0.5 font-mono text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">
-            PK
-          </span>
-        </div>
-        <span className="block font-mono text-[9px] font-medium tracking-[0.22em] text-slate-500 uppercase mt-0.5">
+      <div className="leading-tight">
+        <span className="block font-display text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          AMARC
+        </span>
+        <span className="block font-mono text-[8.5px] sm:text-[9.5px] font-medium tracking-[0.2em] text-slate-500 uppercase">
           Engineering &amp; Construction
         </span>
       </div>

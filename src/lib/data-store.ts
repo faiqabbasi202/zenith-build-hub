@@ -130,7 +130,7 @@ export function mergeWithLocalRecords(
     return patch ? { ...r, ...patch } : r;
   });
 
-  // 3. Prepend newly created records (avoiding duplicates)
+  // 3. Auto-prune locally created drafts that now exist in remote records
   const existingIds = new Set(updatedRemote.map((r) => String(r[primaryKey] || "")));
   const existingSlugs = new Set(updatedRemote.map((r) => String(r["slug"] || "")));
 
@@ -138,10 +138,43 @@ export function mergeWithLocalRecords(
     const id = String(r[primaryKey] || "");
     const slug = String(r["slug"] || "");
     if (deletedSet.has(id) || (slug && deletedSet.has(slug))) return false;
+    // If it's already in the database, don't duplicate it
     return !existingIds.has(id) && (!slug || !existingSlugs.has(slug));
   });
 
+  // If created list shrank because items synced to remote, persist the pruned list
+  if (validCreated.length !== store.created.length) {
+    store.created = validCreated;
+    saveStoreData(tableKey, store);
+  }
+
   return [...validCreated, ...updatedRemote];
+}
+
+/**
+ * Remove any stale local drafts for a project once it exists on the remote database.
+ */
+export function cleanupSyncedProject(slug: string): void {
+  if (typeof window === "undefined") return;
+  const store = getStoreData("projects");
+  let changed = false;
+
+  const filtered = store.created.filter((p) => p["slug"] !== slug);
+  if (filtered.length !== store.created.length) {
+    store.created = filtered;
+    changed = true;
+  }
+
+  for (const [key, patch] of Object.entries(store.updated)) {
+    if (patch["slug"] === slug) {
+      delete store.updated[key];
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    saveStoreData("projects", store);
+  }
 }
 
 /**
