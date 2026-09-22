@@ -200,14 +200,52 @@ function AdminDashboardPage() {
     const payload = { ...data };
     delete payload["_isLocalOnly"];
 
+    // 1. Projects table specific mappings
     if (tableKey === "projects") {
       if (payload["service_slug"]) {
         if (!payload["partners"]) {
           payload["partners"] = payload["service_slug"];
         }
-        delete payload["service_slug"];
+      }
+      delete payload["service_slug"];
+    }
+
+    // 2. Comprehensive PostgreSQL schema sanitation
+    for (const [key, val] of Object.entries(payload)) {
+      // Avoid sending empty string as UUID
+      if (key === "id" && (!val || val === "")) {
+        delete payload["id"];
+        continue;
+      }
+
+      // Prevent Postgres 22007: invalid input syntax for type date: ""
+      if (key.endsWith("_date") || key.endsWith("_at") || key === "date") {
+        if (typeof val === "string" && val.trim() === "") {
+          payload[key] = null;
+        }
+      }
+
+      // Prevent Postgres 22P02: invalid input syntax for type numeric/integer: ""
+      if (
+        key.includes("percent") ||
+        key.includes("value") ||
+        key.includes("sort_order") ||
+        key.includes("price") ||
+        key.includes("size_bytes")
+      ) {
+        if (val === "" || val == null || isNaN(Number(val))) {
+          payload[key] = null;
+        } else {
+          payload[key] = Number(val);
+        }
+      }
+
+      // Optional text/image fields: empty strings converted to null to keep Postgres schema clean
+      if (typeof val === "string" && val.trim() === "" && key !== "title" && key !== "slug") {
+        payload[key] = null;
       }
     }
+
     return payload;
   };
 

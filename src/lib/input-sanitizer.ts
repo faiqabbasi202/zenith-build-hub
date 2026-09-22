@@ -139,7 +139,10 @@ export function sanitizeFormData(
 
   config.fields.forEach((field) => {
     const val = sanitized[field.key];
-    if (val == null) return;
+    if (val == null) {
+      sanitized[field.key] = null;
+      return;
+    }
 
     if (field.type === "gallery" || field.key === "gallery") {
       if (Array.isArray(val)) {
@@ -165,18 +168,41 @@ export function sanitizeFormData(
       } else {
         sanitized[field.key] = [];
       }
+    } else if (field.type === "date") {
+      // Prevent Postgres 22007 invalid input syntax for type date: ""
+      if (typeof val === "string" && val.trim() === "") {
+        sanitized[field.key] = null;
+      } else if (val) {
+        sanitized[field.key] = String(val).trim();
+      } else {
+        sanitized[field.key] = null;
+      }
+    } else if (field.type === "number") {
+      // Prevent Postgres 22P02 invalid input syntax for type numeric/integer: ""
+      if (val === "" || val == null || isNaN(Number(val))) {
+        sanitized[field.key] = null;
+      } else {
+        sanitized[field.key] = Number(val);
+      }
     } else if (field.type === "text" || field.type === "textarea") {
       if (field.key === "slug" || field.key.endsWith("_slug")) {
         sanitized[field.key] = sanitizeSlug(val);
       } else if (field.key.includes("url") || field.key.includes("href") || field.key.includes("website")) {
-        sanitized[field.key] = sanitizeUrl(val);
+        const clean = sanitizeUrl(val);
+        sanitized[field.key] = clean === "" ? null : clean;
       } else {
-        sanitized[field.key] = sanitizeText(val);
+        const clean = sanitizeText(val);
+        sanitized[field.key] = clean === "" && !field.required ? null : clean;
       }
     } else if (field.type === "image") {
-      sanitized[field.key] = sanitizeUrl(val);
-    } else if (field.type === "number") {
-      sanitized[field.key] = val === "" || val == null ? null : Number(val);
+      const clean = sanitizeUrl(val);
+      sanitized[field.key] = clean === "" ? null : clean;
+    } else if (field.type === "select") {
+      if (val === "" || val === "null" || val === "undefined") {
+        sanitized[field.key] = field.required ? "" : null;
+      } else {
+        sanitized[field.key] = String(val).trim();
+      }
     }
   });
 
