@@ -27,6 +27,8 @@ export interface OptimizationResult {
 
 export const ALLOWED_IMAGE_MIMES = [
   "image/jpeg",
+  "image/pjpeg",
+  "image/jfif",
   "image/png",
   "image/webp",
   "image/avif",
@@ -35,6 +37,8 @@ export const ALLOWED_IMAGE_MIMES = [
 export const ALLOWED_IMAGE_EXTS = [
   ".jpg",
   ".jpeg",
+  ".jfif",
+  ".jif",
   ".png",
   ".webp",
   ".avif",
@@ -58,26 +62,32 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
     };
   }
 
-  // 2. MIME type constraint
   const mime = file.type.toLowerCase();
-  if (!ALLOWED_IMAGE_MIMES.includes(mime as any)) {
+  const lowerName = file.name.toLowerCase();
+  const hasValidExt = ALLOWED_IMAGE_EXTS.some((ext) => lowerName.endsWith(ext));
+
+  // 2. MIME type constraint (allow image/* or empty/octet-stream when filename has valid extension)
+  const isAllowedMime =
+    ALLOWED_IMAGE_MIMES.includes(mime as any) ||
+    mime.startsWith("image/") ||
+    ((mime === "" || mime === "application/octet-stream") && hasValidExt);
+
+  if (!isAllowedMime) {
     // Explicitly flag dangerous or unsupported types
     if (mime.includes("svg")) {
       return { valid: false, error: "SVG files are not supported for portfolio images due to security constraints." };
     }
     return {
       valid: false,
-      error: `Unsupported image format (${mime || "unknown"}). Allowed formats: JPEG, PNG, WebP, AVIF.`,
+      error: `Unsupported image format (${mime || "unknown"}). Allowed formats: JPEG, JFIF, PNG, WebP, AVIF.`,
     };
   }
 
   // 3. File extension constraint
-  const lowerName = file.name.toLowerCase();
-  const hasValidExt = ALLOWED_IMAGE_EXTS.some((ext) => lowerName.endsWith(ext));
   if (!hasValidExt) {
     return {
       valid: false,
-      error: `Invalid file extension. Please upload a file ending in .jpg, .jpeg, .png, .webp, or .avif.`,
+      error: `Invalid file extension. Please upload a file ending in .jpg, .jpeg, .jfif, .png, .webp, or .avif.`,
     };
   }
 

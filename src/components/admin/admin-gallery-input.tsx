@@ -178,7 +178,7 @@ export function AdminGalleryInput({
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/*"
+            accept=".jpg,.jpeg,.jfif,.jif,.png,.webp,.avif,image/*"
             onChange={handleFileUpload}
             className="hidden"
           />

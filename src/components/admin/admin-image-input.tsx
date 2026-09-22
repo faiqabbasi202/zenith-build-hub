@@ -261,7 +261,7 @@ export function AdminImageInput({
         <input
           ref={fileInputRef}
           type="file"
-          accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"
+          accept=".jpg,.jpeg,.jfif,.jif,.png,.webp,.avif,image/jpeg,image/jfif,image/pjpeg,image/png,image/webp,image/avif"
           className="hidden"
           onChange={handleFileUpload}
         />
